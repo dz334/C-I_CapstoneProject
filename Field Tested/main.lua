@@ -14,7 +14,7 @@ local function drawBackgroundFixed(image)
 end
 
 
--- -- Basic AABB overlap check used for player-vs-solid collision tests.
+-- Basic overlap check for collision
 local function rectsOverlap(a, b)
     return a.x < b.x + b.w
         and a.x + a.w > b.x
@@ -22,7 +22,7 @@ local function rectsOverlap(a, b)
         and a.y + a.h > b.y
 end
 
--- Read rectangle objects from the "Solid" Tiled layer into runtime collision data.
+-- Read rectangle objects from the "Solid" map layer 
 local function collectSolidRects(map)
     solids = {}
     local solidLayer = map.layers["Solid"]
@@ -42,8 +42,7 @@ local function collectSolidRects(map)
     end
 end
 
--- Resolve collisions after horizontal movement.
--- Player uses bottom-center position, so we convert to a rectangle each frame.
+-- Resolve collisions after horizontal movement
 local function resolveHorizontalCollisions(p)
     local playerRect = { x = p.x - p.w / 2, y = p.y - p.h, w = p.w, h = p.h }
 
@@ -60,7 +59,7 @@ local function resolveHorizontalCollisions(p)
     end
 end
 
--- Resolve collisions after vertical movement and update grounded state.
+-- Resolve collisions after vertical movement and update grounded state
 local function resolveVerticalCollisions(p)
     local playerRect = { x = p.x - p.w / 2, y = p.y - p.h, w = p.w, h = p.h }
     p.isGrounded = false
@@ -80,7 +79,7 @@ local function resolveVerticalCollisions(p)
 end
 
 function love.load()
-    -- Libraries and core systems.
+    -- Import libraries and core systems.
     anim8 = require 'Libraries/anim8'
     love.graphics.setDefaultFilter('nearest', 'nearest') --When art is scaled, keep it pixelated/clear
 
@@ -91,15 +90,15 @@ function love.load()
     sti = require 'Libraries/sti'
     gameMap = sti('Map/testmap3.lua')
 
-    -- Cached map size (pixels) for camera clamping.
+    -- Get map size for keeping camera attached
     mapW = gameMap.width * gameMap.tilewidth
     mapH = gameMap.height * gameMap.tileheight
 
-    -- Load collision map data and image assets.
+    -- Load collision map data and image assets
     collectSolidRects(gameMap)
     assets.load()
 
-    -- Player state and platformer physics tuning.
+    -- Player state and physics
     player = {}
     player.x = 400
     player.y = 300
@@ -115,7 +114,7 @@ function love.load()
     player.maxFallSpeed = 700
     player.isGrounded = false
 
-    -- Sprite/animation setup (kept from your original character sheet).
+    -- Sprite/animation setup
     player.spriteSheet = love.graphics.newImage('Sprites/player-sheet.png')
     player.grid = anim8.newGrid(12, 18, player.spriteSheet:getWidth(), player.spriteSheet:getHeight())
 
@@ -129,7 +128,7 @@ function love.load()
 end
 
 function love.update(dt)
-    -- Horizontal input only (platformer style).
+    -- Horizontal controls 
     local moveX = 0
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         moveX = 1
@@ -139,33 +138,32 @@ function love.update(dt)
         player.anim = player.animation.left
     end
 
-    -- Direct horizontal velocity from input.
+    -- Calculate player horizontal speed
     player.vx = moveX * player.moveSpeed
 
-    -- Jump only while grounded.
+    -- Jump only if while grounded.
     if (love.keyboard.isDown("up") or love.keyboard.isDown("w") or love.keyboard.isDown("space")) and player.isGrounded then
         player.vy = -player.jumpForce
         player.isGrounded = false
     end
 
-    -- Gravity integration with terminal fall speed.
+    -- Calculate gravity and fall speed
     player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
 
-    -- Move and resolve collisions axis-by-axis for stable platformer behavior.
     player.x = player.x + player.vx * dt
     resolveHorizontalCollisions(player)
 
     player.y = player.y + player.vy * dt
     resolveVerticalCollisions(player)
 
-    -- Idle animation frame when standing still on ground.
+    -- Player sprite idle animation frame 
     if moveX == 0 and player.isGrounded then
         player.anim:gotoFrame(2)
     end
 
     player.anim:update(dt)
 
-    -- Follow player and clamp camera to map bounds.
+    -- Attach camera to player
     cam:lookAt(player.x, player.y - player.h / 2)
 
     local w = love.graphics.getWidth()
@@ -187,7 +185,6 @@ function love.update(dt)
 end
 
 function love.draw()
-    -- World-space rendering under camera transform.
     cam:attach()
         -- Background layers.
         drawBackgroundFixed(assets.background.backgroundSky)
@@ -195,7 +192,7 @@ function love.draw()
         drawBackgroundFixed(assets.background.backgroundCloud2)
         drawBackgroundFixed(assets.background.backgroundCloud1)
 
-        -- Foreground gameplay layers and player sprite.
+        -- Foreground gameplay layers and player sprite
         gameMap:drawLayer(gameMap.layers["Ground"])
         gameMap:drawLayer(gameMap.layers["Trees"])
         player.anim:draw(player.spriteSheet, player.x, player.y, nil, 4, nil, 6, 9)
