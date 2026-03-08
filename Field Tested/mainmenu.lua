@@ -4,6 +4,7 @@ local font
 local buttonHeight = 64
 local margin = 16
 local actions = {}
+ local titleFontSize
 
 local function makeButton(text, onClick)
     return { 
@@ -19,6 +20,8 @@ end
 function menu.load(menuActions)
     actions = menuActions or {}
     buttons = {}
+
+    titleFontSize = love.graphics.newFont(64)
 
     font = love.graphics.newFont(32)
     table.insert(buttons, makeButton("Start Game", function()
@@ -90,7 +93,14 @@ function menu.draw()
         cursorY = cursorY + buttonHeight + margin
     end
 
-    love.graphics.print("Field Tested")
+    local title = "Field Tested"
+    local titleWidth = titleFontSize:getWidth(title)
+    love.graphics.setFont(titleFontSize)
+    love.graphics.setColor(0,1,0,1)
+    love.graphics.print(title, (width - titleWidth) / 2, 200)
+    love.graphics.setFont(font)
+
+    love.graphics.setColor(1,1,1,1)
 
 end
 

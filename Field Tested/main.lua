@@ -1,8 +1,14 @@
+local menu = require("mainmenu")
+local settingsMenu = require("settingsmenu")
+local gameState = "menu"
+
 local assets = require("assets") 
 
 local mapW = 0
 local mapH = 0
 local solids = {}
+local gameLoaded = false
+local elapsedTime = 0
 
 local BG_W = 1920
 local BG_H = 640
@@ -13,7 +19,6 @@ local function drawBackgroundFixed(image)
     love.graphics.draw(image, 0, BG_H, 0, scaleX, scaleY, 0, image:getHeight())
 end
 
-
 -- Basic overlap check for collision
 local function rectsOverlap(a, b)
     return a.x < b.x + b.w
@@ -22,7 +27,7 @@ local function rectsOverlap(a, b)
         and a.y + a.h > b.y
 end
 
--- Read rectangle objects from the "Solid" map layer 
+-- Read rectangle objects from the "Solid" map layer
 local function collectSolidRects(map)
     solids = {}
     local solidLayer = map.layers["Solid"]
@@ -59,7 +64,7 @@ local function resolveHorizontalCollisions(p)
     end
 end
 
--- Resolve collisions after vertical movement and update grounded state
+-- Resolve collisions after vertical movement
 local function resolveVerticalCollisions(p)
     local playerRect = { x = p.x - p.w / 2, y = p.y - p.h, w = p.w, h = p.h }
     p.isGrounded = false
@@ -78,10 +83,10 @@ local function resolveVerticalCollisions(p)
     end
 end
 
-function love.load()
-    -- Import libraries and core systems.
+local function loadGame()
+    -- Libraries and core systems.
     anim8 = require 'Libraries/anim8'
-    love.graphics.setDefaultFilter('nearest', 'nearest') --When art is scaled, keep it pixelated/clear
+    love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it pixelated/clear
 
 
     camera = require 'Libraries/camera'
@@ -90,15 +95,14 @@ function love.load()
     sti = require 'Libraries/sti'
     gameMap = sti('Map/testmap3.lua')
 
-    -- Get map size for keeping camera attached
+    -- Cached map size (pixels) for camera clamping
     mapW = gameMap.width * gameMap.tilewidth
     mapH = gameMap.height * gameMap.tileheight
 
-    -- Load collision map data and image assets
+    -- Load collision map data
     collectSolidRects(gameMap)
-    assets.load()
 
-    -- Player state and physics
+    -- Player state and platformer physics tuning
     player = {}
     player.x = 400
     player.y = 300
@@ -125,10 +129,50 @@ function love.load()
     player.animation.up = anim8.newAnimation(player.grid('1-4', 4), 0.1)
 
     player.anim = player.animation.right
+    gameLoaded = true
+end
+
+function love.load()
+    assets.load()
+
+    menu.load({
+        startGame = function()
+            gameState = "game"
+            elapsedTime = 0
+            if not gameLoaded then
+                loadGame()
+            end
+        end,
+        loadGame = function()
+            print("Loading game")
+        end,
+        settings = function()
+            gameState = "settings"
+        end
+    })
+
+    settingsMenu.load({
+        back = function()
+            gameState = "menu"
+        end
+    })
 end
 
 function love.update(dt)
-    -- Horizontal controls 
+    if gameState == "menu" then
+        menu.update(dt)
+        return
+    end
+
+    if gameState == "settings" then
+        settingsMenu.update(dt)
+        return
+    end
+
+    elapsedTime = elapsedTime + dt
+
+
+    -- Horizontal input
     local moveX = 0
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         moveX = 1
@@ -138,16 +182,16 @@ function love.update(dt)
         player.anim = player.animation.left
     end
 
-    -- Calculate player horizontal speed
+    -- calculate horizontal velocity from input
     player.vx = moveX * player.moveSpeed
 
-    -- Jump only if while grounded.
+    -- Jump only while grounded
     if (love.keyboard.isDown("up") or love.keyboard.isDown("w") or love.keyboard.isDown("space")) and player.isGrounded then
         player.vy = -player.jumpForce
         player.isGrounded = false
     end
 
-    -- Calculate gravity and fall speed
+    -- Gravity integration with fall speed
     player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
 
     player.x = player.x + player.vx * dt
@@ -156,14 +200,14 @@ function love.update(dt)
     player.y = player.y + player.vy * dt
     resolveVerticalCollisions(player)
 
-    -- Player sprite idle animation frame 
+    -- Idle animation frame when standing still on ground
     if moveX == 0 and player.isGrounded then
         player.anim:gotoFrame(2)
     end
 
     player.anim:update(dt)
 
-    -- Attach camera to player
+    -- Follow player and clamp camera to map bounds
     cam:lookAt(player.x, player.y - player.h / 2)
 
     local w = love.graphics.getWidth()
@@ -184,7 +228,37 @@ function love.update(dt)
     end
 end
 
+function love.mousepressed(x, y, button)
+    if gameState == "menu" then
+        menu.mousepressed(x, y, button)
+        return
+    end
+
+    if gameState == "settings" then
+        settingsMenu.mousepressed(x, y, button)
+        return
+    end
+end
+
 function love.draw()
+    if gameState == "menu" then
+        drawBackgroundFixed(assets.background.backgroundSky)
+        drawBackgroundFixed(assets.background.backgroundHills)
+        drawBackgroundFixed(assets.background.backgroundCloud2)
+        drawBackgroundFixed(assets.background.backgroundCloud1)
+        menu.draw()
+        return
+    end
+
+    if gameState == "settings" then
+        drawBackgroundFixed(assets.background.backgroundSky)
+        drawBackgroundFixed(assets.background.backgroundHills)
+        drawBackgroundFixed(assets.background.backgroundCloud2)
+        drawBackgroundFixed(assets.background.backgroundCloud1)
+        settingsMenu.draw()
+        return
+    end
+    
     cam:attach()
         -- Background layers.
         drawBackgroundFixed(assets.background.backgroundSky)
@@ -192,9 +266,12 @@ function love.draw()
         drawBackgroundFixed(assets.background.backgroundCloud2)
         drawBackgroundFixed(assets.background.backgroundCloud1)
 
-        -- Foreground gameplay layers and player sprite
+        -- Foreground gameplay layers and player sprite.
         gameMap:drawLayer(gameMap.layers["Ground"])
         gameMap:drawLayer(gameMap.layers["Trees"])
         player.anim:draw(player.spriteSheet, player.x, player.y, nil, 4, nil, 6, 9)
     cam:detach()
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(string.format("Time: %.1f", elapsedTime), 16, 16)
 end
