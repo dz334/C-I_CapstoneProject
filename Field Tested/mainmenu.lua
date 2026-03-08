@@ -21,7 +21,7 @@ function menu.load(menuActions)
     actions = menuActions or {}
     buttons = {}
 
-    titleFontSize = love.graphics.newFont(64)
+    titleFontSize = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
 
     font = love.graphics.newFont(32)
     table.insert(buttons, makeButton("Start Game", function()
