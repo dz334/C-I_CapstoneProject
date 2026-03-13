@@ -122,7 +122,7 @@ function game:update(dt)
     -- Jump input (only if grounded)
     if (love.keyboard.isDown("up") or love.keyboard.isDown("w") or love.keyboard.isDown("space"))
     and player.isGrounded then
-        player.vy         = -player.jumpForce
+        player.vy = -player.jumpForce
         player.isGrounded = false
     end
 

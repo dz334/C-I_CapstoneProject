@@ -6,7 +6,21 @@ local gameState = require 'states/game'
 local pauseState = require 'states/pause'
 assets = require 'assets'
 
--- Global helper available to all states
+-- Audio
+local isMuted = false
+local soundVolume = 0.5 --range 0 to 1
+--local previousMenu = nil -- track whether settings was opened from 'main' or 'pause'
+local themeMusic = nil
+
+local function applyVolume()
+    if isMuted then
+        love.audio.setVolume(0)
+    else
+        love.audio.setVolume(soundVolume)
+    end
+end
+
+-- Global helper function 
 function drawBackgroundFixed(image)
     local BG_W = 1920
     local BG_H = 640
@@ -18,6 +32,19 @@ end
 function love.load()
     assets.load()
     Gamestate.switch(menuState)
+
+    -- Load and play theme music 
+    local musicPath = nil
+        if love.filesystem.getInfo('Sounds/theme.mp3') then
+            musicPath = 'Sounds/theme.mp3'
+        end
+        if musicPath then
+            themeMusic = love.audio.newSource(musicPath, 'stream')
+            themeMusic:setLooping(true)
+            themeMusic:play()
+        end
+    applyVolume()
+
 end
 
 function love.update(dt)
