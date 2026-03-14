@@ -68,6 +68,20 @@ function game:enter()
         cam = camera()
         gameMap = sti('Map/testmap3.lua')
 
+        -- Stop menu music when entering game
+        if themeMusic then
+            themeMusic:stop()
+        end
+
+        -- Start gameplay background music
+        if love.filesystem.getInfo(assets.audio.gameMusic) then
+            gameMusic = love.audio.newSource("Sounds/AccumulaTown.mp3", "stream")
+        end 
+        gameMusic:setLooping(true)
+        gameMusic:play()
+        applyVolume()
+        
+
         -- Get map size (pixels) for camera clamping
         mapW = gameMap.width * gameMap.tilewidth
         mapH = gameMap.height * gameMap.tileheight

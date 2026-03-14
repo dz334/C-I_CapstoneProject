@@ -14,6 +14,11 @@ function assets.load()
         extraPlants = love.graphics.newImage('Tiles/Extra_plants.png'),
         tileset = love.graphics.newImage('Tiles/tileset.png'),
     }
+    
+    assets.audio = {
+        menuMusic = 'Sounds/theme.mp3',
+        gameMusic = 'Sounds/AccumulaTown.mp3'
+    }
 end
 
 return assets

@@ -7,12 +7,11 @@ local pauseState = require 'states/pause'
 assets = require 'assets'
 
 -- Audio
-local isMuted = false
-local soundVolume = 0.5 --range 0 to 1
---local previousMenu = nil -- track whether settings was opened from 'main' or 'pause'
-local themeMusic = nil
+isMuted = false
+soundVolume = 0.1 -- range 0 to 1
+themeMusic = nil
 
-local function applyVolume()
+function applyVolume()
     if isMuted then
         love.audio.setVolume(0)
     else
@@ -34,15 +33,11 @@ function love.load()
     Gamestate.switch(menuState)
 
     -- Load and play theme music 
-    local musicPath = nil
-        if love.filesystem.getInfo('Sounds/theme.mp3') then
-            musicPath = 'Sounds/theme.mp3'
+        if love.filesystem.getInfo(assets.audio.menuMusic) then
+            themeMusic = love.audio.newSource(assets.audio.menuMusic, 'stream')
         end
-        if musicPath then
-            themeMusic = love.audio.newSource(musicPath, 'stream')
-            themeMusic:setLooping(true)
-            themeMusic:play()
-        end
+        themeMusic:setLooping(true)
+        themeMusic:play()
     applyVolume()
 
 end
