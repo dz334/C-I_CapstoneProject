@@ -13,7 +13,7 @@ local function rectsOverlap(a, b)
        and a.y + a.h > b.y
 end
 
--- Read rectangle objects from Tilted "Solid" map layer
+-- Read rectangle objects from Tiled "Solid" map layer
 local function collectSolidRects(map)
     solids = {}
     local solidLayer = map.layers["Solid"]
@@ -56,6 +56,14 @@ local function resolveVerticalCollisions(p)
     end
 end
 
+local function getSpawnPoint(map)
+    local spawnLayer = map.layers["Spawn"]
+    if spawnLayer and spawnLayer.objects and spawnLayer.objects[1] then
+        return spawnLayer.objects[1].x, spawnLayer.objects[1].y
+    end
+    return 400, 400
+end
+
 function game:enter()
     -- Only loads game when first entering gamestate
     if not gameLoaded then
@@ -66,21 +74,19 @@ function game:enter()
         love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it pixelated/clear
 
         cam = camera()
-        gameMap = sti('Map/testmap3.lua')
+        gameMap = sti('Map/newtest1.lua')
 
         -- Stop menu music when entering game
         if themeMusic then
             themeMusic:stop()
         end
-
         -- Start gameplay background music
         if love.filesystem.getInfo(assets.audio.gameMusic) then
-            gameMusic = love.audio.newSource("Sounds/AccumulaTown.mp3", "stream")
+            gameMusic = love.audio.newSource(assets.audio.gameMusic, "stream")
         end 
         gameMusic:setLooping(true)
         gameMusic:play()
         applyVolume()
-        
 
         -- Get map size (pixels) for camera clamping
         mapW = gameMap.width * gameMap.tilewidth
@@ -91,11 +97,11 @@ function game:enter()
 
         -- Player state and physics properties
         player = {}
-        player.x, player.y = 400, 300
+        player.x, player.y = getSpawnPoint(gameMap)
         player.w, player.h = 24, 60
         player.vx, player.vy = 0, 0
-        player.moveSpeed = 180
-        player.jumpForce = 420
+        player.moveSpeed = 300
+        player.jumpForce = 400
         player.gravity = 1100
         player.maxFallSpeed = 700
         player.isGrounded = false
@@ -110,6 +116,7 @@ function game:enter()
         player.animation.right = anim8.newAnimation(player.grid('1-4', 3), 0.1)
         player.animation.up = anim8.newAnimation(player.grid('1-4', 4), 0.1)
 
+        -- Load player facing right by default
         player.anim = player.animation.right
         gameLoaded = true
     end
@@ -162,6 +169,11 @@ function game:update(dt)
     local h = love.graphics.getHeight()
     cam.x = math.max(w/2, math.min(cam.x, mapW - w/2))
     cam.y = math.max(h/2, math.min(cam.y, mapH - h/2))
+
+    -- Press "r" to reset position to spawn 
+    if love.keyboard.isDown("r") then
+        player.x, player.y = getSpawnPoint(gameMap)
+    end    
 end
 
 function game:draw()
@@ -171,13 +183,14 @@ function game:draw()
         drawBackgroundFixed(assets.background.backgroundCloud2)
         drawBackgroundFixed(assets.background.backgroundCloud1)
         gameMap:drawLayer(gameMap.layers["Ground"])
-        gameMap:drawLayer(gameMap.layers["Trees"])
-        player.anim:draw(player.spriteSheet, player.x, player.y, nil, 4, nil, 6, 9)
+        player.anim:draw(player.spriteSheet, player.x, player.y, nil, 2, nil, 9, 16)
     cam:detach()
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(string.format("Time: %.1f", elapsedTime), 16, 16)
-    love.graphics.print("ESC = Pause", 16, 40)
+    love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
+    love.graphics.print("ESC = Pause", 10, 40)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
+    love.graphics.print("Press R to reset", 10, 88)
 end
 
 function game:keypressed(key)

@@ -9,8 +9,8 @@ return {
   height = 20,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 6,
-  nextobjectid = 12,
+  nextlayerid = 8,
+  nextobjectid = 16,
   properties = {
     ["Solid"] = true
   },
@@ -24,7 +24,7 @@ return {
       spacing = 0,
       margin = 0,
       columns = 18,
-      image = "../Tiles/tileset.png",
+      image = "J:/love2d(progamming)/Practice code/Tiles/tileset.png",
       imagewidth = 576,
       imageheight = 384,
       objectalignment = "unspecified",
@@ -160,19 +160,6 @@ return {
           properties = {}
         },
         {
-          id = 5,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 772.727,
-          y = 575.758,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
           id = 6,
           name = "",
           type = "",
@@ -223,14 +210,30 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
-        },
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 7,
+      name = "Spawn",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      properties = {},
+      objects = {
         {
-          id = 11,
+          id = 15,
           name = "",
           type = "",
-          shape = "rectangle",
-          x = 613.333,
-          y = 792,
+          shape = "point",
+          x = 52,
+          y = 480,
           width = 0,
           height = 0,
           rotation = 0,

@@ -8,12 +8,12 @@ function assets.load()
         backgroundSky = love.graphics.newImage('Map/Background/Sky_color.png'),
     }
 
-    assets.tilesets = {
-        grassEntities = love.graphics.newImage('Tiles/Grassland_entities.png'),
-        terrain = love.graphics.newImage('Tiles/Terrain.png'),
-        extraPlants = love.graphics.newImage('Tiles/Extra_plants.png'),
-        tileset = love.graphics.newImage('Tiles/tileset.png'),
-    }
+    -- assets.tilesets = {
+    --     grassEntities = love.graphics.newImage('Tiles/Grassland_entities.png'),
+    --     terrain = love.graphics.newImage('Tiles/Terrain.png'),
+    --     extraPlants = love.graphics.newImage('Tiles/Extra_plants.png'),
+    --     tileset = love.graphics.newImage('Tiles/tileset.png'),
+    -- }
     
     assets.audio = {
         menuMusic = 'Sounds/theme.mp3',
