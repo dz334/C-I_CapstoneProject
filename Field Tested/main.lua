@@ -8,7 +8,7 @@ assets = require 'assets'
 
 -- Audio
 isMuted = false
-soundVolume = 0.1 -- range 0 to 1
+soundVolume = 1 -- range 0 to 1
 themeMusic = nil
 
 function applyVolume()
@@ -31,15 +31,6 @@ end
 function love.load()
     assets.load()
     Gamestate.switch(menuState)
-
-    -- Load and play menu theme music 
-    if love.filesystem.getInfo(assets.audio.menuMusic) then
-        themeMusic = love.audio.newSource(assets.audio.menuMusic, 'stream')
-    end
-    themeMusic:setLooping(true)
-    themeMusic:play()
-    applyVolume()
-
 end
 
 function love.update(dt)

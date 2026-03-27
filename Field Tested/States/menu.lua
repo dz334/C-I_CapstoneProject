@@ -6,6 +6,19 @@ local titleFont
 local buttonHeight = 64
 local margin = 16
 
+-- Audio
+isMuted = false
+soundVolume = 1 -- range 0 to 1
+themeMusic = nil
+
+function applyVolume()
+    if isMuted then
+        love.audio.setVolume(0)
+    else
+        love.audio.setVolume(soundVolume)
+    end
+end
+
 local function makeButton(text, onClick)
     return { 
         text = text, 
@@ -25,15 +38,38 @@ function menu:enter()
     table.insert(buttons, makeButton("Start Game", function()
         Gamestate.switch(require 'states/game')
     end))
+
     table.insert(buttons, makeButton("Load Game", function()
         print("Load game - not yet implemented")
     end))
+
     table.insert(buttons, makeButton("Settings", function()
-        Gamestate.switch(require 'states/settings')
+        Gamestate.push(require 'states/settings')
     end))
+
     table.insert(buttons, makeButton("Quit", function()
         love.event.quit(0)
     end))
+
+    -- Load and play menu theme music 
+  
+    if love.filesystem.getInfo(assets.audio.menuMusic) then
+        self.music = love.audio.newSource(assets.audio.menuMusic, 'stream')
+        self.music:setLooping(true)
+    end
+    -- Play only if not already playing
+    if self.music and not self.music:isPlaying() then
+        self.music:play()
+        applyVolume()
+    end
+
+end
+
+function menu:leave()
+    -- Stop game music when leaving game state
+    if self.music and self.music:isPlaying() then
+        self.music:stop()
+    end
 end
 
 function menu:update(dt)

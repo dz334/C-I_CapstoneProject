@@ -22,7 +22,7 @@ function settings:enter()
     buttonFont = love.graphics.newFont(32)
 
     table.insert(buttons, makeButton("Back", function()
-        Gamestate.switch(require 'states/menu')
+        Gamestate.pop()
     end))
 end
 

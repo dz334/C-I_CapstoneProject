@@ -23,17 +23,22 @@ function pause:enter()
     buttonFont = love.graphics.newFont(32)
 
     table.insert(buttons, makeButton("Resume", function()
-        Gamestate.pop()
+        --Gamestate.pop()
+        Gamestate.push(require 'states/game')
     end))
+
     table.insert(buttons, makeButton("Settings", function()
-        Gamestate.switch(require 'states/settings')
+        Gamestate.push(require 'states/settings')
     end))
+
     table.insert(buttons, makeButton("Main Menu", function()
-        Gamestate.switch(require 'states/menu')
+        Gamestate.push(require 'states/menu')
     end))
+
     table.insert(buttons, makeButton("Quit", function()
         love.event.quit(0)
     end))
+
 end
 
 function pause:update(dt)

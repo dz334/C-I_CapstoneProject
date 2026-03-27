@@ -5,6 +5,19 @@ local solids = {}
 local elapsedTime = 0
 local gameLoaded = false
 
+-- Audio
+isMuted = false
+soundVolume = 1 -- range 0 to 1
+themeMusic = nil
+
+function applyVolume()
+    if isMuted then
+        love.audio.setVolume(0)
+    else
+        love.audio.setVolume(soundVolume)
+    end
+end
+
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
     return a.x < b.x + b.w
@@ -76,17 +89,19 @@ function game:enter()
         cam = camera()
         gameMap = sti('Map/newtest1.lua')
 
-        -- Stop menu music when entering game
-        if themeMusic then
-            themeMusic:stop()
-        end
-        -- Start gameplay background music
+        -- Create the game music if it doesn't exist
+    if not self.music then
         if love.filesystem.getInfo(assets.audio.gameMusic) then
-            gameMusic = love.audio.newSource(assets.audio.gameMusic, "stream")
-        end 
-        gameMusic:setLooping(true)
-        gameMusic:play()
+            self.music = love.audio.newSource(assets.audio.gameMusic, 'stream')
+            self.music:setLooping(true)
+        end
+    end
+
+    -- Play only if not already playing
+    if self.music and not self.music:isPlaying() then
+        self.music:play()
         applyVolume()
+    end
 
         -- Get map size (pixels) for camera clamping
         mapW = gameMap.width * gameMap.tilewidth
@@ -122,6 +137,13 @@ function game:enter()
     end
 
     elapsedTime = 0
+end
+
+function game:leave()
+    -- Stop game music when leaving game state
+    if self.music and self.music:isPlaying() then
+        self.music:stop()
+    end
 end
 
 function game:update(dt)
@@ -195,7 +217,9 @@ end
 
 function game:keypressed(key)
     if key == "escape" then
-        Gamestate.push(require 'states/pause')
+        --Gamestate.push(require 'states/pause')
+        Gamestate.switch(require 'states/pause')
+
     end
 end
 
