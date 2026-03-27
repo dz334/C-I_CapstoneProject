@@ -4,6 +4,9 @@ local mapH = 0
 local solids = {}
 local elapsedTime = 0
 local gameLoaded = false
+local puzzleObject = nil
+local puzzleUIActive = false
+local puzzleInput = ""
 
 -- Audio
 isMuted = false
@@ -24,6 +27,10 @@ local function rectsOverlap(a, b)
        and a.x + a.w > b.x
        and a.y < b.y + b.h
        and a.y + a.h > b.y
+end
+
+local function getPlayerRect(p)
+    return { x = p.x - p.w/2, y = p.y - p.h, w = p.w, h = p.h }
 end
 
 -- Read rectangle objects from Tiled "Solid" map layer
@@ -133,6 +140,17 @@ function game:enter()
 
         -- Load player facing right by default
         player.anim = player.animation.right
+        -- Puzzle object placed near spawn (placeholder)
+        local spawnX, spawnY = player.x, player.y
+        puzzleObject = {
+            x = spawnX + 80,
+            y = spawnY - 40,
+            w = 32,
+            h = 32
+        }
+        puzzleUIActive = false
+        puzzleInput = ""
+
         gameLoaded = true
     end
 
@@ -148,6 +166,16 @@ end
 
 function game:update(dt)
     elapsedTime = elapsedTime + dt
+
+    if puzzleUIActive then
+        player.vx = 0
+        player.vy = 0
+        if player.isGrounded then
+            player.anim:gotoFrame(2)
+        end
+        player.anim:update(dt)
+        return
+    end
 
     -- Horizontal movement input
     local moveX = 0
@@ -206,6 +234,13 @@ function game:draw()
         drawBackgroundFixed(assets.background.backgroundCloud1)
         gameMap:drawLayer(gameMap.layers["Ground"])
         player.anim:draw(player.spriteSheet, player.x, player.y, nil, 2, nil, 9, 16)
+
+        -- Draw puzzle object placeholder
+        if puzzleObject then
+            love.graphics.setColor(1, 0.85, 0.2, 1)
+            love.graphics.rectangle("fill", puzzleObject.x, puzzleObject.y, puzzleObject.w, puzzleObject.h)
+            love.graphics.setColor(1, 1, 1, 1)
+        end
     cam:detach()
 
     love.graphics.setColor(1, 1, 1, 1)
@@ -213,6 +248,28 @@ function game:draw()
     love.graphics.print("ESC = Pause", 10, 40)
     love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
     love.graphics.print("Press R to reset", 10, 88)
+
+    -- UI prompt when near puzzle object
+    if puzzleObject and not puzzleUIActive then
+        local playerRect = getPlayerRect(player)
+        local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }
+        if rectsOverlap(playerRect, objRect) then
+            love.graphics.print("Press Z to open puzzle UI", 10, 112)
+        end
+    end
+
+    -- Puzzle UI placeholder
+    if puzzleUIActive then
+        local uiW, uiH = 420, 240
+        local uiX = (love.graphics.getWidth() - uiW) / 2
+        local uiY = (love.graphics.getHeight() - uiH) / 2
+        love.graphics.setColor(0, 0, 0, 0.75)
+        love.graphics.rectangle("fill", uiX, uiY, uiW, uiH)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.rectangle("line", uiX, uiY, uiW, uiH)
+        love.graphics.print("Puzzle UI (placeholder)", uiX + 16, uiY + 16)
+        love.graphics.print("Input: " .. puzzleInput, uiX + 16, uiY + 64)
+    end
 end
 
 function game:keypressed(key)
@@ -220,6 +277,30 @@ function game:keypressed(key)
         --Gamestate.push(require 'states/pause')
         Gamestate.switch(require 'states/pause')
 
+    elseif puzzleUIActive then
+        if key == "backspace" then
+            puzzleInput = puzzleInput:sub(1, -2)
+        elseif key == "return" or key == "kpenter" then
+            if puzzleInput:lower() == "done" then
+                puzzleUIActive = false
+                puzzleInput = ""
+            end
+        end
+    elseif key == "z" then
+        if puzzleObject then
+            local playerRect = getPlayerRect(player)
+            local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }
+            if rectsOverlap(playerRect, objRect) then
+                puzzleUIActive = true
+                puzzleInput = ""
+            end
+        end
+    end
+end
+
+function game:textinput(t)
+    if puzzleUIActive then
+        puzzleInput = puzzleInput .. t
     end
 end
 

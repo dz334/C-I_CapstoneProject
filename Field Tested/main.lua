@@ -48,3 +48,7 @@ end
 function love.keypressed(key)
     Gamestate.keypressed(key)
 end
+
+function love.textinput(t)
+    Gamestate.textinput(t)
+end
