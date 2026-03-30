@@ -254,7 +254,7 @@ function game:draw()
         local playerRect = getPlayerRect(player)
         local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }
         if rectsOverlap(playerRect, objRect) then
-            love.graphics.print("Press Z to open puzzle UI", 10, 112)
+            love.graphics.print("Press E to open puzzle UI", 10, 112)
         end
     end
 
@@ -280,13 +280,13 @@ function game:keypressed(key)
     elseif puzzleUIActive then
         if key == "backspace" then
             puzzleInput = puzzleInput:sub(1, -2)
-        elseif key == "return" or key == "kpenter" then
+        elseif key == "return" then
             if puzzleInput:lower() == "done" then
                 puzzleUIActive = false
                 puzzleInput = ""
             end
         end
-    elseif key == "z" then
+    elseif key == "e" then
         if puzzleObject then
             local playerRect = getPlayerRect(player)
             local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }

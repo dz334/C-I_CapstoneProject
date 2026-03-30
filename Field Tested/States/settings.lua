@@ -93,7 +93,7 @@ end
 
 function settings:keypressed(key)
     if key == "escape" then
-        Gamestate.switch(require 'states/menu')
+        Gamestate.pop()
     end
 end
 

@@ -1,9 +1,9 @@
 -- Load Hump Gamestate library and assets
 Gamestate = require 'Libraries/hump/gamestate'
-local menuState = require 'states/menu'
-local settingsState = require 'states/settings'
-local gameState = require 'states/game'
-local pauseState = require 'states/pause'
+menuState = require 'states/menu'
+settingsState = require 'states/settings'
+gameState = require 'states/game'
+pauseState = require 'states/pause'
 assets = require 'assets'
 
 -- Audio
@@ -21,16 +21,19 @@ end
 
 -- Global helper function 
 function drawBackgroundFixed(image)
-    local BG_W = 4800
-    local BG_H = 800
+    --local BG_W = 4800
+    --local BG_H =  960 -- 800 original value
+    local BG_W, BG_H = love.window.getDesktopDimensions( displayindex )
     local scaleX = BG_W / image:getWidth()
     local scaleY = BG_H / image:getHeight()
     love.graphics.draw(image, 0, BG_H, 0, scaleX, scaleY, 0, image:getHeight())
 end
 
 function love.load()
+    love.window.setFullscreen(true)
     assets.load()
     Gamestate.switch(menuState)
+
 end
 
 function love.update(dt)
