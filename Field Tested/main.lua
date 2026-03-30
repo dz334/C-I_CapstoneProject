@@ -31,6 +31,7 @@ end
 
 function love.load()
     love.window.setFullscreen(true)
+    love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it pixelated/clear
     assets.load()
     Gamestate.switch(menuState)
 

@@ -91,8 +91,6 @@ function game:enter()
         camera = require 'Libraries/camera'
         sti = require 'Libraries/sti'
 
-        love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it pixelated/clear
-
         cam = camera()
         gameMap = sti('Map/newtest1.lua')
 
@@ -128,18 +126,49 @@ function game:enter()
         player.maxFallSpeed = 700
         player.isGrounded = false
 
+
         -- Sprite/animation setup
-        player.spriteSheet = love.graphics.newImage('Sprites/player-sheet.png')
-        player.grid = anim8.newGrid(12, 18, player.spriteSheet:getWidth(), player.spriteSheet:getHeight())
-
+        local char = assets.character4
         player.animation = {}
-        player.animation.down = anim8.newAnimation(player.grid('1-4', 1), 0.1)
-        player.animation.left = anim8.newAnimation(player.grid('1-4', 2), 0.1)
-        player.animation.right = anim8.newAnimation(player.grid('1-4', 3), 0.1)
-        player.animation.up = anim8.newAnimation(player.grid('1-4', 4), 0.1)
 
-        -- Load player facing right by default
-        player.anim = player.animation.right
+        -- Idle
+        player.idleRightSheet = char.idleRight
+        player.idleLeftSheet  = char.idleLeft
+        local idleRightGrid = anim8.newGrid(32, 32, char.idleRight:getWidth(), char.idleRight:getHeight())
+        local idleLeftGrid  = anim8.newGrid(32, 32, char.idleLeft:getWidth(),  char.idleLeft:getHeight())
+
+        -- Running 
+        player.runRightSheet = char.runRight
+        player.runLeftSheet  = char.runLeft
+        local runRightGrid  = anim8.newGrid(32, 32, char.runRight:getWidth(),  char.runRight:getHeight())
+        local runLeftGrid   = anim8.newGrid(32, 32, char.runLeft:getWidth(),   char.runLeft:getHeight())
+
+        -- Jumping
+        player.jumpRightSheet = char.jumpRight
+        player.jumpLeftSheet  = char.jumpLeft
+        local jumpRightGrid = anim8.newGrid(32, 32, char.jumpRight:getWidth(), char.jumpRight:getHeight())
+        local jumpLeftGrid  = anim8.newGrid(32, 32, char.jumpLeft:getWidth(),  char.jumpLeft:getHeight())
+
+        -- Falling
+        player.fallRightSheet = char.fallRight
+        player.fallLeftSheet  = char.fallLeft
+        local fallRightGrid = anim8.newGrid(32, 32, char.fallRight:getWidth(), char.fallRight:getHeight())
+        local fallLeftGrid  = anim8.newGrid(32, 32, char.fallLeft:getWidth(),  char.fallLeft:getHeight())
+
+        -- Build animations
+        player.animation.idleRight = anim8.newAnimation(idleRightGrid('1-11', 1), 0.08)
+        player.animation.idleLeft  = anim8.newAnimation(idleLeftGrid('1-11',  1), 0.08)
+        player.animation.runRight  = anim8.newAnimation(runRightGrid('1-12',  1), 0.07)
+        player.animation.runLeft   = anim8.newAnimation(runLeftGrid('1-12',   1), 0.07)
+        player.animation.jumpRight = anim8.newAnimation(jumpRightGrid('1-1', 1), 0.07)
+        player.animation.jumpLeft  = anim8.newAnimation(jumpLeftGrid('1-1',  1), 0.07)
+        player.animation.fallRight = anim8.newAnimation(fallRightGrid('1-1', 1), 0.07)
+        player.animation.fallLeft  = anim8.newAnimation(fallLeftGrid('1-1',  1), 0.07)
+        
+        -- Default State
+        player.anim = player.animation.idleRight
+        player.animSheet = player.idleRightSheet
+        player.facingRight = true
 
         -- Puzzle object placed near spawn (placeholder)
         local spawnX, spawnY = player.x, player.y
@@ -182,10 +211,10 @@ function game:update(dt)
     local moveX = 0
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
         moveX = 1
-        player.anim = player.animation.right
+        player.facingRight = true
     elseif love.keyboard.isDown("left") or love.keyboard.isDown("a") then
         moveX = -1
-        player.anim = player.animation.left
+        player.facingRight = false
     end
 
     -- Calculate horizontal velocity
@@ -198,6 +227,22 @@ function game:update(dt)
         player.isGrounded = false
     end
 
+    if not player.isGrounded then
+        if player.vy < 0 then
+            player.anim = player.facingRight and player.animation.jumpRight or player.animation.jumpLeft
+            player.animSheet = player.facingRight and player.jumpRightSheet or player.jumpLeftSheet
+            else
+                player.anim = player.facingRight and player.animation.fallRight or player.animation.fallLeft
+                player.animSheet = player.facingRight and player.fallRightSheet or player.fallLeftSheet
+            end
+        elseif moveX ~= 0 then
+            player.anim = player.facingRight and player.animation.runRight or player.animation.runLeft
+            player.animSheet = player.facingRight and player.runRightSheet or player.runLeftSheet
+        else
+            player.anim = player.facingRight and player.animation.idleRight or player.animation.idleLeft
+            player.animSheet = player.facingRight and player.idleRightSheet or player.idleLeftSheet
+    end
+
     -- Caculate vertical fall speed with gravity
     player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
 
@@ -206,11 +251,6 @@ function game:update(dt)
 
     player.y = player.y + player.vy * dt
     resolveVerticalCollisions(player)
-
-    -- Character idle animation when standing still on ground
-    if moveX == 0 and player.isGrounded then
-        player.anim:gotoFrame(2)
-    end
 
     player.anim:update(dt)
 
@@ -235,7 +275,7 @@ function game:draw()
         drawBackgroundFixed(assets.background2.backgroundCloud2)
         drawBackgroundFixed(assets.background2.backgroundCloud1)
         gameMap:drawLayer(gameMap.layers["Ground"])
-        player.anim:draw(player.spriteSheet, player.x, player.y, nil, 2, nil, 9, 16)
+        player.anim:draw(player.animSheet, player.x, player.y, nil, 2, nil, 16, 32)
 
         -- Draw puzzle object placeholder
         if puzzleObject then
