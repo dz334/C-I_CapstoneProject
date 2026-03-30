@@ -77,10 +77,10 @@ end
 
 function menu:draw()
     -- Draw background (SUBJECT TO CHANGE)
-    drawBackgroundFixed(assets.background.backgroundSky)
-    drawBackgroundFixed(assets.background.backgroundHills)
-    drawBackgroundFixed(assets.background.backgroundCloud2)
-    drawBackgroundFixed(assets.background.backgroundCloud1)
+    drawBackgroundFixed(assets.background1.backgroundSky)
+    drawBackgroundFixed(assets.background1.backgroundHills)
+    drawBackgroundFixed(assets.background1.backgroundCloud2)
+    drawBackgroundFixed(assets.background1.backgroundCloud1)
 
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()

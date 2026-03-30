@@ -10,7 +10,7 @@ local puzzleInput = ""
 
 -- Audio
 isMuted = false
-soundVolume = 1 -- range 0 to 1
+soundVolume = 0.1 -- range 0 to 1
 themeMusic = nil
 
 function applyVolume()
@@ -128,7 +128,7 @@ function game:enter()
         player.maxFallSpeed = 700
         player.isGrounded = false
 
-         -- Sprite/animation setup
+        -- Sprite/animation setup
         player.spriteSheet = love.graphics.newImage('Sprites/player-sheet.png')
         player.grid = anim8.newGrid(12, 18, player.spriteSheet:getWidth(), player.spriteSheet:getHeight())
 
@@ -140,6 +140,7 @@ function game:enter()
 
         -- Load player facing right by default
         player.anim = player.animation.right
+
         -- Puzzle object placed near spawn (placeholder)
         local spawnX, spawnY = player.x, player.y
         puzzleObject = {
@@ -228,10 +229,11 @@ end
 
 function game:draw()
     cam:attach()
-        drawBackgroundFixed(assets.background.backgroundSky)
-        drawBackgroundFixed(assets.background.backgroundHills)
-        drawBackgroundFixed(assets.background.backgroundCloud2)
-        drawBackgroundFixed(assets.background.backgroundCloud1)
+        drawBackgroundFixed(assets.background2.backgroundSky)
+        drawBackgroundFixed(assets.background2.backgroundSand)
+        drawBackgroundFixed(assets.background2.backgroundCloud3)
+        drawBackgroundFixed(assets.background2.backgroundCloud2)
+        drawBackgroundFixed(assets.background2.backgroundCloud1)
         gameMap:drawLayer(gameMap.layers["Ground"])
         player.anim:draw(player.spriteSheet, player.x, player.y, nil, 2, nil, 9, 16)
 
