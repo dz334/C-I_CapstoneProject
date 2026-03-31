@@ -52,7 +52,6 @@ function menu:enter()
     end))
 
     -- Load and play menu theme music 
-  
     if love.filesystem.getInfo(assets.audio.menuMusic) then
         self.music = love.audio.newSource(assets.audio.menuMusic, 'stream')
         self.music:setLooping(true)
@@ -77,10 +76,11 @@ end
 
 function menu:draw()
     -- Draw background (SUBJECT TO CHANGE)
-    drawBackground(assets.background1.backgroundSky, 0)
-    drawBackground(assets.background1.backgroundHills, 0)
-    drawBackground(assets.background1.backgroundCloud2, 0)
-    drawBackground(assets.background1.backgroundCloud1, 0)
+    drawBackground(assets.background2.backgroundSky, 0.05)
+    drawBackground(assets.background2.backgroundSand, 0.1)
+    drawBackground(assets.background2.backgroundCloud3, 0.2)
+    drawBackground(assets.background2.backgroundCloud2, 0.3)
+    drawBackground(assets.background2.backgroundCloud1, 0.4)
 
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()

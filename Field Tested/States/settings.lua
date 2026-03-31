@@ -18,7 +18,7 @@ end
 
 function settings:enter()
     buttons = {}
-    titleFont  = love.graphics.newFont(48)
+    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
     buttonFont = love.graphics.newFont(32)
 
     table.insert(buttons, makeButton("Back", function()
@@ -30,19 +30,20 @@ function settings:update(dt)
 end
 
 function settings:draw()
-    drawBackgroundFixed(assets.background1.backgroundSky)
-    drawBackgroundFixed(assets.background1.backgroundHills)
-    drawBackgroundFixed(assets.background1.backgroundCloud2)
-    drawBackgroundFixed(assets.background1.backgroundCloud1)
+    drawBackground(assets.background2.backgroundSky, 0.05)
+    drawBackground(assets.background2.backgroundSand, 0.1)
+    drawBackground(assets.background2.backgroundCloud3, 0.2)
+    drawBackground(assets.background2.backgroundCloud2, 0.3)
+    drawBackground(assets.background2.backgroundCloud1, 0.4)
 
-    local width       = love.graphics.getWidth()
-    local height      = love.graphics.getHeight()
+    local width = love.graphics.getWidth()
+    local height = love.graphics.getHeight()
     local buttonWidth = width / 3
     local mouseX, mouseY = love.mouse.getPosition()
 
     -- Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(love.math.colorFromBytes(135, 206, 235))
     local title  = "Settings"
     local titleW = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleW) / 2, height * 0.22)

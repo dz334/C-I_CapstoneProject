@@ -79,9 +79,9 @@ function game:enter()
 
         cam = camera()
         cam:zoom(1.5)
-        gameMap = sti('Map/newtest1.lua')
+        gameMap = sti('Map/Level_1.lua')
 
-            -- Create the game music if it doesn't exist
+        -- Create the game music if it doesn't exist
         if not self.music then
             if love.filesystem.getInfo(assets.audio.gameMusic) then
                 self.music = love.audio.newSource(assets.audio.gameMusic, 'stream')
@@ -107,8 +107,8 @@ function game:enter()
         player.x, player.y = getSpawnPoint(gameMap)
         player.w, player.h = 24, 60
         player.vx, player.vy = 0, 0
-        player.moveSpeed = 1300 -- CHANGE SPEED
-        player.jumpForce = 400
+        player.moveSpeed = 300 -- CHANGE SPEED
+        player.jumpForce = 350
         player.gravity = 1100
         player.maxFallSpeed = 700
         player.isGrounded = false
@@ -173,6 +173,7 @@ function game:enter()
     elapsedTime = 0
 end
 
+
 function game:leave()
     -- Stop game music when leaving game state
     if self.music and self.music:isPlaying() then
@@ -195,10 +196,10 @@ function game:update(dt)
 
     -- Horizontal movement input
     local moveX = 0
-    if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
+    if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         moveX = 1
         player.facingRight = true
-    elseif love.keyboard.isDown("left") or love.keyboard.isDown("a") then
+    elseif love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         moveX = -1
         player.facingRight = false
     end
@@ -277,6 +278,7 @@ function game:draw()
     
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
+        gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.5, nil, 16, 32)
 
         -- Draw puzzle object placeholder

@@ -19,7 +19,7 @@ end
 
 function pause:enter()
     buttons = {}
-    titleFont = love.graphics.newFont(64)
+    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
     buttonFont = love.graphics.newFont(32)
 
     table.insert(buttons, makeButton("Resume", function()
@@ -45,10 +45,12 @@ function pause:update(dt)
 end
 
 function pause:draw()
-    -- Dim map background
-    love.graphics.setColor(0, 0, 0, 0.55)
-    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-
+    drawBackground(assets.background2.backgroundSky, 0.05)
+    drawBackground(assets.background2.backgroundSand, 0.1)
+    drawBackground(assets.background2.backgroundCloud3, 0.2)
+    drawBackground(assets.background2.backgroundCloud2, 0.3)
+    drawBackground(assets.background2.backgroundCloud1, 0.4)
+    
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
     local buttonWidth = width / 3

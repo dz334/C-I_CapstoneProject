@@ -35,7 +35,7 @@ function drawBackground(image, parallaxSpeed)
     end
     
     -- Draw the image TWICE
-    -- The first copy starts at negative offsetX
+    -- The first copy starts at negative offset X
     love.graphics.draw(image, -offsetX, 0, 0, scale, scale)
     
     -- The second copy starts exactly one image-width after the first
@@ -44,7 +44,7 @@ end
 
 function love.load()
     love.window.setFullscreen(true)
-    love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it pixelated/clear
+    love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it clear
     assets.load()
     Gamestate.switch(menuState)
 end
