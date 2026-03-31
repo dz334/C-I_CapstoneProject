@@ -55,7 +55,7 @@
   <object id="10" x="1184" y="481.333" width="30" height="102.667"/>
  </objectgroup>
  <objectgroup id="4" name="Spawn">
-  <object id="3" x="80" y="252">
+  <object id="3" x="303" y="255">
    <point/>
   </object>
  </objectgroup>

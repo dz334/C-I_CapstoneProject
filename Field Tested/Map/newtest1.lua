@@ -40,7 +40,40 @@ return {
       properties = {},
       wangsets = {},
       tilecount = 85,
-      tiles = {}
+      tiles = {
+        {
+          id = 1,
+          objectGroup = {
+            type = "objectgroup",
+            draworder = "index",
+            id = 2,
+            name = "",
+            class = "",
+            visible = true,
+            opacity = 1,
+            offsetx = 0,
+            offsety = 0,
+            parallaxx = 1,
+            parallaxy = 1,
+            properties = {},
+            objects = {
+              {
+                id = 1,
+                name = "",
+                type = "",
+                shape = "rectangle",
+                x = -1.77636e-15,
+                y = 1.08426,
+                width = 32.0217,
+                height = 20.0226,
+                rotation = 0,
+                visible = true,
+                properties = {}
+              }
+            }
+          }
+        }
+      }
     }
   },
   layers = {
@@ -243,8 +276,8 @@ return {
           name = "",
           type = "",
           shape = "point",
-          x = 80,
-          y = 252,
+          x = 303,
+          y = 255,
           width = 0,
           height = 0,
           rotation = 0,

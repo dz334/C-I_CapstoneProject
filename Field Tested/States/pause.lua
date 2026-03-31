@@ -104,7 +104,8 @@ end
 
 function pause:keypressed(key)
     if key == "escape" then
-        Gamestate.switch(gameState)
+        --Gamestate.switch(gameState)
+        Gamestate.pop()
     end
 end
 

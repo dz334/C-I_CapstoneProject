@@ -8,19 +8,6 @@ local puzzleObject = nil
 local puzzleUIActive = false
 local puzzleInput = ""
 
--- Audio
-isMuted = false
-soundVolume = 0.1 -- range 0 to 1
-themeMusic = nil
-
-function applyVolume()
-    if isMuted then
-        love.audio.setVolume(0)
-    else
-        love.audio.setVolume(soundVolume)
-    end
-end
-
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
     return a.x < b.x + b.w
@@ -81,7 +68,6 @@ local function getSpawnPoint(map)
     if spawnLayer and spawnLayer.objects and spawnLayer.objects[1] then
         return spawnLayer.objects[1].x, spawnLayer.objects[1].y
     end
-    return 400, 400
 end
 
 function game:enter()
@@ -92,21 +78,22 @@ function game:enter()
         sti = require 'Libraries/sti'
 
         cam = camera()
+        cam:zoom(1.5)
         gameMap = sti('Map/newtest1.lua')
 
-        -- Create the game music if it doesn't exist
-    if not self.music then
-        if love.filesystem.getInfo(assets.audio.gameMusic) then
-            self.music = love.audio.newSource(assets.audio.gameMusic, 'stream')
-            self.music:setLooping(true)
+            -- Create the game music if it doesn't exist
+        if not self.music then
+            if love.filesystem.getInfo(assets.audio.gameMusic) then
+                self.music = love.audio.newSource(assets.audio.gameMusic, 'stream')
+                self.music:setLooping(true)
+            end
         end
-    end
 
-    -- Play only if not already playing
-    if self.music and not self.music:isPlaying() then
-        self.music:play()
-        applyVolume()
-    end
+        -- Play only if not already playing
+        if self.music and not self.music:isPlaying() then
+            self.music:play()
+            applyVolume()
+        end
 
         -- Get map size (pixels) for camera clamping
         mapW = gameMap.width * gameMap.tilewidth
@@ -120,12 +107,11 @@ function game:enter()
         player.x, player.y = getSpawnPoint(gameMap)
         player.w, player.h = 24, 60
         player.vx, player.vy = 0, 0
-        player.moveSpeed = 300
+        player.moveSpeed = 1300 -- CHANGE SPEED
         player.jumpForce = 400
         player.gravity = 1100
         player.maxFallSpeed = 700
         player.isGrounded = false
-
 
         -- Sprite/animation setup
         local char = assets.character4
@@ -227,18 +213,19 @@ function game:update(dt)
         player.isGrounded = false
     end
 
+    -- Animation Change Logic
     if not player.isGrounded then
-        if player.vy < 0 then
+        if player.vy < 0 then -- If player is not falling
             player.anim = player.facingRight and player.animation.jumpRight or player.animation.jumpLeft
             player.animSheet = player.facingRight and player.jumpRightSheet or player.jumpLeftSheet
-            else
+            else -- If player is falling
                 player.anim = player.facingRight and player.animation.fallRight or player.animation.fallLeft
                 player.animSheet = player.facingRight and player.fallRightSheet or player.fallLeftSheet
             end
-        elseif moveX ~= 0 then
+        elseif moveX ~= 0 then -- If player is not moving
             player.anim = player.facingRight and player.animation.runRight or player.animation.runLeft
             player.animSheet = player.facingRight and player.runRightSheet or player.runLeftSheet
-        else
+        else -- If player is moving
             player.anim = player.facingRight and player.animation.idleRight or player.animation.idleLeft
             player.animSheet = player.facingRight and player.idleRightSheet or player.idleLeftSheet
     end
@@ -256,10 +243,24 @@ function game:update(dt)
 
     -- Follow player and clamp camera to map bounds
     cam:lookAt(player.x, player.y - player.h/2)
-    local w = love.graphics.getWidth()
-    local h = love.graphics.getHeight()
+    local w = love.graphics.getWidth() / cam.scale
+    local h = love.graphics.getHeight() / cam.scale
     cam.x = math.max(w/2, math.min(cam.x, mapW - w/2))
     cam.y = math.max(h/2, math.min(cam.y, mapH - h/2))
+
+    -- X-Axis Clamp (Centers the map if the map is smaller than the screen)
+    if mapW < w then
+        cam.x = mapW / 2
+    else
+        cam.x = math.max(w/2, math.min(cam.x, mapW - w/2))
+    end
+    
+    -- Y-Axis Clamp (Centers the map if the map is smaller than the screen)
+    if mapH < h then
+        cam.y = mapH / 2
+    else
+        cam.y = math.max(h/2, math.min(cam.y, mapH - h/2))
+    end
 
     -- Press "r" to reset position to spawn 
     if love.keyboard.isDown("r") then
@@ -268,14 +269,15 @@ function game:update(dt)
 end
 
 function game:draw()
+    drawBackground(assets.background2.backgroundSky, 0.05)
+    drawBackground(assets.background2.backgroundSand, 0.1)
+    drawBackground(assets.background2.backgroundCloud3, 0.2)
+    drawBackground(assets.background2.backgroundCloud2, 0.3)
+    drawBackground(assets.background2.backgroundCloud1, 0.4)
+    
     cam:attach()
-        drawBackgroundFixed(assets.background2.backgroundSky)
-        drawBackgroundFixed(assets.background2.backgroundSand)
-        drawBackgroundFixed(assets.background2.backgroundCloud3)
-        drawBackgroundFixed(assets.background2.backgroundCloud2)
-        drawBackgroundFixed(assets.background2.backgroundCloud1)
         gameMap:drawLayer(gameMap.layers["Ground"])
-        player.anim:draw(player.animSheet, player.x, player.y, nil, 2, nil, 16, 32)
+        player.anim:draw(player.animSheet, player.x, player.y, nil, 1.5, nil, 16, 32)
 
         -- Draw puzzle object placeholder
         if puzzleObject then

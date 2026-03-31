@@ -6,9 +6,9 @@ gameState = require 'states/game'
 pauseState = require 'states/pause'
 assets = require 'assets'
 
--- Audio
+-- Audio [CURRENTLY MUTED CHANGE LATER!!]
 isMuted = false
-soundVolume = 1 -- range 0 to 1
+soundVolume = 0 -- range 0 to 1
 themeMusic = nil
 
 function applyVolume()
@@ -19,14 +19,27 @@ function applyVolume()
     end
 end
 
--- Global helper function 
-function drawBackgroundFixed(image)
-    --local BG_W = 4800
-    --local BG_H =  960 -- 800 original value
-    local BG_W, BG_H = love.window.getDesktopDimensions( displayindex )
-    local scaleX = BG_W / image:getWidth()
-    local scaleY = BG_H / image:getHeight()
-    love.graphics.draw(image, 0, BG_H, 0, scaleX, scaleY, 0, image:getHeight())
+-- Global Draw Background Function With Parallax
+function drawBackground(image, parallaxSpeed)
+    local screenW = love.graphics.getWidth()
+    local screenH = love.graphics.getHeight()
+    
+    -- Scale to fill height so there are no bars at the top/bottom
+    local scale = screenH / image:getHeight()
+    local imgW = image:getWidth() * scale
+    
+    -- Calculate Offset
+    local offsetX = 0
+    if cam and parallaxSpeed then
+        offsetX = (cam.x * parallaxSpeed) % imgW
+    end
+    
+    -- Draw the image TWICE
+    -- The first copy starts at negative offsetX
+    love.graphics.draw(image, -offsetX, 0, 0, scale, scale)
+    
+    -- The second copy starts exactly one image-width after the first
+    love.graphics.draw(image, -offsetX + imgW, 0, 0, scale, scale)
 end
 
 function love.load()
@@ -34,7 +47,6 @@ function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it pixelated/clear
     assets.load()
     Gamestate.switch(menuState)
-
 end
 
 function love.update(dt)
