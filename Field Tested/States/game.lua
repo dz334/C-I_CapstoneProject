@@ -70,6 +70,13 @@ local function getSpawnPoint(map)
     end
 end
 
+local function getPuzzleLocation(map)
+    local puzzleLayer = map.layers["Puzzle"]
+        if puzzleLayer and puzzleLayer.objects and puzzleLayer.objects[1] then
+        return puzzleLayer.objects[1].x, puzzleLayer.objects[1].y
+    end
+end
+
 function game:enter()
     -- Only loads game when first entering gamestate
     if not gameLoaded then
@@ -157,10 +164,10 @@ function game:enter()
         player.facingRight = true
 
         -- Puzzle object placed near spawn (placeholder)
-        local spawnX, spawnY = player.x, player.y
+        local puzzleX, puzzleY = getPuzzleLocation(gameMap)
         puzzleObject = {
-            x = spawnX + 80,
-            y = spawnY - 40,
+            x = puzzleX - 16,
+            y = puzzleY - 16,
             w = 32,
             h = 32
         }
@@ -279,14 +286,16 @@ function game:draw()
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
         gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
+        gameMap:drawLayer(gameMap.layers["Signs"])
+        gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.5, nil, 16, 32)
 
         -- Draw puzzle object placeholder
-        if puzzleObject then
-            love.graphics.setColor(1, 0.85, 0.2, 1)
-            love.graphics.rectangle("fill", puzzleObject.x, puzzleObject.y, puzzleObject.w, puzzleObject.h)
-            love.graphics.setColor(1, 1, 1, 1)
-        end
+        -- if puzzleObject then
+        --     love.graphics.setColor(1, 0.85, 0.2, 1)
+        --     love.graphics.rectangle("fill", puzzleObject.x, puzzleObject.y, puzzleObject.w, puzzleObject.h)
+        --     love.graphics.setColor(1, 1, 1, 1)
+        -- end
     cam:detach()
 
     love.graphics.setColor(1, 1, 1, 1)

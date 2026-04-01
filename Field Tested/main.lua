@@ -34,7 +34,7 @@ function drawBackground(image, parallaxSpeed)
         offsetX = (cam.x * parallaxSpeed) % imgW
     end
     
-    -- Draw the image TWICE
+    -- Draw Background twice
     -- The first copy starts at negative offset X
     love.graphics.draw(image, -offsetX, 0, 0, scale, scale)
     
