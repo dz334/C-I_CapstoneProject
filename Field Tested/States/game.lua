@@ -77,6 +77,13 @@ local function getPuzzleLocation(map)
     end
 end
 
+local function getSignLocation(map)
+    local signsLayer = map.layers["Signs"]
+        if signsLayer and signsLayer.objects and signsLayer.objects[1] then
+        return signsLayer.objects[1].x, signsLayer.objects[1].y
+    end
+end
+
 function game:enter()
     -- Only loads game when first entering gamestate
     if not gameLoaded then
@@ -165,14 +172,31 @@ function game:enter()
 
         -- Puzzle object placed near spawn (placeholder)
         local puzzleX, puzzleY = getPuzzleLocation(gameMap)
-        puzzleObject = {
-            x = puzzleX - 16,
-            y = puzzleY - 16,
-            w = 32,
-            h = 32
-        }
+        if puzzleX and puzzleY then
+            puzzleObject = {
+                x = puzzleX - 16,
+                y = puzzleY - 16,
+                w = 32,
+                h = 32
+            }
+        else
+            puzzleObject = nil
+        end
         puzzleUIActive = false
         puzzleInput = ""
+
+        -- Puzzle object placed near spawn (placeholder)
+        local signX, signY = getSignLocation(gameMap)
+           if signX and signY then
+            signObject = {
+                x = signX - 16,
+                y = signY - 16,
+                w = 32,
+                h = 32
+            }
+        else
+            signObject = nil
+        end
 
         gameLoaded = true
     end
@@ -286,7 +310,7 @@ function game:draw()
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
         gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
-        gameMap:drawLayer(gameMap.layers["Signs"])
+        gameMap:drawLayer(gameMap.layers["SignsIMG"])
         gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.5, nil, 16, 32)
 
@@ -313,8 +337,17 @@ function game:draw()
         end
     end
 
+    -- UI prompt when near sign object
+    if signObject and not signUIActive then
+        local playerRect = getPlayerRect(player)
+        local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
+        if rectsOverlap(playerRect, signRect) then
+            love.graphics.print("Press E to read sign", 10, 112)
+        end
+    end
+
     -- Puzzle UI placeholder
-    if puzzleUIActive then
+    if puzzleUIActive or signUIActive then
         local uiW, uiH = 420, 240
         local uiX = (love.graphics.getWidth() - uiW) / 2
         local uiY = (love.graphics.getHeight() - uiH) / 2
@@ -322,8 +355,13 @@ function game:draw()
         love.graphics.rectangle("fill", uiX, uiY, uiW, uiH)
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.rectangle("line", uiX, uiY, uiW, uiH)
-        love.graphics.print("Puzzle UI (placeholder)", uiX + 16, uiY + 16)
-        love.graphics.print("Input: " .. puzzleInput, uiX + 16, uiY + 64)
+
+        if puzzleUIActive then
+            love.graphics.print("Puzzle UI (placeholder)", uiX + 16, uiY + 16)
+            love.graphics.print("Input: " .. puzzleInput, uiX + 16, uiY + 64)
+        else
+            love.graphics.print("Sign UI (placeholder)", uiX + 16, uiY + 16)
+        end
     end
 end
 
@@ -348,6 +386,12 @@ function game:keypressed(key)
             if rectsOverlap(playerRect, objRect) then
                 puzzleUIActive = true
                 puzzleInput = ""
+            end
+        elseif signObject then
+            local playerRect = getPlayerRect(player)
+            local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
+            if rectsOverlap(playerRect, signRect) then
+                signUIActive = true
             end
         end
     end

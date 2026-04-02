@@ -1,7 +1,7 @@
 return {
   version = "1.10",
   luaversion = "5.1",
-  tiledversion = "1.11.2",
+  tiledversion = "1.12.1",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -9,8 +9,8 @@ return {
   height = 25,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 9,
-  nextobjectid = 13,
+  nextlayerid = 11,
+  nextobjectid = 14,
   properties = {},
   tilesets = {
     {
@@ -86,6 +86,7 @@ return {
                 width = 31.875,
                 height = 32,
                 rotation = 0,
+                opacity = 1,
                 visible = true,
                 properties = {
                   ["Collidable"] = true
@@ -359,6 +360,7 @@ return {
           width = 4734,
           height = 25,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -372,6 +374,7 @@ return {
           width = 34,
           height = 730,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -385,6 +388,7 @@ return {
           width = 52,
           height = 95,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -398,6 +402,7 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
+          opacity = 1,
           visible = true,
           polygon = {
             { x = 0, y = 0 },
@@ -419,6 +424,7 @@ return {
           width = 95.3333,
           height = 28,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -432,6 +438,7 @@ return {
           width = 60.5,
           height = 61.5,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -445,6 +452,7 @@ return {
           width = 94.5,
           height = 27.5,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -474,6 +482,37 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
+          opacity = 1,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 9,
+      name = "Signs",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      properties = {},
+      objects = {
+        {
+          id = 13,
+          name = "",
+          type = "",
+          shape = "point",
+          x = 328,
+          y = 693,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -548,6 +587,7 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -560,7 +600,7 @@ return {
       width = 150,
       height = 25,
       id = 7,
-      name = "Signs",
+      name = "SignsIMG",
       class = "",
       visible = true,
       opacity = 1,
