@@ -85,6 +85,13 @@ local function getSignLocation(map)
     end
 end
 
+local function getOrbLocation(map)
+    local orbLayer = map.layers["Orb"]
+        if orbLayer and orbLayer.objects and orbLayer.objects[1] then
+        return orbLayer.objects[1].x, orbLayer.objects[1].y
+    end
+end
+
 function game:enter()
     -- Only loads game when first entering gamestate
     if not gameLoaded then
@@ -158,18 +165,33 @@ function game:enter()
 
         -- Build animations
         player.animation.idleRight = anim8.newAnimation(idleRightGrid('1-11', 1), 0.08)
-        player.animation.idleLeft  = anim8.newAnimation(idleLeftGrid('1-11',  1), 0.08)
-        player.animation.runRight  = anim8.newAnimation(runRightGrid('1-12',  1), 0.07)
-        player.animation.runLeft   = anim8.newAnimation(runLeftGrid('1-12',   1), 0.07)
+        player.animation.idleLeft  = anim8.newAnimation(idleLeftGrid('1-11', 1), 0.08)
+        player.animation.runRight  = anim8.newAnimation(runRightGrid('1-12', 1), 0.07)
+        player.animation.runLeft   = anim8.newAnimation(runLeftGrid('1-12', 1), 0.07)
         player.animation.jumpRight = anim8.newAnimation(jumpRightGrid('1-1', 1), 0.07)
-        player.animation.jumpLeft  = anim8.newAnimation(jumpLeftGrid('1-1',  1), 0.07)
+        player.animation.jumpLeft  = anim8.newAnimation(jumpLeftGrid('1-1', 1), 0.07)
         player.animation.fallRight = anim8.newAnimation(fallRightGrid('1-1', 1), 0.07)
-        player.animation.fallLeft  = anim8.newAnimation(fallLeftGrid('1-1',  1), 0.07)
+        player.animation.fallLeft  = anim8.newAnimation(fallLeftGrid('1-1', 1), 0.07)
         
-        -- Default State
+        -- Player Default State
         player.anim = player.animation.idleRight
         player.animSheet = player.idleRightSheet
         player.facingRight = true
+
+        -- Animated Orb
+        orb = {}
+        orb.x, orb.y = getOrbLocation(gameMap)
+        
+        local orbAsset = assets.orb
+        orb.animation = {}
+        
+        orb.IdleSheet = orbAsset.orbIdle
+        local orbAnimationGrid = anim8.newGrid(32, 32, orbAsset.orbIdle:getWidth(), orbAsset.orbIdle:getHeight()) 
+        
+        orb.animation.orbIdle = anim8.newAnimation(orbAnimationGrid('1-4', 1), 0.07)
+        
+        orb.animSheet = orb.IdleSheet
+        orb.anim = orb.animation.orbIdle
 
         -- Puzzle object (placeholder)
         local puzzleX, puzzleY = getPuzzleLocation(gameMap)
@@ -323,14 +345,9 @@ function game:draw()
         gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
         gameMap:drawLayer(gameMap.layers["CaveExit"])
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
-
-        -- Draw puzzle object placeholder
-        -- if puzzleObject then
-        --     love.graphics.setColor(1, 0.85, 0.2, 1)
-        --     love.graphics.rectangle("fill", puzzleObject.x, puzzleObject.y, puzzleObject.w, puzzleObject.h)
-        --     love.graphics.setColor(1, 1, 1, 1)
-        -- end
     cam:detach()
+
+    orb.anim:draw(orb.animSheet, orb.x, orb.y, nil, 1, nil, 16, 32)
 
     -- UI prompt when near puzzle object
     if puzzleObject and not puzzleUIActive and not signUIActive then

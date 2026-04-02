@@ -9,8 +9,8 @@ return {
   height = 25,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 15,
-  nextobjectid = 16,
+  nextlayerid = 16,
+  nextobjectid = 18,
   properties = {},
   tilesets = {
     {
@@ -298,38 +298,38 @@ return {
       wangsets = {},
       tilecount = 1,
       tiles = {}
-    },
-    {
-      name = "board",
-      firstgid = 1056,
-      class = "",
-      tilewidth = 32,
-      tileheight = 32,
-      spacing = 0,
-      margin = 0,
-      columns = 3,
-      image = "../Tiles/2.png",
-      imagewidth = 96,
-      imageheight = 96,
-      objectalignment = "unspecified",
-      tilerendersize = "tile",
-      fillmode = "stretch",
-      tileoffset = {
-        x = 0,
-        y = 0
-      },
-      grid = {
-        orientation = "orthogonal",
-        width = 32,
-        height = 32
-      },
-      properties = {},
-      wangsets = {},
-      tilecount = 9,
-      tiles = {}
     }
   },
   layers = {
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 15,
+      name = "Orb",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      properties = {},
+      objects = {
+        {
+          id = 16,
+          name = "",
+          type = "",
+          shape = "point",
+          x = 898.5,
+          y = 686.5,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
     {
       type = "tilelayer",
       x = 0,

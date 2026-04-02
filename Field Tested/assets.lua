@@ -55,6 +55,10 @@ function assets.load()
     assets.ui = {
         panel = love.graphics.newImage("Tiles/4.png")
     }
+
+    assets.orb = {
+        orbIdle = love.graphics.newImage("Tiles/orb.png")
+    }
 end
 
 return assets
