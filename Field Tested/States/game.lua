@@ -7,6 +7,7 @@ local gameLoaded = false
 local puzzleObject = nil
 local puzzleUIActive = false
 local puzzleInput = ""
+local signUIActive = false
 
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
@@ -170,7 +171,7 @@ function game:enter()
         player.animSheet = player.idleRightSheet
         player.facingRight = true
 
-        -- Puzzle object placed near spawn (placeholder)
+        -- Puzzle object (placeholder)
         local puzzleX, puzzleY = getPuzzleLocation(gameMap)
         if puzzleX and puzzleY then
             puzzleObject = {
@@ -185,7 +186,7 @@ function game:enter()
         puzzleUIActive = false
         puzzleInput = ""
 
-        -- Puzzle object placed near spawn (placeholder)
+        -- Sign object (placeholder)
         local signX, signY = getSignLocation(gameMap)
            if signX and signY then
             signObject = {
@@ -197,6 +198,8 @@ function game:enter()
         else
             signObject = nil
         end
+        signUIActive = false
+
 
         gameLoaded = true
     end
@@ -387,7 +390,8 @@ function game:keypressed(key)
                 puzzleUIActive = true
                 puzzleInput = ""
             end
-        elseif signObject then
+        end
+        if signObject then
             local playerRect = getPlayerRect(player)
             local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
             if rectsOverlap(playerRect, signRect) then
