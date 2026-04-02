@@ -22,10 +22,6 @@ function assets.load()
         gameMusic = 'Sounds/AccumulaTown.mp3'
     }
 
-    assets.sprite1 = {
-
-    }
-
     assets.character1 = {
 
     }
