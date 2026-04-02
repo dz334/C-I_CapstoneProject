@@ -43,13 +43,13 @@
   <image source="../Tiles/Cave_Entrance.png" width="60" height="32"/>
  </tileset>
  <objectgroup id="15" name="Orb">
-  <object id="16" x="898.5" y="686.5">
+  <object id="16" x="1190.5" y="693.833">
    <point/>
   </object>
-  <object id="18" x="800.667" y="682.667">
+  <object id="18" x="1354" y="696">
    <point/>
   </object>
-  <object id="19" x="845.333" y="684.667">
+  <object id="19" x="1032" y="572.667">
    <point/>
   </object>
  </objectgroup>

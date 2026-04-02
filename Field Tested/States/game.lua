@@ -115,7 +115,7 @@ function game:enter()
         cam = camera()
         cam:zoom(1.5)
         gameMap = sti('Map/Level_1.lua')
-        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
+        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
         -- Create the game music if it doesn't exist
         if not self.music then
@@ -360,10 +360,10 @@ function game:draw()
     love.graphics.print("ESC = Pause", 10, 40)
     love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
     love.graphics.print("Press R to reset", 10, 88)
-
+    love.graphics.setFont(gameFont)
     local orbDisplay= "Orbs: "
     local orbTitle = gameFont:getWidth(orbDisplay)
-    love.graphics.print("Orbs: " .. orbsCollected .. "/" .. orbsRequired, (love.graphics.getWidth() - orbTitle) / 2, 16)
+    love.graphics.print("Orbs: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
     
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
@@ -379,7 +379,7 @@ function game:draw()
         end
     end
     cam:detach()
-    
+
     -- UI prompt when near puzzle object
     if puzzleObject and not puzzleUIActive and not signUIActive then
         local playerRect = getPlayerRect(player)
