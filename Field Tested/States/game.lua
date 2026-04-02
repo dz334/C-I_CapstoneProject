@@ -218,7 +218,7 @@ end
 function game:update(dt)
     elapsedTime = elapsedTime + dt
 
-    if puzzleUIActive then
+    if puzzleUIActive or signUIActive then
         player.vx = 0
         player.vy = 0
         if player.isGrounded then
@@ -309,6 +309,12 @@ function game:draw()
     drawBackground(assets.background2.backgroundCloud3, 0.2)
     drawBackground(assets.background2.backgroundCloud2, 0.3)
     drawBackground(assets.background2.backgroundCloud1, 0.4)
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
+    love.graphics.print("ESC = Pause", 10, 40)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
+    love.graphics.print("Press R to reset", 10, 88)
     
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
@@ -325,14 +331,8 @@ function game:draw()
         -- end
     cam:detach()
 
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
-    love.graphics.print("ESC = Pause", 10, 40)
-    love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
-    love.graphics.print("Press R to reset", 10, 88)
-
     -- UI prompt when near puzzle object
-    if puzzleObject and not puzzleUIActive then
+    if puzzleObject and not puzzleUIActive and not signUIActive then
         local playerRect = getPlayerRect(player)
         local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }
         if rectsOverlap(playerRect, objRect) then
@@ -341,7 +341,7 @@ function game:draw()
     end
 
     -- UI prompt when near sign object
-    if signObject and not signUIActive then
+    if signObject and not signUIActive and not puzzleUIActive then
         local playerRect = getPlayerRect(player)
         local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
         if rectsOverlap(playerRect, signRect) then
@@ -370,8 +370,12 @@ end
 
 function game:keypressed(key)
     if key == "escape" then
-        --Gamestate.push(require 'states/pause')
         Gamestate.switch(require 'states/pause')
+
+    elseif signUIActive then
+        if key == "e" or key == "return" or key == "escape" or key == "space" then
+            signUIActive = false
+        end
 
     elseif puzzleUIActive then
         if key == "backspace" then
@@ -382,6 +386,7 @@ function game:keypressed(key)
                 puzzleInput = ""
             end
         end
+
     elseif key == "e" then
         if puzzleObject then
             local playerRect = getPlayerRect(player)
