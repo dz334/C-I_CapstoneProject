@@ -304,11 +304,11 @@ function game:update(dt)
 end
 
 function game:draw()
-    drawBackground(assets.background2.backgroundSky, 0.05)
-    drawBackground(assets.background2.backgroundSand, 0.1)
-    drawBackground(assets.background2.backgroundCloud3, 0.2)
-    drawBackground(assets.background2.backgroundCloud2, 0.3)
-    drawBackground(assets.background2.backgroundCloud1, 0.4)
+    drawBackground(assets.background1.backgroundSky, 0.05)
+    drawBackground(assets.background1.backgroundSand, 0.1)
+    drawBackground(assets.background1.backgroundCloud3, 0.2)
+    drawBackground(assets.background1.backgroundCloud2, 0.3)
+    drawBackground(assets.background1.backgroundCloud1, 0.4)
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
@@ -321,7 +321,8 @@ function game:draw()
         gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
         gameMap:drawLayer(gameMap.layers["SignsIMG"])
         gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
-        player.anim:draw(player.animSheet, player.x, player.y, nil, 1.5, nil, 16, 32)
+        gameMap:drawLayer(gameMap.layers["CaveExit"])
+        player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
 
         -- Draw puzzle object placeholder
         -- if puzzleObject then
@@ -351,20 +352,26 @@ function game:draw()
 
     -- Puzzle UI placeholder
     if puzzleUIActive or signUIActive then
-        local uiW, uiH = 420, 240
+        local scale = 2 
+        local imgW = assets.ui.panel:getWidth()
+        local imgH = assets.ui.panel:getHeight()
+        local uiW = imgW * scale
+        local uiH = imgH * scale
         local uiX = (love.graphics.getWidth() - uiW) / 2
-        local uiY = (love.graphics.getHeight() - uiH) / 2
-        love.graphics.setColor(0, 0, 0, 0.75)
-        love.graphics.rectangle("fill", uiX, uiY, uiW, uiH)
+        local uiY = (love.graphics.getHeight() - uiH) / 2   
+
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.rectangle("line", uiX, uiY, uiW, uiH)
+        love.graphics.draw(assets.ui.panel, uiX, uiY, 0, scale, scale)
 
         if puzzleUIActive then
-            love.graphics.print("Puzzle UI (placeholder)", uiX + 16, uiY + 16)
-            love.graphics.print("Input: " .. puzzleInput, uiX + 16, uiY + 64)
+            love.graphics.setColor(0, 0, 0, 1)
+            love.graphics.print("Puzzle UI", uiX + 48, uiY + 48)
+            love.graphics.print("Input: " .. puzzleInput, uiX + 48, uiY + 88)
         else
-            love.graphics.print("Sign UI (placeholder)", uiX + 16, uiY + 16)
+            love.graphics.setColor(0, 0, 0, 1)
+            love.graphics.print("Sign text goes here", uiX + 48, uiY + 48)
         end
+        love.graphics.setColor(1, 1, 1, 1)
     end
 end
 
@@ -373,7 +380,7 @@ function game:keypressed(key)
         Gamestate.switch(require 'states/pause')
 
     elseif signUIActive then
-        if key == "e" or key == "return" or key == "escape" or key == "space" then
+        if key == "e" or key == "return" or key == "space" then
             signUIActive = false
         end
 

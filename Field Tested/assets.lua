@@ -2,13 +2,6 @@ local assets = {}
 
 function assets.load()
     assets.background1 = {
-        backgroundCloud1 = love.graphics.newImage('Map/Background/Cloud_cover_1.png'),
-        backgroundCloud2 = love.graphics.newImage('Map/Background/Cloud_cover_2.png'),
-        backgroundHills = love.graphics.newImage('Map/Background/Hills.png'),
-        backgroundSky = love.graphics.newImage('Map/Background/Sky_color.png')
-    }
-
-    assets.background2 = {
         backgroundCloud1 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_big.png'),
         backgroundCloud2 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_medium.png'),
         backgroundCloud3 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_small.png'),
@@ -57,6 +50,10 @@ function assets.load()
         
         doubleJumpLeft = love.graphics.newImage('Sprites/Character4/Double_Jump_Left.png'),
         doubleJumpRight = love.graphics.newImage('Sprites/Character4/Double_Jump_Right.png')
+    }
+
+    assets.ui = {
+        panel = love.graphics.newImage("Tiles/4.png")
     }
 end
 
