@@ -8,6 +8,11 @@ local puzzleObject = nil
 local puzzleUIActive = false
 local puzzleInput = ""
 local signUIActive = false
+local orbs = {}
+local orbsCollected = 0
+local orbsRequired = 3
+local exitUnlocked = false
+local gameFont
 
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
@@ -73,22 +78,30 @@ end
 
 local function getPuzzleLocation(map)
     local puzzleLayer = map.layers["Puzzle"]
-        if puzzleLayer and puzzleLayer.objects and puzzleLayer.objects[1] then
+    if puzzleLayer and puzzleLayer.objects and puzzleLayer.objects[1] then
         return puzzleLayer.objects[1].x, puzzleLayer.objects[1].y
     end
 end
 
 local function getSignLocation(map)
     local signsLayer = map.layers["Signs"]
-        if signsLayer and signsLayer.objects and signsLayer.objects[1] then
+    if signsLayer and signsLayer.objects and signsLayer.objects[1] then
         return signsLayer.objects[1].x, signsLayer.objects[1].y
     end
 end
 
-local function getOrbLocation(map)
+local function collectOrbs(map)
+    orbs = {}
     local orbLayer = map.layers["Orb"]
-        if orbLayer and orbLayer.objects and orbLayer.objects[1] then
-        return orbLayer.objects[1].x, orbLayer.objects[1].y
+    if not orbLayer or not orbLayer.objects then return end
+    for _, obj in ipairs(orbLayer.objects) do
+        table.insert(orbs, {
+            x = obj.x,
+            y = obj.y,
+            w = 32,
+            h = 32,
+            collected = false
+        })
     end
 end
 
@@ -102,6 +115,7 @@ function game:enter()
         cam = camera()
         cam:zoom(1.5)
         gameMap = sti('Map/Level_1.lua')
+        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
 
         -- Create the game music if it doesn't exist
         if not self.music then
@@ -123,6 +137,9 @@ function game:enter()
 
         -- Load collision map data
         collectSolidRects(gameMap)
+
+        -- Load Orb Collection Data
+        collectOrbs(gameMap)
 
         -- Player state and physics properties
         player = {}
@@ -178,20 +195,10 @@ function game:enter()
         player.animSheet = player.idleRightSheet
         player.facingRight = true
 
-        -- Animated Orb
-        orb = {}
-        orb.x, orb.y = getOrbLocation(gameMap)
-        
-        local orbAsset = assets.orb
-        orb.animation = {}
-        
-        orb.IdleSheet = orbAsset.orbIdle
-        local orbAnimationGrid = anim8.newGrid(32, 32, orbAsset.orbIdle:getWidth(), orbAsset.orbIdle:getHeight()) 
-        
-        orb.animation.orbIdle = anim8.newAnimation(orbAnimationGrid('1-4', 1), 0.07)
-        
-        orb.animSheet = orb.IdleSheet
-        orb.anim = orb.animation.orbIdle
+        -- Orb animation
+        local orbFrameW = 32  -- adjust based on your actual frame size
+        local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
+        orbAnim = anim8.newAnimation(orbGrid('1-4', 1), 0.07)
 
         -- Puzzle object (placeholder)
         local puzzleX, puzzleY = getPuzzleLocation(gameMap)
@@ -297,6 +304,7 @@ function game:update(dt)
     resolveVerticalCollisions(player)
 
     player.anim:update(dt)
+    orbAnim:update(dt)
 
     -- Follow player and clamp camera to map bounds
     cam:lookAt(player.x, player.y - player.h/2)
@@ -319,6 +327,21 @@ function game:update(dt)
         cam.y = math.max(h/2, math.min(cam.y, mapH - h/2))
     end
 
+    -- Orb Collection
+    for _, orb in ipairs(orbs) do
+    if not orb.collected then
+        local playerRect = getPlayerRect(player)
+        local orbRect = { x = orb.x, y = orb.y, w = orb.w, h = orb.h }
+        if rectsOverlap(playerRect, orbRect) then
+            orb.collected = true
+            orbsCollected = orbsCollected + 1
+            if orbsCollected >= orbsRequired then
+                exitUnlocked = true
+            end
+        end
+    end
+end
+
     -- Press "r" to reset position to spawn 
     if love.keyboard.isDown("r") then
         player.x, player.y = getSpawnPoint(gameMap)
@@ -337,6 +360,10 @@ function game:draw()
     love.graphics.print("ESC = Pause", 10, 40)
     love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
     love.graphics.print("Press R to reset", 10, 88)
+
+    local orbDisplay= "Orbs: "
+    local orbTitle = gameFont:getWidth(orbDisplay)
+    love.graphics.print("Orbs: " .. orbsCollected .. "/" .. orbsRequired, (love.graphics.getWidth() - orbTitle) / 2, 16)
     
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
@@ -345,10 +372,14 @@ function game:draw()
         gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
         gameMap:drawLayer(gameMap.layers["CaveExit"])
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
+        for _, orb in ipairs(orbs) do
+        if not orb.collected then
+            love.graphics.setColor(1, 1, 1, 1)
+            orbAnim:draw(assets.orb.orbIdle, orb.x + 16, orb.y + 16, nil, 1, nil, 32/2, assets.orb.orbIdle:getHeight()/2)
+        end
+    end
     cam:detach()
-
-    orb.anim:draw(orb.animSheet, orb.x, orb.y, nil, 1, nil, 16, 32)
-
+    
     -- UI prompt when near puzzle object
     if puzzleObject and not puzzleUIActive and not signUIActive then
         local playerRect = getPlayerRect(player)

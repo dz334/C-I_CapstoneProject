@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="18">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="20">
  <editorsettings>
   <export target="Level_1.lua" format="lua"/>
  </editorsettings>
@@ -44,6 +44,12 @@
  </tileset>
  <objectgroup id="15" name="Orb">
   <object id="16" x="898.5" y="686.5">
+   <point/>
+  </object>
+  <object id="18" x="800.667" y="682.667">
+   <point/>
+  </object>
+  <object id="19" x="845.333" y="684.667">
    <point/>
   </object>
  </objectgroup>
@@ -121,7 +127,7 @@
   <object id="14" x="1025.67" y="608.333" width="30.3333" height="96.6667"/>
  </objectgroup>
  <objectgroup id="3" name="Spawn">
-  <object id="5" x="289" y="700">
+  <object id="5" x="215" y="703.333">
    <point/>
   </object>
  </objectgroup>

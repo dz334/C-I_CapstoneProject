@@ -10,7 +10,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 16,
-  nextobjectid = 18,
+  nextobjectid = 20,
   properties = {},
   tilesets = {
     {
@@ -327,6 +327,32 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 18,
+          name = "",
+          type = "",
+          shape = "point",
+          x = 800.667,
+          y = 682.667,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 19,
+          name = "",
+          type = "",
+          shape = "point",
+          x = 845.333,
+          y = 684.667,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     },
@@ -569,8 +595,8 @@ return {
           name = "",
           type = "",
           shape = "point",
-          x = 289,
-          y = 700,
+          x = 215,
+          y = 703.333,
           width = 0,
           height = 0,
           rotation = 0,
