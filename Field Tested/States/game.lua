@@ -13,6 +13,8 @@ local orbsCollected = 0
 local orbsRequired = 3
 local exitUnlocked = false
 local gameFont
+local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
+        jumpSound:setVolume(0.4)
 
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
@@ -107,29 +109,22 @@ end
 
 function game:enter()
     -- Only loads game when first entering gamestate
+        game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
+        game_Music:setVolume(0.2)
+        game_Music:setLooping(true)
+        game_Music:play()
+   
     if not gameLoaded then
         anim8 = require 'Libraries/anim8'
         camera = require 'Libraries/camera'
         sti = require 'Libraries/sti'
 
+        game_Music:play()
+
         cam = camera()
         cam:zoom(1.5)
         gameMap = sti('Map/Level_1.lua')
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
-
-        -- Create the game music if it doesn't exist
-        if not self.music then
-            if love.filesystem.getInfo(assets.audio.gameMusic) then
-                self.music = love.audio.newSource(assets.audio.gameMusic, 'stream')
-                self.music:setLooping(true)
-            end
-        end
-
-        -- Play only if not already playing
-        if self.music and not self.music:isPlaying() then
-            self.music:play()
-            applyVolume()
-        end
 
         -- Get map size (pixels) for camera clamping
         mapW = gameMap.width * gameMap.tilewidth
@@ -236,15 +231,14 @@ function game:enter()
     elapsedTime = 0
 end
 
-
 function game:leave()
-    -- Stop game music when leaving game state
-    if self.music and self.music:isPlaying() then
-        self.music:stop()
+    if game_Music then
+        game_Music:stop()
     end
 end
 
 function game:update(dt)
+
     elapsedTime = elapsedTime + dt
 
     if puzzleUIActive or signUIActive then
@@ -275,6 +269,14 @@ function game:update(dt)
     and player.isGrounded then
         player.vy = -player.jumpForce
         player.isGrounded = false
+        if player.jumpRequested then
+            jumpSound:stop()
+            jumpSound:play()
+            player.jumpRequested = false
+        end
+    
+    player.jumpRequested = false
+        jumping = true
     end
 
     -- Animation Change Logic
@@ -346,6 +348,7 @@ end
     if love.keyboard.isDown("r") then
         player.x, player.y = getSpawnPoint(gameMap)
     end    
+
 end
 
 function game:draw()
@@ -424,6 +427,10 @@ function game:draw()
 end
 
 function game:keypressed(key)
+    if (key == "space" or key == "up" or key == "w") then
+        player.jumpRequested = true
+    end
+
     if key == "escape" then
         Gamestate.switch(require 'states/pause')
 
