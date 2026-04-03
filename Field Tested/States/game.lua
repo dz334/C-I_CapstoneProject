@@ -111,12 +111,15 @@ function game:enter()
     -- Only loads game when first entering gamestate
         game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
         game_Music:setVolume(0.2)
+        game_Music:setLooping(true)
         game_Music:play()
-        menu_Music:stop()
+   
     if not gameLoaded then
         anim8 = require 'Libraries/anim8'
         camera = require 'Libraries/camera'
         sti = require 'Libraries/sti'
+
+        game_Music:play()
 
         cam = camera()
         cam:zoom(1.5)
@@ -226,6 +229,12 @@ function game:enter()
     end
 
     elapsedTime = 0
+end
+
+function game:leave()
+    if game_Music then
+        game_Music:stop()
+    end
 end
 
 function game:update(dt)

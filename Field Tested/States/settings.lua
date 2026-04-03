@@ -69,6 +69,9 @@ function settings:draw()
     love.graphics.setColor(1, 1, 1, 0.95)
     love.graphics.setFont(buttonFont)
     love.graphics.print("Add your options here (audio, controls, graphics).", width * 0.22, height * 0.38)
+    -- print the current volume level
+    local volumeText = string.format("Current Volume: %d%%", love.audio.getVolume() * 100)
+    love.graphics.print(volumeText, width * 0.22, height * 0.44)
 
 
     -- Buttons

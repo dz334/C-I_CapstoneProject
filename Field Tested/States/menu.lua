@@ -48,6 +48,10 @@ function menu:enter()
 
 end
 
+function menu:leave()
+    menu_Music:stop()
+end
+
 function menu:draw()
     -- Draw background (SUBJECT TO CHANGE)
     drawBackground(assets.background1.backgroundSky, 0.05)
