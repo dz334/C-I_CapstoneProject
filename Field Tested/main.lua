@@ -6,19 +6,6 @@ gameState = require 'states/game'
 pauseState = require 'states/pause'
 assets = require 'assets'
 
--- Audio [CURRENTLY MUTED CHANGE LATER!!]
-isMuted = false
-soundVolume = 0 -- range 0 to 1
-themeMusic = nil
-
-function applyVolume()
-    if isMuted then
-        love.audio.setVolume(0)
-    else
-        love.audio.setVolume(soundVolume)
-    end
-end
-
 -- Global Draw Background Function With Parallax
 function drawBackground(image, parallaxSpeed)
     local screenW = love.graphics.getWidth()

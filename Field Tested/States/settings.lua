@@ -24,6 +24,23 @@ function settings:enter()
     table.insert(buttons, makeButton("Back", function()
         Gamestate.pop()
     end))
+    -- Volume buttons
+    table.insert(buttons, makeButton("Volume: +", function()
+        local currentVolume = love.audio.getVolume()
+        love.audio.setVolume(math.min(1, currentVolume + 0.1))
+    end))
+    table.insert(buttons, makeButton("Volume: -", function()
+        local currentVolume = love.audio.getVolume()
+        love.audio.setVolume(math.max(0, currentVolume - 0.1))
+    end))
+    -- Mute button
+    table.insert(buttons, makeButton("Mute/Unmute", function()
+        if love.audio.getVolume() > 0 then
+            love.audio.setVolume(0)
+        else
+            love.audio.setVolume(0.5) -- Default volume when unmuting
+        end
+    end))
 end
 
 function settings:update(dt)
@@ -52,6 +69,7 @@ function settings:draw()
     love.graphics.setColor(1, 1, 1, 0.95)
     love.graphics.setFont(buttonFont)
     love.graphics.print("Add your options here (audio, controls, graphics).", width * 0.22, height * 0.38)
+
 
     -- Buttons
     local startY = height * 0.5
