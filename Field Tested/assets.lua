@@ -57,7 +57,7 @@ function assets.load()
     }
 
     assets.orb = {
-        orbIdle = love.graphics.newImage('Tiles/orb.png')
+        orbIdle = love.graphics.newImage('Sprites/Key/key.png')
         --orbCollected = love.graphics.newImage('Tiles/vfx_effect_orb.png')
     }
 end

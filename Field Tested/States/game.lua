@@ -13,6 +13,7 @@ local orbsCollected = 0
 local orbsRequired = 3
 local exitUnlocked = false
 local gameFont
+local isPuzzleCompleted = false
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
         jumpSound:setVolume(0.4)
 
@@ -142,7 +143,7 @@ function game:enter()
         player.w, player.h = 24, 60
         player.vx, player.vy = 0, 0
         player.moveSpeed = 300 -- CHANGE SPEED
-        player.jumpForce = 350
+        player.jumpForce = 400
         player.gravity = 1100
         player.maxFallSpeed = 700
         player.isGrounded = false
@@ -309,7 +310,7 @@ function game:update(dt)
     orbAnim:update(dt)
 
     -- Follow player and clamp camera to map bounds
-    cam:lookAt(player.x, player.y - player.h/2)
+    cam:lookAt(player.x, player.y)
     local w = love.graphics.getWidth() / cam.scale
     local h = love.graphics.getHeight() / cam.scale
     cam.x = math.max(w/2, math.min(cam.x, mapW - w/2))
