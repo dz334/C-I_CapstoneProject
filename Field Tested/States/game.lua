@@ -1,4 +1,5 @@
 local game = {}
+local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
@@ -123,7 +124,8 @@ function game:enter()
         game_Music:play()
 
         cam = camera()
-        cam:zoom(1.5)
+        local sw, sh = love.graphics.getDimensions()
+        cam:zoom(math.min(sw / BASE_W, sh / BASE_H))
         gameMap = sti('Map/Level_1.lua')
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
@@ -476,6 +478,12 @@ function game:textinput(t)
 end
 
 function game:mousepressed(x, y, button)
+end
+
+function game:resize(w, h)
+    if cam then
+        cam:zoom(math.min(w / BASE_W, h / BASE_H))
+    end
 end
 
 return game
