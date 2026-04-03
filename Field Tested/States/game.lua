@@ -348,6 +348,8 @@ end
     -- Press "r" to reset position to spawn 
     if love.keyboard.isDown("r") then
         player.x, player.y = getSpawnPoint(gameMap)
+        elapsedTime = 0
+        -- orbsCollected = 0 -- redraw orbs after 
     end    
 
 end
