@@ -365,9 +365,9 @@ function game:draw()
     love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
     love.graphics.print("Press R to reset", 10, 88)
     love.graphics.setFont(gameFont)
-    local orbDisplay= "Orbs: "
+    local orbDisplay= "Keys: "
     local orbTitle = gameFont:getWidth(orbDisplay)
-    love.graphics.print("Orbs: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
+    love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
     
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
