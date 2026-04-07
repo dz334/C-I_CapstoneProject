@@ -2,7 +2,7 @@ local settings = {}
 local buttons = {}
 local titleFont
 local buttonFont
-local buttonHeight = 64
+local buttonHeight = 36
 local margin = 20
 
 local function makeButton(text, onClick)
@@ -19,7 +19,7 @@ end
 function settings:enter()
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    buttonFont = love.graphics.newFont(32)
+    buttonFont = love.graphics.newFont(16)
 
     table.insert(buttons, makeButton("Back", function()
         Gamestate.pop()
@@ -40,6 +40,11 @@ function settings:enter()
         else
             love.audio.setVolume(0.5) -- Default volume when unmuting
         end
+    end))
+-- Fullscreen
+    table.insert(buttons, makeButton("Toggle Fullscreen", function()
+        local isFullscreen = love.window.getFullscreen()
+        love.window.setFullscreen(not isFullscreen)
     end))
 end
 

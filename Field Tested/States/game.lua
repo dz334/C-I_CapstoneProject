@@ -1,4 +1,5 @@
 local game = {}
+local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
@@ -123,7 +124,8 @@ function game:enter()
         game_Music:play()
 
         cam = camera()
-        cam:zoom(1.5)
+        local sw, sh = love.graphics.getDimensions()
+        cam:zoom(math.min(sw / BASE_W, sh / BASE_H))
         gameMap = sti('Map/Level_1.lua')
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
@@ -367,9 +369,9 @@ function game:draw()
     love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
     love.graphics.print("Press R to reset", 10, 88)
     love.graphics.setFont(gameFont)
-    local orbDisplay= "Orbs: "
+    local orbDisplay= "Keys: "
     local orbTitle = gameFont:getWidth(orbDisplay)
-    love.graphics.print("Orbs: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
+    love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
     
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
@@ -478,6 +480,12 @@ function game:textinput(t)
 end
 
 function game:mousepressed(x, y, button)
+end
+
+function game:resize(w, h)
+    if cam then
+        cam:zoom(math.min(w / BASE_W, h / BASE_H))
+    end
 end
 
 return game

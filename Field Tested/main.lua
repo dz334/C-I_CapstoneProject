@@ -30,7 +30,6 @@ function drawBackground(image, parallaxSpeed)
 end
 
 function love.load()
-    love.window.setFullscreen(true)
     love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it clear
     assets.load()
     Gamestate.switch(menuState)
