@@ -364,16 +364,6 @@ function game:draw()
         drawBackground(assets.background1.backgroundCloud2, 0.3)
         drawBackground(assets.background1.backgroundCloud1, 0.4)
     end
-
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
-    love.graphics.print("ESC = Pause", 10, 40)
-    love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
-    love.graphics.print("Press R to reset", 10, 88)
-    love.graphics.setFont(gameFont)
-    local orbDisplay= "Keys: "
-    local orbTitle = gameFont:getWidth(orbDisplay)
-    love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
     
     cam:attach()
         -- Level 1
@@ -403,6 +393,16 @@ function game:draw()
         end
     end
     cam:detach()
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
+    love.graphics.print("ESC = Pause", 10, 40)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), 10, 64)
+    love.graphics.print("Press R to reset", 10, 88)
+    love.graphics.setFont(gameFont)
+    local orbDisplay= "Keys: "
+    local orbTitle = gameFont:getWidth(orbDisplay)
+    love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
 
     -- UI prompt when near puzzle object
     if puzzleObject and not puzzleUIActive and not signUIActive then
