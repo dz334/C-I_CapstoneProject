@@ -43,13 +43,13 @@
   <image source="../Tiles/Cave_Entrance.png" width="60" height="32"/>
  </tileset>
  <objectgroup id="15" name="Orb">
-  <object id="16" x="895.167" y="583.166">
+  <object id="16" x="569.834" y="449.166">
    <point/>
   </object>
-  <object id="18" x="1354" y="696">
+  <object id="18" x="1338" y="670.667">
    <point/>
   </object>
-  <object id="19" x="1022.67" y="572.667">
+  <object id="19" x="1017.34" y="572">
    <point/>
   </object>
  </objectgroup>
@@ -123,18 +123,18 @@
   </object>
   <object id="9" x="480.667" y="673.333" width="95.3333" height="28"/>
   <object id="10" x="673.5" y="640.5" width="60.5" height="61.5"/>
-  <object id="11" x="832" y="609.5" width="94.5" height="27.5"/>
+  <object id="11" x="832" y="609.5" width="94.5" height="9.83333"/>
   <object id="14" x="1024.55" y="606.708" width="30.3333" height="96.6667"/>
-  <object id="20" x="1154" y="610" width="29.3333" height="27.3333"/>
+  <object id="20" x="1154" y="610" width="29.3333" height="9.99997"/>
   <object id="21" x="1056.42" y="676.083" width="31.3333" height="27.3333"/>
-  <object id="22" x="1280.67" y="609.333" width="32" height="28.6667"/>
-  <object id="23" x="1409.33" y="609.333" width="29.3333" height="28"/>
+  <object id="22" x="1280.67" y="609.333" width="32" height="10.6667"/>
+  <object id="23" x="1409.33" y="609.333" width="29.3333" height="10"/>
   <object id="24" x="1536.67" y="608" width="31.3333" height="95.3333"/>
-  <object id="25" x="288.667" y="609.333" width="95.3333" height="28.6667"/>
-  <object id="26" x="192" y="514" width="30" height="26"/>
-  <object id="27" x="226" y="546.667" width="26" height="25.3333"/>
-  <object id="28" x="322.667" y="479.333" width="93.3333" height="31.3333"/>
-  <object id="29" x="511.333" y="481.333" width="97.3333" height="30"/>
+  <object id="25" x="288.667" y="609.333" width="95.3333" height="11.3334"/>
+  <object id="26" x="192" y="514" width="30" height="11"/>
+  <object id="27" x="226" y="546.667" width="26" height="10.3333"/>
+  <object id="28" x="322.667" y="479.333" width="93.3333" height="12"/>
+  <object id="29" x="511.333" y="481.333" width="97.3333" height="12"/>
   <object id="32" x="1953.33" y="609.333" width="31.3333" height="97.3333"/>
  </objectgroup>
  <objectgroup id="3" name="Spawn">
