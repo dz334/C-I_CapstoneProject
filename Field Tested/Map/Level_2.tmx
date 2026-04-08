@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="150" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="30">
+ <editorsettings>
+  <export target="Level_2.lua" format="lua"/>
+ </editorsettings>
  <tileset firstgid="1" name="Background" tilewidth="960" tileheight="540" tilecount="14" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0">

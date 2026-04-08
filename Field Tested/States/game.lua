@@ -382,6 +382,8 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["lava"])
             gameMap:drawLayer(gameMap.layers["Smoke"])
             gameMap:drawLayer(gameMap.layers["platforms"])
+            gameMap:drawLayer(gameMap.layers["ladder"])
+            gameMap:drawLayer(gameMap.layers["ladder_physics"])
         end
 
 
