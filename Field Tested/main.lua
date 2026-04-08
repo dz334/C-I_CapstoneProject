@@ -7,27 +7,27 @@ pauseState = require 'states/pause'
 assets = require 'assets'
 
 -- Global Draw Background Function With Parallax
---function drawBackground(image, parallaxSpeed)
-    --local screenW = love.graphics.getWidth()
-    --local screenH = love.graphics.getHeight()
+function drawBackground(image, parallaxSpeed)
+    local screenW = love.graphics.getWidth()
+    local screenH = love.graphics.getHeight()
     
     -- Scale to fill height so there are no bars at the top/bottom
-    --local scale = screenH / image:getHeight()
-    --local imgW = image:getWidth() * scale
+    local scale = screenH / image:getHeight()
+    local imgW = image:getWidth() * scale
     
     -- Calculate Offset
-    --local offsetX = 0
-    --if cam and parallaxSpeed then
-        --offsetX = (cam.x * parallaxSpeed) % imgW
-    --end
+    local offsetX = 0
+    if cam and parallaxSpeed then
+        offsetX = (cam.x * parallaxSpeed) % imgW
+    end
     
     -- Draw Background twice
     -- The first copy starts at negative offset X
-    --love.graphics.draw(image, -offsetX, 0, 0, scale, scale)
+    love.graphics.draw(image, -offsetX, 0, 0, scale, scale)
     
     -- The second copy starts exactly one image-width after the first
-    --love.graphics.draw(image, -offsetX + imgW, 0, 0, scale, scale)
---end
+    love.graphics.draw(image, -offsetX + imgW, 0, 0, scale, scale)
+end
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it clear

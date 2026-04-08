@@ -127,8 +127,8 @@ function game:enter()
         cam = camera()
         local sw, sh = love.graphics.getDimensions()
         cam:zoom(math.min(sw / BASE_W, sh / BASE_H))
-        --gameMap = sti('Map/Level_1.lua')
-        gameMap = sti('Map/Level_2.lua')
+        gameMap = sti('Map/Level_1.lua')
+        level = 1
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
         -- Get map size (pixels) for camera clamping
@@ -357,11 +357,13 @@ end
 end
 
 function game:draw()
-    --drawBackground(assets.background1.backgroundSky, 0.05)
-    --drawBackground(assets.background1.backgroundSand, 0.1)
-    --drawBackground(assets.background1.backgroundCloud3, 0.2)
-    --drawBackground(assets.background1.backgroundCloud2, 0.3)
-    --drawBackground(assets.background1.backgroundCloud1, 0.4)
+    if level == 1 then
+        drawBackground(assets.background1.backgroundSky, 0.05)
+        drawBackground(assets.background1.backgroundSand, 0.1)
+        drawBackground(assets.background1.backgroundCloud3, 0.2)
+        drawBackground(assets.background1.backgroundCloud2, 0.3)
+        drawBackground(assets.background1.backgroundCloud1, 0.4)
+    end
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
@@ -375,18 +377,23 @@ function game:draw()
     
     cam:attach()
         -- Level 1
-        gameMap:drawLayer(gameMap.layers["Ground"])
-        gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
-        gameMap:drawLayer(gameMap.layers["SignsIMG"])
-        gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
-        gameMap:drawLayer(gameMap.layers["CaveExit"])
+        if level == 1 then
+            gameMap:drawLayer(gameMap.layers["Ground"])
+            gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
+            gameMap:drawLayer(gameMap.layers["SignsIMG"])
+            gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
+            gameMap:drawLayer(gameMap.layers["CaveExit"])
+
         -- Level 2
-        gameMap:drawLayer(gameMap.layers["Spawn"])
-        gameMap:drawLayer(gameMap.layers["Solid"])
-        gameMap:drawLayer(gameMap.layers["Background"])
-        gameMap:drawLayer(gameMap.layers["lava"])
-        gameMap:drawLayer(gameMap.layers["Smoke"])
-        gameMap:drawLayer(gameMap.layers["platforms"])
+        elseif level == 2 then
+            gameMap:drawLayer(gameMap.layers["Spawn"])
+            gameMap:drawLayer(gameMap.layers["Solid"])
+            gameMap:drawLayer(gameMap.layers["Background"])
+            gameMap:drawLayer(gameMap.layers["lava"])
+            gameMap:drawLayer(gameMap.layers["Smoke"])
+            gameMap:drawLayer(gameMap.layers["platforms"])
+        end
+
 
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
         for _, orb in ipairs(orbs) do
@@ -441,6 +448,20 @@ function game:draw()
 end
 
 function game:keypressed(key)
+    if key == "1" then
+        gameMap = sti('Map/Level_1.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 1
+    elseif key == "2" then
+        gameMap = sti('Map/Level_2.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 2
+    end
+
     if (key == "space" or key == "up" or key == "w") then
         player.jumpRequested = true
     end
