@@ -76,6 +76,14 @@ function menu:draw()
     local titleWidth = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleWidth) / 2, 200)
 
+    -- Text information
+    love.graphics.setFont(font)
+    love.graphics.setColor(1, 1, 1, 0.8)
+    local infoText = "While in-game press number keys 1-2 to switch between levels freely!\n\nThis is for testing purposes only and will be removed in the final game."
+    local infoWidth = font:getWidth(infoText)
+    love.graphics.print(infoText, (width - infoWidth) / 2, 300)
+
+
     -- Menu buttons
     love.graphics.setFont(font)
     for _, b in ipairs(buttons) do
