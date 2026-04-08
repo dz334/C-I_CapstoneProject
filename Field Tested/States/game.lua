@@ -110,6 +110,7 @@ local function collectOrbs(map)
 end
 
 function game:enter()
+
     -- Only loads game when first entering gamestate
         game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
         game_Music:setVolume(0.2)
@@ -374,17 +375,17 @@ function game:draw()
     
     cam:attach()
         -- Level 1
-        --gameMap:drawLayer(gameMap.layers["Ground"])
-        --gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
-        --gameMap:drawLayer(gameMap.layers["SignsIMG"])
-        --gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
-        --gameMap:drawLayer(gameMap.layers["CaveExit"])
+        gameMap:drawLayer(gameMap.layers["Ground"])
+        gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
+        gameMap:drawLayer(gameMap.layers["SignsIMG"])
+        gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
+        gameMap:drawLayer(gameMap.layers["CaveExit"])
         -- Level 2
-        gameMap:drawLayer(gameMap.layers["Background"])
-        gameMap:drawLayer(gameMap.layers["lava"])
-
         gameMap:drawLayer(gameMap.layers["Spawn"])
         gameMap:drawLayer(gameMap.layers["Solid"])
+        gameMap:drawLayer(gameMap.layers["Background"])
+        gameMap:drawLayer(gameMap.layers["lava"])
+        gameMap:drawLayer(gameMap.layers["Smoke"])
         gameMap:drawLayer(gameMap.layers["platforms"])
 
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)

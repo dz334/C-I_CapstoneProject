@@ -26,6 +26,9 @@ function menu:enter()
     menu_Music:setVolume(0.5)
     menu_Music:play()
 
+    -- Enter fullscreen mode
+    love.window.setFullscreen(true)
+
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
     font = love.graphics.newFont(32)
