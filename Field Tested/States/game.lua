@@ -36,7 +36,7 @@ local function collectSolidRects(map)
     local solidLayer = map.layers["Solid"]
     if not solidLayer or not solidLayer.objects then return end
     for _, obj in ipairs(solidLayer.objects) do
-        if obj.shape == "rectangle" and obj.width > 0 and obj.height > 0 then
+        if (obj.shape == "rectangle") and obj.width > 0 and obj.height > 0 then
             table.insert(solids, { x = obj.x, y = obj.y, w = obj.width, h = obj.height })
         end
     end
@@ -126,7 +126,8 @@ function game:enter()
         cam = camera()
         local sw, sh = love.graphics.getDimensions()
         cam:zoom(math.min(sw / BASE_W, sh / BASE_H))
-        gameMap = sti('Map/Level_1.lua')
+        --gameMap = sti('Map/Level_1.lua')
+        gameMap = sti('Map/Level_2.lua')
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
         -- Get map size (pixels) for camera clamping
@@ -355,11 +356,11 @@ end
 end
 
 function game:draw()
-    drawBackground(assets.background1.backgroundSky, 0.05)
-    drawBackground(assets.background1.backgroundSand, 0.1)
-    drawBackground(assets.background1.backgroundCloud3, 0.2)
-    drawBackground(assets.background1.backgroundCloud2, 0.3)
-    drawBackground(assets.background1.backgroundCloud1, 0.4)
+    --drawBackground(assets.background1.backgroundSky, 0.05)
+    --drawBackground(assets.background1.backgroundSand, 0.1)
+    --drawBackground(assets.background1.backgroundCloud3, 0.2)
+    --drawBackground(assets.background1.backgroundCloud2, 0.3)
+    --drawBackground(assets.background1.backgroundCloud1, 0.4)
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
@@ -372,11 +373,20 @@ function game:draw()
     love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
     
     cam:attach()
-        gameMap:drawLayer(gameMap.layers["Ground"])
-        gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
-        gameMap:drawLayer(gameMap.layers["SignsIMG"])
-        gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
-        gameMap:drawLayer(gameMap.layers["CaveExit"])
+        -- Level 1
+        --gameMap:drawLayer(gameMap.layers["Ground"])
+        --gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
+        --gameMap:drawLayer(gameMap.layers["SignsIMG"])
+        --gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
+        --gameMap:drawLayer(gameMap.layers["CaveExit"])
+        -- Level 2
+        gameMap:drawLayer(gameMap.layers["Background"])
+        gameMap:drawLayer(gameMap.layers["lava"])
+
+        gameMap:drawLayer(gameMap.layers["Spawn"])
+        gameMap:drawLayer(gameMap.layers["Solid"])
+        gameMap:drawLayer(gameMap.layers["platforms"])
+
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
         for _, orb in ipairs(orbs) do
         if not orb.collected then
