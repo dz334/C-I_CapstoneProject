@@ -35,7 +35,7 @@ function menu:enter()
     end))
 
     table.insert(buttons, makeButton("Load Game", function()
-        print("Load game - not yet implemented")
+        Gamestate.switch(require 'states/loadGame')
     end))
 
     table.insert(buttons, makeButton("Settings", function()

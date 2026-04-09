@@ -238,6 +238,8 @@ function game:leave()
     if game_Music then
         game_Music:stop()
     end
+
+    save.saveGame(1)
 end
 
 function game:update(dt)
@@ -299,7 +301,7 @@ function game:update(dt)
             player.animSheet = player.facingRight and player.idleRightSheet or player.idleLeftSheet
     end
 
-    -- Caculate vertical fall speed with gravity
+    -- Calculate vertical fall speed with gravity
     player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
 
     player.x = player.x + player.vx * dt

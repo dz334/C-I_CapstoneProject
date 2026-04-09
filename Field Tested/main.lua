@@ -4,6 +4,8 @@ menuState = require 'states/menu'
 settingsState = require 'states/settings'
 gameState = require 'states/game'
 pauseState = require 'states/pause'
+save = require 'save'
+loadState = require 'states/loadGame' 
 assets = require 'assets'
 
 -- Global Draw Background Function With Parallax
@@ -30,7 +32,7 @@ function drawBackground(image, parallaxSpeed)
 end
 
 function love.load()
-     love.window.setFullscreen(true, "desktop")
+    love.window.setFullscreen(true, "desktop")
     love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it clear
     assets.load()
     Gamestate.switch(menuState)
