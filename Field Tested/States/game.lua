@@ -94,6 +94,13 @@ local function getSignLocation(map)
     end
 end
 
+local function getExitLocation(map)
+    local exitLayer = map.layers["Exit"]
+    if exitLayer and exitLayer.objects and exitLayer.objects[1] then
+        return exitLayer.objects[1].x, exitLayer.objects[1].y
+    end
+end
+
 local function collectOrbs(map)
     orbs = {}
     local orbLayer = map.layers["Orb"]
@@ -228,6 +235,19 @@ function game:enter()
             signObject = nil
         end
         signUIActive = false
+
+        -- Exit object (placeholder)
+        local exitX, exitY = getExitLocation(gameMap)
+           if exitX and exitY then
+            exitObject = {
+                x = exitX - 16,
+                y = exitY - 16,
+                w = 64,
+                h = 32
+            }
+        else
+            exitObject = nil
+        end
 
 
         gameLoaded = true
@@ -422,6 +442,16 @@ function game:draw()
         end
     end
 
+    -- UI prompt when near exit object
+    if exitObject then
+        local playerRect = getPlayerRect(player)
+        local exitRect = { x = exitObject.x, y = exitObject.y, w = exitObject.w, h = exitObject.h }
+        if rectsOverlap(playerRect, exitRect) then
+            love.graphics.print("Press E to Advance", 10, 112)
+        end
+    end
+
+
     -- Puzzle UI placeholder
     if puzzleUIActive or signUIActive then
         local scale = 2 
@@ -498,6 +528,27 @@ function game:keypressed(key)
             local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
             if rectsOverlap(playerRect, signRect) then
                 signUIActive = true
+            end
+        end
+        if exitObject and exitUnlocked then
+            local playerRect = getPlayerRect(player)
+            local exitRect = { x = exitObject.x, y = exitObject.y, w = exitObject.w, h = exitObject.h }
+            if rectsOverlap(playerRect, exitRect) then
+                -- Advance to next level or end game
+                if level == 1 then
+                    gameMap = sti('Map/Level_2.lua')
+                    collectSolidRects(gameMap)
+                    collectOrbs(gameMap)
+                    player.x, player.y = getSpawnPoint(gameMap)
+                    level = 2
+                elseif level == 2 then
+                    -- End game or loop back to level 1
+                    gameMap = sti('Map/Level_1.lua')
+                    collectSolidRects(gameMap)
+                    collectOrbs(gameMap)
+                    player.x, player.y = getSpawnPoint(gameMap)
+                    level = 1
+                end
             end
         end
     end
