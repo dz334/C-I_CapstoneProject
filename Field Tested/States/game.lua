@@ -376,11 +376,11 @@ function game:draw()
 
         -- Level 2
         elseif level == 2 then
-            gameMap:drawLayer(gameMap.layers["Spawn"])
-            gameMap:drawLayer(gameMap.layers["Solid"])
+            --gameMap:drawLayer(gameMap.layers["Spawn"])
+            --gameMap:drawLayer(gameMap.layers["Solid"])
             gameMap:drawLayer(gameMap.layers["Background"])
             gameMap:drawLayer(gameMap.layers["lava"])
-            gameMap:drawLayer(gameMap.layers["Smoke"])
+            gameMap:drawLayer(gameMap.layers["smoke"])
             gameMap:drawLayer(gameMap.layers["platforms"])
         end
 
