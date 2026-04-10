@@ -4,7 +4,7 @@ local mapW = 0
 local mapH = 0
 local solids = {}
 elapsedTime = 0
-local gameLoaded = false
+gameLoaded = false
 local signUIActive = false
 orbs = {}
 orbsCollected = 0
@@ -107,7 +107,6 @@ local function collectOrbs(map)
 end
 
 function game:enter()
-
     -- Only loads game when first entering gamestate
     game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
     game_Music:setVolume(0.2)

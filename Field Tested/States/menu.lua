@@ -49,6 +49,7 @@ function menu:enter()
         love.event.quit(0)
     end))
 
+    gameloaded = false
 end
 
 function menu:leave()
