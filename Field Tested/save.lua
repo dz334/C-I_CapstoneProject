@@ -1,7 +1,6 @@
 local save = {}
 local bitser = require 'Libraries/bitser-master/bitser'
 save.maxSlots = 3
-save.filePath = "savegame.dat"
 
 function save.getSaveData()
     return {
