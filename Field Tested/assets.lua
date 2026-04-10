@@ -23,19 +23,54 @@ function assets.load()
     }
 
     assets.character1 = {
+        idleLeft = love.graphics.newImage('Sprites/Character1/IdleLeft.png'),
+        idleRight = love.graphics.newImage('Sprites/Character1/IdleRight.png'),
 
+        jumpLeft = love.graphics.newImage('Sprites/Character1/JumpLeft.png'),
+        jumpRight = love.graphics.newImage('Sprites/Character1/JumpRight.png'),
+
+        runLeft = love.graphics.newImage('Sprites/Character1/RunLeft.png'),
+        runRight = love.graphics.newImage('Sprites/Character1/RunRight.png'),
+
+        fallLeft = love.graphics.newImage('Sprites/Character1/FallLeft.png'),
+        fallRight = love.graphics.newImage('Sprites/Character1/FallRight.png'),
+        
+        doubleJumpLeft = love.graphics.newImage('Sprites/Character1/Double_Jump_Left.png'),
+        doubleJumpRight = love.graphics.newImage('Sprites/Character1/Double_Jump_Right.png')
     }
 
     assets.character2 = {
+        idleLeft = love.graphics.newImage('Sprites/Character2/IdleLeft.png'),
+        idleRight = love.graphics.newImage('Sprites/Character2/IdleRight.png'),
+
+        jumpLeft = love.graphics.newImage('Sprites/Character2/JumpLeft.png'),
+        jumpRight = love.graphics.newImage('Sprites/Character2/JumpRight.png'),
+
+        runLeft = love.graphics.newImage('Sprites/Character2/RunLeft.png'),
+        runRight = love.graphics.newImage('Sprites/Character2/RunRight.png'),
+
+        fallLeft = love.graphics.newImage('Sprites/Character2/FallLeft.png'),
+        fallRight = love.graphics.newImage('Sprites/Character2/FallRight.png'),
         
+        doubleJumpLeft = love.graphics.newImage('Sprites/Character2/Double_Jump_Left.png'),
+        doubleJumpRight = love.graphics.newImage('Sprites/Character2/Double_Jump_Right.png')
     }
 
     assets.character3 = {
-        idle = love.graphics.newImage('Sprites/Character3/Idle.png'),
-        jump = love.graphics.newImage('Sprites/Character3/Jump.png'),
-        run = love.graphics.newImage('Sprites/Character3/Run.png'),
-        fall = love.graphics.newImage('Sprites/Character3/Fall.png'),
-        doubleJump = love.graphics.newImage('Sprites/Character3/Double_Jump.png')
+        idleLeft = love.graphics.newImage('Sprites/Character3/IdleLeft.png'),
+        idleRight = love.graphics.newImage('Sprites/Character3/IdleRight.png'),
+
+        jumpLeft = love.graphics.newImage('Sprites/Character3/JumpLeft.png'),
+        jumpRight = love.graphics.newImage('Sprites/Character3/JumpRight.png'),
+
+        runLeft = love.graphics.newImage('Sprites/Character3/RunLeft.png'),
+        runRight = love.graphics.newImage('Sprites/Character3/RunRight.png'),
+
+        fallLeft = love.graphics.newImage('Sprites/Character3/FallLeft.png'),
+        fallRight = love.graphics.newImage('Sprites/Character3/FallRight.png'),
+        
+        doubleJumpLeft = love.graphics.newImage('Sprites/Character3/Double_Jump_Left.png'),
+        doubleJumpRight = love.graphics.newImage('Sprites/Character3/Double_Jump_Right.png')
     }
 
     assets.character4 = {
