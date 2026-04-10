@@ -541,6 +541,7 @@ function game:keypressed(key)
                     collectOrbs(gameMap)
                     player.x, player.y = getSpawnPoint(gameMap)
                     level = 2
+                    orbsCollected = 0
                 elseif level == 2 then
                     -- End game or loop back to level 1
                     gameMap = sti('Map/Level_1.lua')
