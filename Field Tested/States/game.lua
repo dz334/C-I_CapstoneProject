@@ -8,7 +8,7 @@ gameLoaded = false
 local signUIActive = false
 orbs = {}
 orbsCollected = 0
-orbsRequired = 3
+orbsRequired = 1
 exitUnlocked = false
 local gameFont
 isPuzzleCompleted = false
@@ -345,7 +345,12 @@ function game:update(dt)
 end
 
     -- Press "r" to reset position to spawn 
-    if love.keyboard.isDown("r") then
+    if love.keyboard.isDown("r") 
+    or (level == 2 and player.y > 773)
+    or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
+    or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
+    or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
+    then
         player.x, player.y = getSpawnPoint(gameMap)
         elapsedTime = 0
         -- orbsCollected = 0 -- redraw orbs after 

@@ -40,12 +40,6 @@
   <image source="../Tiles/Cave_Entrance.png" width="60" height="32"/>
  </tileset>
  <objectgroup id="15" name="Orb">
-  <object id="16" x="569.834" y="449.166">
-   <point/>
-  </object>
-  <object id="18" x="1338" y="670.667">
-   <point/>
-  </object>
   <object id="19" x="1017.34" y="572">
    <point/>
   </object>
