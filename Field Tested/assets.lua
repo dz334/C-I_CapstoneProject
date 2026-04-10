@@ -82,6 +82,15 @@ function assets.load()
         doubleJumpLeft = love.graphics.newImage('Sprites/Character4/Double_Jump_Left.png'),
         doubleJumpRight = love.graphics.newImage('Sprites/Character4/Double_Jump_Right.png')
     }
+
+    assets.ui = {
+        panel = love.graphics.newImage('Tiles/4.png')
+    }
+
+    assets.orb = {
+        orbIdle = love.graphics.newImage('Sprites/Key/key.png')
+        --orbCollected = love.graphics.newImage('Tiles/vfx_effect_orb.png')
+    }
 end
 
 return assets
