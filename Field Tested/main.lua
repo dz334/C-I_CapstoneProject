@@ -4,20 +4,9 @@ menuState = require 'states/menu'
 settingsState = require 'states/settings'
 gameState = require 'states/game'
 pauseState = require 'states/pause'
+save = require 'save'
+loadState = require 'states/loadGame' 
 assets = require 'assets'
-
--- Audio [CURRENTLY MUTED CHANGE LATER!!]
-isMuted = false
-soundVolume = 0 -- range 0 to 1
-themeMusic = nil
-
-function applyVolume()
-    if isMuted then
-        love.audio.setVolume(0)
-    else
-        love.audio.setVolume(soundVolume)
-    end
-end
 
 -- Global Draw Background Function With Parallax
 function drawBackground(image, parallaxSpeed)
@@ -43,7 +32,7 @@ function drawBackground(image, parallaxSpeed)
 end
 
 function love.load()
-    love.window.setFullscreen(true)
+    love.window.setFullscreen(true, "desktop")
     love.graphics.setDefaultFilter('nearest', 'nearest') -- When art is scaled, keep it clear
     assets.load()
     Gamestate.switch(menuState)

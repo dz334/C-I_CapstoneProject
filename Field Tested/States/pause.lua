@@ -23,8 +23,13 @@ function pause:enter()
     buttonFont = love.graphics.newFont(32)
 
     table.insert(buttons, makeButton("Resume", function()
-        --Gamestate.pop()
         Gamestate.push(require 'states/game')
+    end))
+
+    table.insert(buttons, makeButton("Save", function()
+        local success = save.saveGame(1)
+        pause.saveMessage = success and "Saved!" or "Save Failed!"
+        pause.saveMessageTimer = 2  -- Show for 2 seconds
     end))
 
     table.insert(buttons, makeButton("Settings", function()
@@ -32,6 +37,7 @@ function pause:enter()
     end))
 
     table.insert(buttons, makeButton("Main Menu", function()
+        gameLoaded = false
         Gamestate.push(require 'states/menu')
     end))
 
@@ -42,14 +48,21 @@ function pause:enter()
 end
 
 function pause:update(dt)
+    if pause.saveMessageTimer then
+        pause.saveMessageTimer = pause.saveMessageTimer - dt
+        if pause.saveMessageTimer <= 0 then
+            pause.saveMessage = nil
+            pause.saveMessageTimer = nil
+        end
+    end
 end
 
 function pause:draw()
-    drawBackground(assets.background2.backgroundSky, 0.05)
-    drawBackground(assets.background2.backgroundSand, 0.1)
-    drawBackground(assets.background2.backgroundCloud3, 0.2)
-    drawBackground(assets.background2.backgroundCloud2, 0.3)
-    drawBackground(assets.background2.backgroundCloud1, 0.4)
+    drawBackground(assets.background1.backgroundSky, 0.05)
+    drawBackground(assets.background1.backgroundSand, 0.1)
+    drawBackground(assets.background1.backgroundCloud3, 0.2)
+    drawBackground(assets.background1.backgroundCloud2, 0.3)
+    drawBackground(assets.background1.backgroundCloud1, 0.4)
     
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
@@ -92,6 +105,12 @@ function pause:draw()
     end
 
     love.graphics.setColor(1, 1, 1, 1)
+
+    if pause.saveMessage then
+        love.graphics.setFont(buttonFont)
+        local msgW = buttonFont:getWidth(pause.saveMessage)
+        love.graphics.print(pause.saveMessage, (width - msgW) / 2, height * 0.85)
+    end
 end
 
 function pause:mousepressed(x, y, mouseButton)

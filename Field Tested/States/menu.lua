@@ -6,19 +6,6 @@ local titleFont
 local buttonHeight = 64
 local margin = 16
 
--- Audio
-isMuted = false
-soundVolume = 1 -- range 0 to 1
-themeMusic = nil
-
-function applyVolume()
-    if isMuted then
-        love.audio.setVolume(0)
-    else
-        love.audio.setVolume(soundVolume)
-    end
-end
-
 local function makeButton(text, onClick)
     return { 
         text = text, 
@@ -31,6 +18,17 @@ local function makeButton(text, onClick)
 end
 
 function menu:enter()
+    -- Stop game music if coming from game state
+    if game_Music then
+        game_Music:stop()
+    end
+    menu_Music = love.audio.newSource('sounds/theme.mp3', 'stream')
+    menu_Music:setVolume(0.5)
+    menu_Music:play()
+
+    -- Enter fullscreen mode
+    love.window.setFullscreen(true)
+
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
     font = love.graphics.newFont(32)
@@ -40,7 +38,7 @@ function menu:enter()
     end))
 
     table.insert(buttons, makeButton("Load Game", function()
-        print("Load game - not yet implemented")
+        Gamestate.switch(require 'states/loadGame')
     end))
 
     table.insert(buttons, makeButton("Settings", function()
@@ -51,36 +49,20 @@ function menu:enter()
         love.event.quit(0)
     end))
 
-    -- Load and play menu theme music 
-    if love.filesystem.getInfo(assets.audio.menuMusic) then
-        self.music = love.audio.newSource(assets.audio.menuMusic, 'stream')
-        self.music:setLooping(true)
-    end
-    -- Play only if not already playing
-    if self.music and not self.music:isPlaying() then
-        self.music:play()
-        applyVolume()
-    end
-
+    gameloaded = false
 end
 
 function menu:leave()
-    -- Stop game music when leaving game state
-    if self.music and self.music:isPlaying() then
-        self.music:stop()
-    end
-end
-
-function menu:update(dt)
+    menu_Music:stop()
 end
 
 function menu:draw()
     -- Draw background (SUBJECT TO CHANGE)
-    drawBackground(assets.background2.backgroundSky, 0.05)
-    drawBackground(assets.background2.backgroundSand, 0.1)
-    drawBackground(assets.background2.backgroundCloud3, 0.2)
-    drawBackground(assets.background2.backgroundCloud2, 0.3)
-    drawBackground(assets.background2.backgroundCloud1, 0.4)
+    drawBackground(assets.background1.backgroundSky, 0.05)
+    drawBackground(assets.background1.backgroundSand, 0.1)
+    drawBackground(assets.background1.backgroundCloud3, 0.2)
+    drawBackground(assets.background1.backgroundCloud2, 0.3)
+    drawBackground(assets.background1.backgroundCloud1, 0.4)
 
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
@@ -94,6 +76,14 @@ function menu:draw()
     local title = "Field Tested"
     local titleWidth = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleWidth) / 2, 200)
+
+    -- Text information
+    love.graphics.setFont(font)
+    love.graphics.setColor(1, 1, 1, 0.8)
+    local infoText = "While in-game press number keys 1-2 to switch between levels freely!\n\nThis is for testing purposes only and will be removed in the final game."
+    local infoWidth = font:getWidth(infoText)
+    love.graphics.print(infoText, (width - infoWidth) / 2, 300)
+
 
     -- Menu buttons
     love.graphics.setFont(font)

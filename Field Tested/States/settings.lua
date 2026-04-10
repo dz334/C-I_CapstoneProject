@@ -2,7 +2,7 @@ local settings = {}
 local buttons = {}
 local titleFont
 local buttonFont
-local buttonHeight = 64
+local buttonHeight = 36
 local margin = 20
 
 local function makeButton(text, onClick)
@@ -19,10 +19,32 @@ end
 function settings:enter()
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    buttonFont = love.graphics.newFont(32)
+    buttonFont = love.graphics.newFont(16)
 
     table.insert(buttons, makeButton("Back", function()
         Gamestate.pop()
+    end))
+    -- Volume buttons
+    table.insert(buttons, makeButton("Volume: +", function()
+        local currentVolume = love.audio.getVolume()
+        love.audio.setVolume(math.min(1, currentVolume + 0.1))
+    end))
+    table.insert(buttons, makeButton("Volume: -", function()
+        local currentVolume = love.audio.getVolume()
+        love.audio.setVolume(math.max(0, currentVolume - 0.1))
+    end))
+    -- Mute button
+    table.insert(buttons, makeButton("Mute/Unmute", function()
+        if love.audio.getVolume() > 0 then
+            love.audio.setVolume(0)
+        else
+            love.audio.setVolume(0.5) -- Default volume when unmuting
+        end
+    end))
+-- Fullscreen
+    table.insert(buttons, makeButton("Toggle Fullscreen", function()
+        local isFullscreen = love.window.getFullscreen()
+        love.window.setFullscreen(not isFullscreen)
     end))
 end
 
@@ -30,11 +52,11 @@ function settings:update(dt)
 end
 
 function settings:draw()
-    drawBackground(assets.background2.backgroundSky, 0.05)
-    drawBackground(assets.background2.backgroundSand, 0.1)
-    drawBackground(assets.background2.backgroundCloud3, 0.2)
-    drawBackground(assets.background2.backgroundCloud2, 0.3)
-    drawBackground(assets.background2.backgroundCloud1, 0.4)
+    drawBackground(assets.background1.backgroundSky, 0.05)
+    drawBackground(assets.background1.backgroundSand, 0.1)
+    drawBackground(assets.background1.backgroundCloud3, 0.2)
+    drawBackground(assets.background1.backgroundCloud2, 0.3)
+    drawBackground(assets.background1.backgroundCloud1, 0.4)
 
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
@@ -52,6 +74,10 @@ function settings:draw()
     love.graphics.setColor(1, 1, 1, 0.95)
     love.graphics.setFont(buttonFont)
     love.graphics.print("Add your options here (audio, controls, graphics).", width * 0.22, height * 0.38)
+    -- print the current volume level
+    local volumeText = string.format("Current Volume: %d%%", love.audio.getVolume() * 100)
+    love.graphics.print(volumeText, width * 0.22, height * 0.44)
+
 
     -- Buttons
     local startY = height * 0.5
