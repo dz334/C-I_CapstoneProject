@@ -149,7 +149,7 @@ function game:enter()
         player.isGrounded = false
 
         -- Sprite/animation setup
-        local char = assets.character4
+        local char = assets.character2
         player.animation = {}
 
         -- Idle

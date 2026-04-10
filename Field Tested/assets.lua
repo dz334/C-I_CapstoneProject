@@ -2,13 +2,6 @@ local assets = {}
 
 function assets.load()
     assets.background1 = {
-        backgroundCloud1 = love.graphics.newImage('Map/Background/Cloud_cover_1.png'),
-        backgroundCloud2 = love.graphics.newImage('Map/Background/Cloud_cover_2.png'),
-        backgroundHills = love.graphics.newImage('Map/Background/Hills.png'),
-        backgroundSky = love.graphics.newImage('Map/Background/Sky_color.png')
-    }
-
-    assets.background2 = {
         backgroundCloud1 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_big.png'),
         backgroundCloud2 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_medium.png'),
         backgroundCloud3 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_small.png'),
