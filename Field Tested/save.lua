@@ -47,28 +47,29 @@ function save.saveGame(slot)
 end
 
 -- Load game state from file
-function save.loadGame()
+function save.loadGame(slot)
     slot = slot or 1
     if slot < 1 or slot > save.maxSlots then
         return false
     end
-
+ 
     local filePath = save.getFilePath(slot)
-
-    if not love.filesystem.getInfo(save.filePath) then
+ 
+    if not love.filesystem.getInfo(filePath) then
+        print("No save file found at: " .. filePath)
         return false
     end
-    
-    local contents, size = love.filesystem.read(save.filePath)
+ 
+    local contents, size = love.filesystem.read(filePath)
     if not contents then
         return false
     end
-    
+ 
     local success, data = pcall(bitser.loads, contents)
     if not success or not data then
         return false
     end
-    
+ 
     save.pendingData = data
     save.pendingSlot = slot
     return true
@@ -108,6 +109,7 @@ function save.applyPendingData()
     end
     
     save.pendingData = nil
+    save.pendingSlot = nil
     return true
 end
 

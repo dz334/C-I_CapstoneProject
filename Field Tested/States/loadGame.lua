@@ -6,7 +6,7 @@ local titleFont
 local buttonHeight = 64
 local margin = 16
 
-local function makeButton(text, onClick)
+local function makeButton(text, onClick, slot)
     return { 
         text = text, 
         onClick = onClick, 

@@ -3,18 +3,18 @@ local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
-local elapsedTime = 0
+elapsedTime = 0
 local gameLoaded = false
 local puzzleObject = nil
 local puzzleUIActive = false
 local puzzleInput = ""
 local signUIActive = false
 local orbs = {}
-local orbsCollected = 0
-local orbsRequired = 3
-local exitUnlocked = false
+orbsCollected = 0
+orbsRequired = 3
+exitUnlocked = false
 local gameFont
-local isPuzzleCompleted = false
+isPuzzleCompleted = false
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
         jumpSound:setVolume(0.4)
 
@@ -227,7 +227,7 @@ function game:enter()
         end
         signUIActive = false
 
-
+        save.applyPendingData()
         gameLoaded = true
     end
 
