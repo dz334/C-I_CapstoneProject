@@ -1,7 +1,7 @@
 return {
   version = "1.10",
   luaversion = "5.1",
-  tiledversion = "1.12.1",
+  tiledversion = "1.11.2",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -86,7 +86,6 @@ return {
                 width = 31.875,
                 height = 32,
                 rotation = 0,
-                opacity = 1,
                 visible = true,
                 properties = {
                   ["Collidable"] = true
@@ -326,7 +325,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -340,7 +338,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -354,7 +351,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -456,7 +452,7 @@ return {
       id = 2,
       name = "Solid",
       class = "",
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -476,7 +472,6 @@ return {
           width = 4734,
           height = 25,
           rotation = 0,
-          opacity = 1,
           visible = false,
           properties = {}
         },
@@ -490,8 +485,7 @@ return {
           width = 34,
           height = 730,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -504,8 +498,7 @@ return {
           width = 52,
           height = 95,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -518,8 +511,7 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           polygon = {
             { x = 0, y = 0 },
             { x = 6.875, y = -4.375 },
@@ -540,8 +532,7 @@ return {
           width = 95.3333,
           height = 28,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -554,8 +545,7 @@ return {
           width = 60.5,
           height = 61.5,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -566,10 +556,9 @@ return {
           x = 832,
           y = 609.5,
           width = 94.5,
-          height = 9.83333,
+          height = 27.5,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -578,12 +567,11 @@ return {
           type = "",
           shape = "rectangle",
           x = 1024.55,
-          y = 606.708,
+          y = 608.708,
           width = 30.3333,
-          height = 96.6667,
+          height = 94.6667,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -594,10 +582,9 @@ return {
           x = 1154,
           y = 610,
           width = 29.3333,
-          height = 9.99997,
+          height = 27.3333,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -606,12 +593,11 @@ return {
           type = "",
           shape = "rectangle",
           x = 1056.42,
-          y = 676.083,
+          y = 671.583,
           width = 31.3333,
-          height = 27.3333,
+          height = 31.8333,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -622,10 +608,9 @@ return {
           x = 1280.67,
           y = 609.333,
           width = 32,
-          height = 10.6667,
+          height = 28.6667,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -636,10 +621,9 @@ return {
           x = 1409.33,
           y = 609.333,
           width = 29.3333,
-          height = 10,
+          height = 28,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -652,8 +636,7 @@ return {
           width = 31.3333,
           height = 95.3333,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -664,10 +647,9 @@ return {
           x = 288.667,
           y = 609.333,
           width = 95.3333,
-          height = 11.3334,
+          height = 28.6667,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -678,10 +660,9 @@ return {
           x = 192,
           y = 514,
           width = 30,
-          height = 11,
+          height = 26,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -692,10 +673,9 @@ return {
           x = 226,
           y = 546.667,
           width = 26,
-          height = 10.3333,
+          height = 25.3333,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -706,10 +686,9 @@ return {
           x = 322.667,
           y = 479.333,
           width = 93.3333,
-          height = 12,
+          height = 31.3333,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -720,10 +699,9 @@ return {
           x = 511.333,
           y = 481.333,
           width = 97.3333,
-          height = 12,
+          height = 30,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         },
         {
@@ -736,8 +714,7 @@ return {
           width = 31.3333,
           height = 97.3333,
           rotation = 0,
-          opacity = 1,
-          visible = false,
+          visible = true,
           properties = {}
         }
       }
@@ -766,7 +743,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -796,7 +772,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -810,7 +785,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -824,7 +798,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -899,7 +872,6 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -974,7 +946,6 @@ return {
           width = 62.5,
           height = 34,
           rotation = 0,
-          opacity = 1,
           visible = true,
           properties = {}
         }
