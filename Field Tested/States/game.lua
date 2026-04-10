@@ -5,9 +5,6 @@ local mapH = 0
 local solids = {}
 elapsedTime = 0
 local gameLoaded = false
-local puzzleObject = nil
-local puzzleUIActive = false
-local puzzleInput = ""
 local signUIActive = false
 orbs = {}
 orbsCollected = 0
@@ -36,7 +33,7 @@ local function collectSolidRects(map)
     local solidLayer = map.layers["Solid"]
     if not solidLayer or not solidLayer.objects then return end
     for _, obj in ipairs(solidLayer.objects) do
-        if obj.shape == "rectangle" and obj.width > 0 and obj.height > 0 then
+        if (obj.shape == "rectangle") and obj.width > 0 and obj.height > 0 then
             table.insert(solids, { x = obj.x, y = obj.y, w = obj.width, h = obj.height })
         end
     end
@@ -80,17 +77,17 @@ local function getSpawnPoint(map)
     end
 end
 
-local function getPuzzleLocation(map)
-    local puzzleLayer = map.layers["Puzzle"]
-    if puzzleLayer and puzzleLayer.objects and puzzleLayer.objects[1] then
-        return puzzleLayer.objects[1].x, puzzleLayer.objects[1].y
-    end
-end
-
 local function getSignLocation(map)
     local signsLayer = map.layers["Signs"]
     if signsLayer and signsLayer.objects and signsLayer.objects[1] then
         return signsLayer.objects[1].x, signsLayer.objects[1].y
+    end
+end
+
+local function getExitLocation(map)
+    local exitLayer = map.layers["Exit"]
+    if exitLayer and exitLayer.objects and exitLayer.objects[1] then
+        return exitLayer.objects[1].x, exitLayer.objects[1].y
     end
 end
 
@@ -110,6 +107,7 @@ local function collectOrbs(map)
 end
 
 function game:enter()
+
     -- Only loads game when first entering gamestate
     game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
     game_Music:setVolume(0.2)
@@ -127,6 +125,7 @@ function game:enter()
         local sw, sh = love.graphics.getDimensions()
         cam:zoom(math.min(sw / BASE_W, sh / BASE_H))
         gameMap = sti('Map/Level_1.lua')
+        level = 1
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
         -- Get map size (pixels) for camera clamping
@@ -142,7 +141,7 @@ function game:enter()
         -- Player state and physics properties
         player = {}
         player.x, player.y = getSpawnPoint(gameMap)
-        player.w, player.h = 24, 60
+        player.w, player.h = 24, 32
         player.vx, player.vy = 0, 0
         player.moveSpeed = 300 -- CHANGE SPEED
         player.jumpForce = 400
@@ -198,21 +197,6 @@ function game:enter()
         local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
 
-        -- Puzzle object (placeholder)
-        local puzzleX, puzzleY = getPuzzleLocation(gameMap)
-        if puzzleX and puzzleY then
-            puzzleObject = {
-                x = puzzleX - 16,
-                y = puzzleY - 16,
-                w = 32,
-                h = 32
-            }
-        else
-            puzzleObject = nil
-        end
-        puzzleUIActive = false
-        puzzleInput = ""
-
         -- Sign object (placeholder)
         local signX, signY = getSignLocation(gameMap)
            if signX and signY then
@@ -226,6 +210,19 @@ function game:enter()
             signObject = nil
         end
         signUIActive = false
+
+        -- Exit object (placeholder)
+        local exitX, exitY = getExitLocation(gameMap)
+           if exitX and exitY then
+            exitObject = {
+                x = exitX - 16,
+                y = exitY - 16,
+                w = 64,
+                h = 32
+            }
+        else
+            exitObject = nil
+        end
 
         -- Reset for reenter or load previous same
         elapsedTime = 0
@@ -245,7 +242,7 @@ function game:update(dt)
 
     elapsedTime = elapsedTime + dt
 
-    if puzzleUIActive or signUIActive then
+    if signUIActive then
         player.vx = 0
         player.vy = 0
         if player.isGrounded then
@@ -358,11 +355,39 @@ end
 end
 
 function game:draw()
-    drawBackground(assets.background1.backgroundSky, 0.05)
-    drawBackground(assets.background1.backgroundSand, 0.1)
-    drawBackground(assets.background1.backgroundCloud3, 0.2)
-    drawBackground(assets.background1.backgroundCloud2, 0.3)
-    drawBackground(assets.background1.backgroundCloud1, 0.4)
+    if level == 1 then
+        drawBackground(assets.background1.backgroundSky, 0.05)
+        drawBackground(assets.background1.backgroundSand, 0.1)
+        drawBackground(assets.background1.backgroundCloud3, 0.2)
+        drawBackground(assets.background1.backgroundCloud2, 0.3)
+        drawBackground(assets.background1.backgroundCloud1, 0.4)
+    end
+    
+    cam:attach()
+        -- Level 1
+        if level == 1 then
+            gameMap:drawLayer(gameMap.layers["Ground"])
+            gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
+            gameMap:drawLayer(gameMap.layers["SignsIMG"])
+            gameMap:drawLayer(gameMap.layers["CaveExit"])
+
+        -- Level 2
+        elseif level == 2 then
+            gameMap:drawLayer(gameMap.layers["Background"])
+            gameMap:drawLayer(gameMap.layers["lava"])
+            gameMap:drawLayer(gameMap.layers["smoke"])
+            gameMap:drawLayer(gameMap.layers["platforms"])
+        end
+
+
+        player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
+        for _, orb in ipairs(orbs) do
+        if not orb.collected then
+            love.graphics.setColor(1, 1, 1, 1)
+            orbAnim:draw(assets.orb.orbIdle, orb.x + 16, orb.y + 16, nil, 1, nil, 32/2, assets.orb.orbIdle:getHeight()/2)
+        end
+    end
+    cam:detach()
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
@@ -373,33 +398,9 @@ function game:draw()
     local orbDisplay= "Keys: "
     local orbTitle = gameFont:getWidth(orbDisplay)
     love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
-    
-    cam:attach()
-        gameMap:drawLayer(gameMap.layers["Ground"])
-        gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
-        gameMap:drawLayer(gameMap.layers["SignsIMG"])
-        gameMap:drawLayer(gameMap.layers["PuzzleIMG"])
-        gameMap:drawLayer(gameMap.layers["CaveExit"])
-        player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
-        for _, orb in ipairs(orbs) do
-        if not orb.collected then
-            love.graphics.setColor(1, 1, 1, 1)
-            orbAnim:draw(assets.orb.orbIdle, orb.x + 16, orb.y + 16, nil, 1, nil, 32/2, assets.orb.orbIdle:getHeight()/2)
-        end
-    end
-    cam:detach()
-
-    -- UI prompt when near puzzle object
-    if puzzleObject and not puzzleUIActive and not signUIActive then
-        local playerRect = getPlayerRect(player)
-        local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }
-        if rectsOverlap(playerRect, objRect) then
-            love.graphics.print("Press E to open puzzle UI", 10, 112)
-        end
-    end
 
     -- UI prompt when near sign object
-    if signObject and not signUIActive and not puzzleUIActive then
+    if signObject and not signUIActive then
         local playerRect = getPlayerRect(player)
         local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
         if rectsOverlap(playerRect, signRect) then
@@ -407,8 +408,17 @@ function game:draw()
         end
     end
 
-    -- Puzzle UI placeholder
-    if puzzleUIActive or signUIActive then
+    -- UI prompt when near exit object
+    if exitObject then
+        local playerRect = getPlayerRect(player)
+        local exitRect = { x = exitObject.x, y = exitObject.y, w = exitObject.w, h = exitObject.h }
+        if rectsOverlap(playerRect, exitRect) then
+            love.graphics.print("Press E to Advance", 10, 112)
+        end
+    end
+
+    -- Sign UI placeholder
+    if signUIActive then
         local scale = 2 
         local imgW = assets.ui.panel:getWidth()
         local imgH = assets.ui.panel:getHeight()
@@ -420,21 +430,46 @@ function game:draw()
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(assets.ui.panel, uiX, uiY, 0, scale, scale)
 
-        if puzzleUIActive then
-            love.graphics.setColor(0, 0, 0, 1)
-            love.graphics.print("Puzzle UI", uiX + 48, uiY + 48)
-            love.graphics.print("Input: " .. puzzleInput, uiX + 48, uiY + 88)
-        else
-            love.graphics.setColor(0, 0, 0, 1)
-            love.graphics.print("Sign text goes here", uiX + 48, uiY + 48)
-        end
+        love.graphics.print("Sign text goes here", uiX + 48, uiY + 48)
         love.graphics.setColor(1, 1, 1, 1)
     end
 end
 
 function game:keypressed(key)
+    if key == "1" then
+        gameMap = sti('Map/Level_1.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 1
+    elseif key == "2" then
+        gameMap = sti('Map/Level_2.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 2
+    end
+
     if (key == "space" or key == "up" or key == "w") then
         player.jumpRequested = true
+    end
+
+    if key == "m" then
+        if love.audio.getVolume() > 0 then
+            love.audio.setVolume(0)
+        else
+            love.audio.setVolume(0.5) -- Default volume when unmuting
+        end
+    end
+
+    if key == "-" then
+        local currentVolume = love.audio.getVolume()
+        love.audio.setVolume(math.max(0, currentVolume - 0.1))
+    end
+
+    if key == "=" then
+        local currentVolume = love.audio.getVolume()
+        love.audio.setVolume(math.min(1, currentVolume + 0.1))
     end
 
     if key == "escape" then
@@ -445,25 +480,7 @@ function game:keypressed(key)
             signUIActive = false
         end
 
-    elseif puzzleUIActive then
-        if key == "backspace" then
-            puzzleInput = puzzleInput:sub(1, -2)
-        elseif key == "return" then
-            if puzzleInput:lower() == "done" then
-                puzzleUIActive = false
-                puzzleInput = ""
-            end
-        end
-
     elseif key == "e" then
-        if puzzleObject then
-            local playerRect = getPlayerRect(player)
-            local objRect = { x = puzzleObject.x, y = puzzleObject.y, w = puzzleObject.w, h = puzzleObject.h }
-            if rectsOverlap(playerRect, objRect) then
-                puzzleUIActive = true
-                puzzleInput = ""
-            end
-        end
         if signObject then
             local playerRect = getPlayerRect(player)
             local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
@@ -471,12 +488,28 @@ function game:keypressed(key)
                 signUIActive = true
             end
         end
-    end
-end
-
-function game:textinput(t)
-    if puzzleUIActive then
-        puzzleInput = puzzleInput .. t
+        if exitObject and exitUnlocked then
+            local playerRect = getPlayerRect(player)
+            local exitRect = { x = exitObject.x, y = exitObject.y, w = exitObject.w, h = exitObject.h }
+            if rectsOverlap(playerRect, exitRect) then
+                -- Advance to next level or end game
+                if level == 1 then
+                    gameMap = sti('Map/Level_2.lua')
+                    collectSolidRects(gameMap)
+                    collectOrbs(gameMap)
+                    player.x, player.y = getSpawnPoint(gameMap)
+                    level = 2
+                    orbsCollected = 0
+                elseif level == 2 then
+                    -- End game or loop back to level 1
+                    gameMap = sti('Map/Level_1.lua')
+                    collectSolidRects(gameMap)
+                    collectOrbs(gameMap)
+                    player.x, player.y = getSpawnPoint(gameMap)
+                    level = 1
+                end
+            end
+        end
     end
 end
 
