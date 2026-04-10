@@ -37,6 +37,7 @@ function pause:enter()
     end))
 
     table.insert(buttons, makeButton("Main Menu", function()
+        gameLoaded = false
         Gamestate.push(require 'states/menu')
     end))
 
