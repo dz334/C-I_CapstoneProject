@@ -381,6 +381,9 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["smoke"])
             gameMap:drawLayer(gameMap.layers["platforms"])
             gameMap:drawLayer(gameMap.layers["lava"])
+        elseif level == 3 then
+            gameMap:drawLayer(gameMap.layers["bg"])
+            gameMap:drawLayer(gameMap.layers["ground"])
         end
 
 
@@ -452,6 +455,12 @@ function game:keypressed(key)
         collectOrbs(gameMap)
         player.x, player.y = getSpawnPoint(gameMap)
         level = 2
+    elseif key == "3" then
+        gameMap = sti('Map/Level_3.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 3
     end
 
     if (key == "space" or key == "up" or key == "w") then
