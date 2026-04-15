@@ -3,14 +3,22 @@ local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
+<<<<<<< Updated upstream
 elapsedTime = 0
 gameLoaded = false
+=======
+local gameLoaded = false
+local puzzleObject = nil
+local puzzleUIActive = false
+local puzzleInput = ""
+>>>>>>> Stashed changes
 local signUIActive = false
+local gameFont
+elapsedTime = 0
 orbs = {}
 orbsCollected = 0
 orbsRequired = 3
 exitUnlocked = false
-local gameFont
 isPuzzleCompleted = false
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
         jumpSound:setVolume(0.4)
@@ -111,7 +119,6 @@ function game:enter()
     game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
     game_Music:setVolume(0.2)
     game_Music:setLooping(true)
-    game_Music:play()
    
     if not gameLoaded then
         anim8 = require 'Libraries/anim8'
@@ -234,6 +241,7 @@ end
 function game:leave()
     if game_Music then
         game_Music:stop()
+        game_Music = nil
     end
 end
 
@@ -472,7 +480,7 @@ function game:keypressed(key)
     end
 
     if key == "escape" then
-        Gamestate.switch(require 'states/pause')
+        Gamestate.push(pauseState)
 
     elseif signUIActive then
         if key == "e" or key == "return" or key == "space" then

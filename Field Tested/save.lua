@@ -23,21 +23,21 @@ function save.saveGame(slot)
     if slot < 1 or slot > save.maxSlots then
         return false
     end
-    
+ 
     local filePath = save.getFilePath(slot)
     local data = save.getSaveData()
-    
-    -- Bitser serializes to string, then we write bytes
+ 
     local success, serialized = pcall(bitser.dumps, data)
     if not success then
         return false
     end
-    
-    -- Write binary data
-    local writeSuccess, message = pcall(function()
+ 
+
+    local writeSuccess, err = pcall(function()
         love.filesystem.write(filePath, serialized)
     end)
-    
+
+    -- Write binary data 
     if writeSuccess then
         return true
     else

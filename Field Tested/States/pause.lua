@@ -23,7 +23,7 @@ function pause:enter()
     buttonFont = love.graphics.newFont(32)
 
     table.insert(buttons, makeButton("Resume", function()
-        Gamestate.push(require 'states/game')
+        Gamestate.pop()
     end))
 
     table.insert(buttons, makeButton("Save", function()
@@ -38,7 +38,7 @@ function pause:enter()
 
     table.insert(buttons, makeButton("Main Menu", function()
         gameLoaded = false
-        Gamestate.push(require 'states/menu')
+        Gamestate.switch(require 'states/menu')
     end))
 
     table.insert(buttons, makeButton("Quit", function()
@@ -125,7 +125,6 @@ end
 
 function pause:keypressed(key)
     if key == "escape" then
-        --Gamestate.switch(gameState)
         Gamestate.pop()
     end
 end
