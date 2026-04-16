@@ -382,7 +382,7 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["platforms"])
             gameMap:drawLayer(gameMap.layers["lava"])
         elseif level == 3 then
-            gameMap:drawLayer(gameMap.layers["bg"])
+            --gameMap:drawLayer(gameMap.layers["bg"])
             gameMap:drawLayer(gameMap.layers["ground"])
         end
 
