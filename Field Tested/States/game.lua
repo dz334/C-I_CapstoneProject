@@ -346,10 +346,13 @@ end
 
     -- Press "r" to reset position to spawn 
     if love.keyboard.isDown("r") 
+    -- Reset if player falls below map bounds or hits certain death zones in level 2
     or (level == 2 and player.y > 773)
     or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
     or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
     or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
+    -- Reset if player falls below map bounds in level 3
+    or (level == 3 and player.y > 773)
     then
         player.x, player.y = getSpawnPoint(gameMap)
         elapsedTime = 0
