@@ -13,7 +13,7 @@ local gameFont
 elapsedTime = 0
 orbs = {}
 orbsCollected = 0
-orbsRequired = 3
+orbsRequired = 1
 exitUnlocked = false
 --isPuzzleCompleted = false remOve
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
@@ -373,7 +373,15 @@ function game:update(dt)
 end
 
     -- Press "r" to reset position to spawn 
-    if love.keyboard.isDown("r") then
+    if love.keyboard.isDown("r") 
+    -- Reset if player falls below map bounds or hits certain death zones in level 2
+    or (level == 2 and player.y > 773)
+    or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
+    or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
+    or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
+    -- Reset if player falls below map bounds in level 3
+    or (level == 3 and player.y > 800)
+    then
         player.x, player.y = getSpawnPoint(gameMap)
         elapsedTime = 0
         -- orbsCollected = 0 -- redraw orbs after 
@@ -402,9 +410,14 @@ function game:draw()
         -- Level 2
         elseif level == 2 then
             gameMap:drawLayer(gameMap.layers["Background"])
-            gameMap:drawLayer(gameMap.layers["lava"])
             gameMap:drawLayer(gameMap.layers["smoke"])
             gameMap:drawLayer(gameMap.layers["platforms"])
+            gameMap:drawLayer(gameMap.layers["lava"])
+        elseif level == 3 then
+            gameMap:drawLayer(gameMap.layers["bg"])
+            gameMap:drawLayer(gameMap.layers["ground"])
+            gameMap:drawLayer(gameMap.layers["props"])
+            gameMap:drawLayer(gameMap.layers["grass"])
         end
 
 
@@ -488,6 +501,12 @@ function game:keypressed(key)
         collectOrbs(gameMap)
         player.x, player.y = getSpawnPoint(gameMap)
         level = 2
+    elseif key == "3" then
+        gameMap = sti('Map/Level_3.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 3
     end
 
     if (key == "space" or key == "up" or key == "w") then

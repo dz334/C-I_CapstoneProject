@@ -316,32 +316,6 @@ return {
       properties = {},
       objects = {
         {
-          id = 16,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 569.834,
-          y = 449.166,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 18,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 1338,
-          y = 670.667,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
           id = 19,
           name = "",
           type = "",
