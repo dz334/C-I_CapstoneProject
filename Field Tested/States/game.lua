@@ -3,25 +3,21 @@ local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
-<<<<<<< Updated upstream
 elapsedTime = 0
 gameLoaded = false
-=======
-local gameLoaded = false
-local puzzleObject = nil
-local puzzleUIActive = false
-local puzzleInput = ""
->>>>>>> Stashed changes
 local signUIActive = false
+
+local endUIActive = false -- REMOVE LATER
 local gameFont
+
 elapsedTime = 0
 orbs = {}
 orbsCollected = 0
 orbsRequired = 3
 exitUnlocked = false
-isPuzzleCompleted = false
+--isPuzzleCompleted = false remOve
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
-        jumpSound:setVolume(0.4)
+jumpSound:setVolume(0.4)
 
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
@@ -99,6 +95,16 @@ local function getExitLocation(map)
     end
 end
 
+
+-- TEST UI PROMPT FOR END SCREEN 
+-- REMOVE LATER
+local function getEndLocation(map)
+    local endLayer = map.layers["EndTest"]
+    if endLayer and endLayer.objects and endLayer.objects[1] then
+        return endLayer.objects[1].x, endLayer.objects[1].y
+    end
+end
+
 local function collectOrbs(map)
     orbs = {}
     local orbLayer = map.layers["Orb"]
@@ -156,7 +162,7 @@ function game:enter()
         player.isGrounded = false
 
         -- Sprite/animation setup
-        local char = assets.character2
+        local char = assets.character4
         player.animation = {}
 
         -- Idle
@@ -207,8 +213,8 @@ function game:enter()
         local signX, signY = getSignLocation(gameMap)
            if signX and signY then
             signObject = {
-                x = signX - 16,
-                y = signY - 16,
+                x = signX,
+                y = signY,
                 w = 32,
                 h = 32
             }
@@ -228,6 +234,20 @@ function game:enter()
             }
         else
             exitObject = nil
+        end
+
+        -- TEST UI PROMPT FOR END SCREEN 
+        -- REMOVE LATER
+        local endX, endY = getEndLocation(gameMap)
+            if endX and endY then
+            endObject = {
+                x = endX,
+                y = endY,
+                w = 64,
+                h = 64
+            }
+        else
+            endObject = nil
         end
 
         -- Reset for reenter or load previous same
@@ -377,6 +397,7 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
             gameMap:drawLayer(gameMap.layers["SignsIMG"])
             gameMap:drawLayer(gameMap.layers["CaveExit"])
+            gameMap:drawLayer(gameMap.layers["End"])
 
         -- Level 2
         elseif level == 2 then
@@ -423,6 +444,18 @@ function game:draw()
             love.graphics.print("Press E to Advance", 10, 112)
         end
     end
+
+    -- TEST UI PROMPT FOR END SCREEN 
+    -- REMOVE LATER
+   if endObject then
+    local playerRect = getPlayerRect(player)
+    local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
+    if rectsOverlap(playerRect, endRect) then
+        love.graphics.print("Press E to end", 10, 112)
+    end
+    -- debug: always print coords so you know where it is
+    love.graphics.print("END: " .. endObject.x .. "," .. endObject.y .. " PLAYER: " .. player.x .. "," .. player.y, 10, 184)
+end
 
     -- Sign UI placeholder
     if signUIActive then
@@ -493,6 +526,15 @@ function game:keypressed(key)
             local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
             if rectsOverlap(playerRect, signRect) then
                 signUIActive = true
+                return
+            end
+        end
+        if endObject then
+            local playerRect = getPlayerRect(player)
+            local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
+            if rectsOverlap(playerRect, endRect) then
+                Gamestate.push(endState)
+                return
             end
         end
         if exitObject and exitUnlocked then

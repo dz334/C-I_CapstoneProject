@@ -7,6 +7,7 @@ pauseState = require 'states/pause'
 save = require 'save'
 loadState = require 'states/loadGame' 
 assets = require 'assets'
+endState = require 'states/endscreen'
 
 -- Global Draw Background Function With Parallax
 function drawBackground(image, parallaxSpeed)
