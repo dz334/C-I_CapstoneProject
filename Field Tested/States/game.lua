@@ -352,7 +352,7 @@ end
     or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
     or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
     -- Reset if player falls below map bounds in level 3
-    or (level == 3 and player.y > 773)
+    or (level == 3 and player.y > 800)
     then
         player.x, player.y = getSpawnPoint(gameMap)
         elapsedTime = 0
@@ -385,8 +385,10 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["platforms"])
             gameMap:drawLayer(gameMap.layers["lava"])
         elseif level == 3 then
-            --gameMap:drawLayer(gameMap.layers["bg"])
+            gameMap:drawLayer(gameMap.layers["bg"])
             gameMap:drawLayer(gameMap.layers["ground"])
+            gameMap:drawLayer(gameMap.layers["props"])
+            gameMap:drawLayer(gameMap.layers["grass"])
         end
 
 
