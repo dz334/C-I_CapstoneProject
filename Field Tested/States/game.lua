@@ -453,24 +453,50 @@ function game:draw()
     end
 end
 
+local function loadLevel(mapPath)
+    gameMap = sti(mapPath)
+
+    collectSolidRects(gameMap)
+    collectOrbs(gameMap)
+
+    player.x, player.y = getSpawnPoint(gameMap)
+
+    -- ✅ FIX: reload sign
+    local signX, signY = getSignLocation(gameMap)
+    if signX and signY then
+        signObject = {
+            x = signX - 16,
+            y = signY - 16,
+            w = 32,
+            h = 32
+        }
+    else
+        signObject = nil
+    end
+
+    -- ✅ FIX: reload exit
+    local exitX, exitY = getExitLocation(gameMap)
+    if exitX and exitY then
+        exitObject = {
+            x = exitX - 16,
+            y = exitY - 16,
+            w = 64,
+            h = 32
+        }
+    else
+        exitObject = nil
+    end
+end
+
 function game:keypressed(key)
     if key == "1" then
-        gameMap = sti('Map/Level_1.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
+        loadLevel('Map/Level_1.lua')
         level = 1
     elseif key == "2" then
-        gameMap = sti('Map/Level_2.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
+        loadLevel('Map/Level_2.lua')
         level = 2
     elseif key == "3" then
-        gameMap = sti('Map/Level_3.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
+        loadLevel('Map/Level_3.lua')
         level = 3
     end
 
@@ -526,11 +552,11 @@ function game:keypressed(key)
                     orbsCollected = 0
                 elseif level == 2 then
                     -- End game or loop back to level 1
-                    gameMap = sti('Map/Level_1.lua')
+                    gameMap = sti('Map/Level_3.lua')
                     collectSolidRects(gameMap)
                     collectOrbs(gameMap)
                     player.x, player.y = getSpawnPoint(gameMap)
-                    level = 1
+                    level = 3
                 end
             end
         end
