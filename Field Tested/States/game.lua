@@ -461,7 +461,7 @@ local function loadLevel(mapPath)
 
     player.x, player.y = getSpawnPoint(gameMap)
 
-    -- ✅ FIX: reload sign
+    -- reload sign
     local signX, signY = getSignLocation(gameMap)
     if signX and signY then
         signObject = {
@@ -474,7 +474,7 @@ local function loadLevel(mapPath)
         signObject = nil
     end
 
-    -- ✅ FIX: reload exit
+    -- reload exit
     local exitX, exitY = getExitLocation(gameMap)
     if exitX and exitY then
         exitObject = {
@@ -544,19 +544,19 @@ function game:keypressed(key)
             if rectsOverlap(playerRect, exitRect) then
                 -- Advance to next level or end game
                 if level == 1 then
-                    gameMap = sti('Map/Level_2.lua')
-                    collectSolidRects(gameMap)
-                    collectOrbs(gameMap)
-                    player.x, player.y = getSpawnPoint(gameMap)
+                    loadLevel('Map/Level_2.lua')
                     level = 2
                     orbsCollected = 0
                 elseif level == 2 then
                     -- End game or loop back to level 1
-                    gameMap = sti('Map/Level_3.lua')
-                    collectSolidRects(gameMap)
-                    collectOrbs(gameMap)
-                    player.x, player.y = getSpawnPoint(gameMap)
+                    loadLevel('Map/Level_3.lua')
                     level = 3
+                    orbsCollected = 0
+                elseif level == 3 then
+                    -- For now, just loop back to level 1
+                    loadLevel('Map/Level_1.lua')
+                    level = 1
+                    orbsCollected = 0
                 end
             end
         end
