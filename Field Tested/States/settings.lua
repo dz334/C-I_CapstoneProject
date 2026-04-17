@@ -69,24 +69,16 @@ function settings:draw()
     local title  = "Settings"
     local titleW = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleW) / 2, height * 0.22)
-
-
+    love.graphics.print(infoText, (width - infoW) / 2, height * 0.38)
 
     -- Placeholder
-    --love.graphics.setColor(1, 1, 1, 0.95)
-    --love.graphics.setFont(buttonFont)
-    --love.graphics.print("Add your options here (audio, controls, graphics).", width * 0.22, height * 0.38)
+    love.graphics.setColor(1, 1, 1, 0.95)
     -- print the current volume level
     --local volumeText = string.format("Current Volume: %d%%", love.audio.getVolume() * 100)
     --love.graphics.print(volumeText, width * 0.22, height * 0.44)
 
-    local infoText = "Add your options here (audio, controls, graphics)."
-    local infoW = buttonFont:getWidth(infoText)
-    love.graphics.print(infoText, (width - infoW) / 2, height * 0.38)
-
     local volumeText = string.format("Current Volume: %d%%", love.audio.getVolume() * 100)
-    local volumeW = buttonFont:getWidth(volumeText)
-    love.graphics.print(volumeText, (width - volumeW) / 2, height * 0.44)
+    love.graphics.print(volumeText, width * 0.22, height * 0.44)
 
     -- Buttons
     local startY = height * 0.5
