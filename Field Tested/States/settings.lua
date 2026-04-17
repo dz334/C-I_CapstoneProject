@@ -75,7 +75,7 @@ function settings:draw()
     local title  = "Settings"
     local titleW = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleW) / 2, height * 0.22)
-    love.graphics.print(infoText, (width - infoW) / 2, height * 0.38)
+
 
     -- Placeholder
     love.graphics.setColor(1, 1, 1, 0.95)
