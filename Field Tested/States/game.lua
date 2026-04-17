@@ -1,3 +1,5 @@
+-- Core game state with player movement, physics, and level management
+
 local game = {}
 local BASE_W, BASE_H = 1280, 720
 local mapW = 0
@@ -191,7 +193,7 @@ function game:enter()
         player.animSheet = player.idleRightSheet
         player.facingRight = true
 
-        -- Orb animation
+        -- Orb/Key animation
         local orbFrameW = 32  -- adjust based on your actual frame size
         local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
@@ -329,7 +331,7 @@ function game:update(dt)
         cam.y = math.max(h/2, math.min(cam.y, mapH - h/2))
     end
 
-    -- Orb Collection
+    -- Orb/Key Collection
     for _, orb in ipairs(orbs) do
     if not orb.collected then
         local playerRect = getPlayerRect(player)
@@ -346,12 +348,11 @@ end
 
     -- Press "r" to reset position to spawn 
     if love.keyboard.isDown("r") 
-    -- Reset if player falls below map bounds or hits certain death zones in level 2
+    -- Death zone resets
     or (level == 2 and player.y > 773)
     or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
     or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
     or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
-    -- Reset if player falls below map bounds in level 3
     or (level == 3 and player.y > 800)
     then
         player.x, player.y = getSpawnPoint(gameMap)
@@ -362,6 +363,7 @@ end
 end
 
 function game:draw()
+
     if level == 1 then
         drawBackground(assets.background1.backgroundSky, 0.05)
         drawBackground(assets.background1.backgroundSand, 0.1)
@@ -384,6 +386,8 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["smoke"])
             gameMap:drawLayer(gameMap.layers["platforms"])
             gameMap:drawLayer(gameMap.layers["lava"])
+
+        -- Level 3
         elseif level == 3 then
             gameMap:drawLayer(gameMap.layers["bg"])
             gameMap:drawLayer(gameMap.layers["ground"])
@@ -391,13 +395,15 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["grass"])
         end
 
-
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
+
         for _, orb in ipairs(orbs) do
+
         if not orb.collected then
             love.graphics.setColor(1, 1, 1, 1)
             orbAnim:draw(assets.orb.orbIdle, orb.x + 16, orb.y + 16, nil, 1, nil, 32/2, assets.orb.orbIdle:getHeight()/2)
         end
+
     end
     cam:detach()
 
