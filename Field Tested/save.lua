@@ -7,7 +7,7 @@ function save.getSaveData()
         playerX = player.x,
         playerY = player.y,
         orbsCollected = orbsCollected,
-        currentLevel = level,
+        currentLevel = level or 1,
         elapsedTime = elapsedTime or 0,
         saveDate = os.date("%Y-%m-%d %H:%M:%S")
     }
@@ -31,7 +31,6 @@ function save.saveGame(slot)
     if not success then
         return false
     end
- 
 
     local writeSuccess, err = pcall(function()
         love.filesystem.write(filePath, serialized)
@@ -81,32 +80,27 @@ function save.applyPendingData()
     end
 
     local data = save.pendingData
-    
-    if data.playerX and data.playerY then
-        player.x = data.playerX
-        player.y = data.playerY
+
+    if data.currentLevel then
+        level = data.currentLevel
     end
+
+    save.pendingPlayerX = data.playerX
+    save.pendingPlayerY = data.playerY
     
     if data.orbsCollected then
         orbsCollected = data.orbsCollected
-        for i = 1, orbsCollected do
-            if orbs[i] then 
-                orbs[i].collected = true 
-            end
-        end
-        if orbsCollected >= orbsRequired then
-            exitUnlocked = true
-        end
-    end
-    
-    if data.isPuzzleCompleted ~= nil then
-        isPuzzleCompleted = data.isPuzzleCompleted
+    else
+        orbsCollected = 0
     end
     
     if data.elapsedTime then
         elapsedTime = data.elapsedTime
+    else
+        elapsedTime = 0
     end
     
+    -- Clear pending data
     save.pendingData = nil
     save.pendingSlot = nil
     return true

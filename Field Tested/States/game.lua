@@ -3,21 +3,20 @@ local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
-elapsedTime = 0
 gameLoaded = false
 local signUIActive = false
-
 local endUIActive = false -- REMOVE LATER
 local gameFont
-
 elapsedTime = 0
 orbs = {}
 orbsCollected = 0
 orbsRequired = 1
 exitUnlocked = false
---isPuzzleCompleted = false remOve
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
 jumpSound:setVolume(0.4)
+local anim8 = require 'Libraries/anim8'
+local camera = require 'Libraries/camera'
+local sti = require 'Libraries/sti'
 
 -- Check for overlap and collisions between player and solids
 local function rectsOverlap(a, b)
@@ -32,7 +31,7 @@ local function getPlayerRect(p)
 end
 
 -- Read rectangle objects from Tiled "Solid" map layer
-local function collectSolidRects(map)
+function collectSolidRects(map)
     solids = {}
     local solidLayer = map.layers["Solid"]
     if not solidLayer or not solidLayer.objects then return end
@@ -105,7 +104,8 @@ local function getEndLocation(map)
     end
 end
 
-local function collectOrbs(map)
+-- Find and create orbs from tiled
+function collectOrbs(map)
     orbs = {}
     local orbLayer = map.layers["Orb"]
     if not orbLayer or not orbLayer.objects then return end
@@ -125,38 +125,15 @@ function game:enter()
     game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
     game_Music:setVolume(0.2)
     game_Music:setLooping(true)
-   
-    if not gameLoaded then
-        anim8 = require 'Libraries/anim8'
-        camera = require 'Libraries/camera'
-        sti = require 'Libraries/sti'
 
-        game_Music:play()
-
-        cam = camera()
-        local sw, sh = love.graphics.getDimensions()
-        cam:zoom(math.min(sw / BASE_W, sh / BASE_H))
-        gameMap = sti('Map/Level_1.lua')
-        level = 1
-        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
-
-        -- Get map size (pixels) for camera clamping
-        mapW = gameMap.width * gameMap.tilewidth
-        mapH = gameMap.height * gameMap.tileheight
-
-        -- Load collision map data
-        collectSolidRects(gameMap)
-
-        -- Load Orb Collection Data
-        collectOrbs(gameMap)
-
+    function createPlayer() 
         -- Player state and physics properties
         player = {}
-        player.x, player.y = getSpawnPoint(gameMap)
+        
         player.w, player.h = 24, 32
         player.vx, player.vy = 0, 0
-        player.moveSpeed = 300 -- CHANGE SPEED
-        player.jumpForce = 400
+        player.moveSpeed = 300
+        player.jumpForce = 410 -- change back to 400
         player.gravity = 1100
         player.maxFallSpeed = 700
         player.isGrounded = false
@@ -204,11 +181,13 @@ function game:enter()
         player.animSheet = player.idleRightSheet
         player.facingRight = true
 
-        -- Orb animation
-        local orbFrameW = 32  -- adjust based on your actual frame size
+         -- Orb animation
+        local orbFrameW = 32
         local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
+    end
 
+    function createUIObjects()
         -- Sign object (placeholder)
         local signX, signY = getSignLocation(gameMap)
            if signX and signY then
@@ -250,10 +229,86 @@ function game:enter()
             endObject = nil
         end
 
-        -- Reset for reenter or load previous same
+    end
+
+    if save.pendingData then
+        game_Music:play()
+        
+        -- Load the save data once
+        save.applyPendingData()
+        
+        gameMap = sti('Map/Level_' .. level .. '.lua')
+        mapW = gameMap.width * gameMap.tilewidth
+        mapH = gameMap.height * gameMap.tileheight
+
+        cam = camera()
+        screenW, screenH = love.graphics.getDimensions()
+        cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
+        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
+
+        -- Rebuild the map 
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        for i = 1, orbsCollected do
+            if orbs[i] then 
+                orbs[i].collected = true 
+            end
+        end
+
+        if orbsCollected >= orbsRequired then
+            exitUnlocked = true
+        else
+            exitUnlocked = false
+        end
+
+        -- Load player
+        createPlayer()
+        player.x = save.pendingPlayerX
+        player.y = save.pendingPlayerY
+        save.pendingPlayerX = nil
+        save.pendingPlayerY = nil
+        player.vx = 0
+        player.vy = 0
+        player.isGrounded = false
+
+        createUIObjects()
+        gameLoaded = true
+        return
+    end
+
+    exitUnlocked = false
+    signUIActive = false
+    
+
+    if not gameLoaded then
+        game_Music:play()
+
+        -- Load camera, fonts, etc
+        cam = camera()
+        screenW, screenH = love.graphics.getDimensions()
+        cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
+        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
+
+        gameMap = sti('Map/Level_1.lua')
+        level = 1
+        
+        -- Get map size (pixels) for camera clamping
+        mapW = gameMap.width * gameMap.tilewidth
+        mapH = gameMap.height * gameMap.tileheight
+    
+        -- Load collision map data
+        collectSolidRects(gameMap)
+
+        -- Load Orb Collection Data
+        collectOrbs(gameMap)
+
+        -- Load Player
+        createPlayer()
+        player.x, player.y = getSpawnPoint(gameMap)
+        
         elapsedTime = 0
         orbsCollected = 0
-        save.applyPendingData()
+        createUIObjects()
         gameLoaded = true
     end
 end
@@ -384,7 +439,6 @@ end
     then
         player.x, player.y = getSpawnPoint(gameMap)
         elapsedTime = 0
-        -- orbsCollected = 0 -- redraw orbs after 
     end    
 
 end
@@ -461,14 +515,12 @@ function game:draw()
     -- TEST UI PROMPT FOR END SCREEN 
     -- REMOVE LATER
    if endObject then
-    local playerRect = getPlayerRect(player)
-    local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
-    if rectsOverlap(playerRect, endRect) then
-        love.graphics.print("Press E to end", 10, 112)
+        local playerRect = getPlayerRect(player)
+        local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
+        if rectsOverlap(playerRect, endRect) then
+            love.graphics.print("Press E to end", 10, 112)
+        end
     end
-    -- debug: always print coords so you know where it is
-    love.graphics.print("END: " .. endObject.x .. "," .. endObject.y .. " PLAYER: " .. player.x .. "," .. player.y, 10, 184)
-end
 
     -- Sign UI placeholder
     if signUIActive then
@@ -489,6 +541,8 @@ end
 end
 
 function game:keypressed(key)
+
+    -- REMOVE LATER
     if key == "1" then
         gameMap = sti('Map/Level_1.lua')
         collectSolidRects(gameMap)
@@ -500,14 +554,19 @@ function game:keypressed(key)
         collectSolidRects(gameMap)
         collectOrbs(gameMap)
         player.x, player.y = getSpawnPoint(gameMap)
+        orbsCollected = 0
         level = 2
     elseif key == "3" then
         gameMap = sti('Map/Level_3.lua')
         collectSolidRects(gameMap)
         collectOrbs(gameMap)
         player.x, player.y = getSpawnPoint(gameMap)
+        orbsCollected = 0
         level = 3
     end
+    -- REMOVE LATER
+
+
 
     if (key == "space" or key == "up" or key == "w") then
         player.jumpRequested = true
