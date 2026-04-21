@@ -174,7 +174,6 @@ function game:enter()
         player.facingRight = true
 
         -- Orb/Key animation
-        local orbFrameW = 32  -- adjust based on your actual frame size
         local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
     end
