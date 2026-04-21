@@ -5,7 +5,7 @@ local mapH = 0
 local solids = {}
 gameLoaded = false
 local signUIActive = false
-local endUIActive = false -- REMOVE LATER
+local endUIActive = false
 local gameFont
 elapsedTime = 0
 orbs = {}
@@ -121,52 +121,43 @@ function collectOrbs(map)
 end
 
 function game:enter()
-    -- Only loads game when first entering gamestate
     game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
     game_Music:setVolume(0.2)
     game_Music:setLooping(true)
 
-    function createPlayer() 
-        -- Player state and physics properties
+    function createPlayer()
         player = {}
-        
         player.w, player.h = 24, 32
         player.vx, player.vy = 0, 0
         player.moveSpeed = 300
-        player.jumpForce = 410 -- change back to 400
+        player.jumpForce = 410
         player.gravity = 1100
         player.maxFallSpeed = 700
         player.isGrounded = false
 
-        -- Sprite/animation setup
         local char = assets.character4
         player.animation = {}
 
-        -- Idle
         player.idleRightSheet = char.idleRight
         player.idleLeftSheet  = char.idleLeft
         local idleRightGrid = anim8.newGrid(32, 32, char.idleRight:getWidth(), char.idleRight:getHeight())
         local idleLeftGrid  = anim8.newGrid(32, 32, char.idleLeft:getWidth(),  char.idleLeft:getHeight())
 
-        -- Running 
         player.runRightSheet = char.runRight
         player.runLeftSheet  = char.runLeft
         local runRightGrid  = anim8.newGrid(32, 32, char.runRight:getWidth(),  char.runRight:getHeight())
         local runLeftGrid   = anim8.newGrid(32, 32, char.runLeft:getWidth(),   char.runLeft:getHeight())
 
-        -- Jumping
         player.jumpRightSheet = char.jumpRight
         player.jumpLeftSheet  = char.jumpLeft
         local jumpRightGrid = anim8.newGrid(32, 32, char.jumpRight:getWidth(), char.jumpRight:getHeight())
         local jumpLeftGrid  = anim8.newGrid(32, 32, char.jumpLeft:getWidth(),  char.jumpLeft:getHeight())
 
-        -- Falling
         player.fallRightSheet = char.fallRight
         player.fallLeftSheet  = char.fallLeft
         local fallRightGrid = anim8.newGrid(32, 32, char.fallRight:getWidth(), char.fallRight:getHeight())
         local fallLeftGrid  = anim8.newGrid(32, 32, char.fallLeft:getWidth(),  char.fallLeft:getHeight())
 
-        -- Build animations
         player.animation.idleRight = anim8.newAnimation(idleRightGrid('1-11', 1), 0.08)
         player.animation.idleLeft  = anim8.newAnimation(idleLeftGrid('1-11', 1), 0.08)
         player.animation.runRight  = anim8.newAnimation(runRightGrid('1-12', 1), 0.07)
@@ -175,115 +166,73 @@ function game:enter()
         player.animation.jumpLeft  = anim8.newAnimation(jumpLeftGrid('1-1', 1), 0.07)
         player.animation.fallRight = anim8.newAnimation(fallRightGrid('1-1', 1), 0.07)
         player.animation.fallLeft  = anim8.newAnimation(fallLeftGrid('1-1', 1), 0.07)
-        
-        -- Player Default State
+
         player.anim = player.animation.idleRight
         player.animSheet = player.idleRightSheet
         player.facingRight = true
 
-         -- Orb animation
-        local orbFrameW = 32
         local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
     end
 
     function createUIObjects()
-        -- Sign object (placeholder)
         local signX, signY = getSignLocation(gameMap)
-           if signX and signY then
-            signObject = {
-                x = signX,
-                y = signY,
-                w = 32,
-                h = 32
-            }
-        else
-            signObject = nil
-        end
+        signObject = (signX and signY) and { x = signX, y = signY, w = 32, h = 32 } or nil
         signUIActive = false
 
-        -- Exit object (placeholder)
         local exitX, exitY = getExitLocation(gameMap)
-           if exitX and exitY then
-            exitObject = {
-                x = exitX - 16,
-                y = exitY - 16,
-                w = 64,
-                h = 32
-            }
-        else
-            exitObject = nil
-        end
+        exitObject = (exitX and exitY) and { x = exitX - 16, y = exitY - 16, w = 64, h = 32 } or nil
 
-        -- TEST UI PROMPT FOR END SCREEN 
-        -- REMOVE LATER
         local endX, endY = getEndLocation(gameMap)
-            if endX and endY then
-            endObject = {
-                x = endX,
-                y = endY,
-                w = 64,
-                h = 64
-            }
-        else
-            endObject = nil
-        end
-
+        endObject = (endX and endY) and { x = endX, y = endY, w = 64, h = 64 } or nil
     end
 
+    -- Load save data
     if save.pendingData then
         game_Music:play()
-        
-        -- Load the save data once
-        save.applyPendingData()
-        
-        gameMap = sti('Map/Level_' .. level .. '.lua')
-        mapW = gameMap.width * gameMap.tilewidth
-        mapH = gameMap.height * gameMap.tileheight
+
+        -- Read target level before applyPendingData clears pendingData
+        local targetLevel = save.pendingData.currentLevel or 1
 
         cam = camera()
         screenW, screenH = love.graphics.getDimensions()
         cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
         gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
 
-        -- Rebuild the map 
+        -- Load the correct map first
+        gameMap = sti('Map/Level_' .. targetLevel .. '.lua')
+        level = targetLevel
+        mapW = gameMap.width * gameMap.tilewidth
+        mapH = gameMap.height * gameMap.tileheight
+
+        -- Build map data so orbs[] exists before applyPendingData runs
         collectSolidRects(gameMap)
         collectOrbs(gameMap)
-        for i = 1, orbsCollected do
-            if orbs[i] then 
-                orbs[i].collected = true 
-            end
-        end
 
-        if orbsCollected >= orbsRequired then
-            exitUnlocked = true
-        else
-            exitUnlocked = false
-        end
-
-        -- Load player
+        -- Create player so player.x/y exist before applyPendingData writes to them
         createPlayer()
-        player.x = save.pendingPlayerX
-        player.y = save.pendingPlayerY
-        save.pendingPlayerX = nil
-        save.pendingPlayerY = nil
-        player.vx = 0
-        player.vy = 0
-        player.isGrounded = false
+        player.x, player.y = getSpawnPoint(gameMap)  -- fallback position
+
+        -- Reset state defaults before applying save
+        elapsedTime = 0
+        orbsCollected = 0
+        exitUnlocked = false
+
+        -- Apply save: overwrites player.x/y, orbsCollected, elapsedTime, orb states
+        save.applyPendingData()
 
         createUIObjects()
         gameLoaded = true
         return
     end
 
+    -- If not save then fresh start 
     exitUnlocked = false
     signUIActive = false
-    
 
     if not gameLoaded then
         game_Music:play()
 
-        -- Load camera, fonts, etc
         cam = camera()
         screenW, screenH = love.graphics.getDimensions()
         cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
@@ -291,21 +240,15 @@ function game:enter()
 
         gameMap = sti('Map/Level_1.lua')
         level = 1
-        
-        -- Get map size (pixels) for camera clamping
         mapW = gameMap.width * gameMap.tilewidth
         mapH = gameMap.height * gameMap.tileheight
-    
-        -- Load collision map data
-        collectSolidRects(gameMap)
 
-        -- Load Orb Collection Data
+        collectSolidRects(gameMap)
         collectOrbs(gameMap)
 
-        -- Load Player
         createPlayer()
         player.x, player.y = getSpawnPoint(gameMap)
-        
+
         elapsedTime = 0
         orbsCollected = 0
         createUIObjects()

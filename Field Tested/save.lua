@@ -73,34 +73,50 @@ function save.loadGame(slot)
     return true
 end
 
--- Apply loaded data
+function save.getPendingLevel()
+    if save.pendingData and save.pendingData.currentLevel then
+        return save.pendingData.currentLevel
+    end
+    return nil
+end
+
+-- Apply loaded data — call AFTER the correct map, solids, and orbs are loaded
 function save.applyPendingData()
-    if not save.pendingData then 
-        return false 
+    if not save.pendingData then
+        return false
     end
 
     local data = save.pendingData
 
-    if data.currentLevel then
-        level = data.currentLevel
+    -- Player position
+    if data.playerX and data.playerY then
+        player.x = data.playerX
+        player.y = data.playerY
     end
 
-    save.pendingPlayerX = data.playerX
-    save.pendingPlayerY = data.playerY
-    
+    -- Orb state — mark the first N orbs as collected
     if data.orbsCollected then
         orbsCollected = data.orbsCollected
+        for i = 1, orbsCollected do
+            if orbs[i] then
+                orbs[i].collected = true
+            end
+        end
+        if orbsCollected >= orbsRequired then
+            exitUnlocked = true
+        end
     else
         orbsCollected = 0
+        exitUnlocked = false
     end
-    
+
+    -- Timer
     if data.elapsedTime then
         elapsedTime = data.elapsedTime
     else
         elapsedTime = 0
     end
-    
-    -- Clear pending data
+
     save.pendingData = nil
     save.pendingSlot = nil
     return true
