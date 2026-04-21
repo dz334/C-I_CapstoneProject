@@ -174,7 +174,6 @@ function game:enter()
         player.facingRight = true
 
         -- Orb/Key animation
-        local orbFrameW = 32  -- adjust based on your actual frame size
         local orbGrid = anim8.newGrid(32, 32, assets.orb.orbIdle:getWidth(), assets.orb.orbIdle:getHeight())
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
     end
@@ -534,6 +533,11 @@ function game:keypressed(key)
         level = 1
     elseif key == "2" then
         loadLevel('Map/Level_2.lua')
+        gameMap = sti('Map/Level_2.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        orbsCollected = 0
         level = 2
     elseif key == "3" then
         loadLevel('Map/Level_3.lua')
