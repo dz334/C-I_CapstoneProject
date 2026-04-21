@@ -10,6 +10,12 @@ function assets.load()
         backgroundOcean = love.graphics.newImage('Tiles/Seaside/Background/Ocean.png')
     }
     
+    assets.background3 = {
+        backgroundColor1 = love.graphics.newImage('Tiles/lvl3_bg/Layers/1.png'),
+        backgroundTree1 = love.graphics.newImage('Tiles/lvl3_bg/Layers/2.png'),
+        backgroundTree2 = love.graphics.newImage('Tiles/lvl3_bg/Layers/3.png'),
+    }
+
     assets.audio = {
         menuMusic = 'Sounds/theme.mp3',
         gameMusic = 'Sounds/AccumulaTown.mp3'

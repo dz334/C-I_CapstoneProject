@@ -1,5 +1,3 @@
--- Core game state with player movement, physics, and level management
-
 local game = {}
 local BASE_W, BASE_H = 1280, 720
 local mapW = 0
@@ -97,8 +95,7 @@ local function getExitLocation(map)
 end
 
 
--- TEST UI PROMPT FOR END SCREEN 
--- REMOVE LATER
+-- UI PROMPT FOR END SCREEN 
 local function getEndLocation(map)
     local endLayer = map.layers["EndTest"]
     if endLayer and endLayer.objects and endLayer.objects[1] then
@@ -215,17 +212,21 @@ function game:enter()
         -- Create player so player.x/y exist before applyPendingData writes to them
         createPlayer()
         player.x, player.y = getSpawnPoint(gameMap)  -- fallback position
+  
 
         -- Reset state defaults before applying save
         elapsedTime = 0
         orbsCollected = 0
         exitUnlocked = false
 
+        --love.timer.sleep(1)
         -- Apply save: overwrites player.x/y, orbsCollected, elapsedTime, orb states
         save.applyPendingData()
+        player.vx, player.vy = 0, 0
 
         createUIObjects()
         gameLoaded = true
+        gravTime = 0
         return
     end
 
@@ -266,8 +267,9 @@ function game:leave()
     end
 end
 
-function game:update(dt)
+gravTime = 0
 
+function game:update(dt)
     elapsedTime = elapsedTime + dt
 
     if signUIActive then
@@ -316,7 +318,7 @@ function game:update(dt)
             else -- If player is falling
                 player.anim = player.facingRight and player.animation.fallRight or player.animation.fallLeft
                 player.animSheet = player.facingRight and player.fallRightSheet or player.fallLeftSheet
-            end
+        end
         elseif moveX ~= 0 then -- If player is not moving
             player.anim = player.facingRight and player.animation.runRight or player.animation.runLeft
             player.animSheet = player.facingRight and player.runRightSheet or player.runLeftSheet
@@ -326,7 +328,11 @@ function game:update(dt)
     end
 
     -- Calculate vertical fall speed with gravity
-    player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
+
+    gravTime = gravTime + dt
+    if gravTime > 0.5 then
+        player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
+    end
 
     player.x = player.x + player.vx * dt
     resolveHorizontalCollisions(player)
@@ -389,13 +395,24 @@ end
 end
 
 function game:draw()
-
-    if level == 1 then
+    local function drawBackgroundLevel1() 
         drawBackground(assets.background1.backgroundSky, 0.05)
         drawBackground(assets.background1.backgroundSand, 0.1)
         drawBackground(assets.background1.backgroundCloud3, 0.2)
         drawBackground(assets.background1.backgroundCloud2, 0.3)
         drawBackground(assets.background1.backgroundCloud1, 0.4)
+    end
+
+    local function drawBackgroundLevel3()
+        drawBackground(assets.background3.backgroundColor1, 0.05)
+        drawBackground(assets.background3.backgroundTree1, 0.1)
+        drawBackground(assets.background3.backgroundTree2, 0.2)
+    end
+
+    if level == 1 then
+        drawBackgroundLevel1()
+        elseif level == 3 then
+            drawBackgroundLevel3()
     end
     
     cam:attach()
@@ -405,7 +422,6 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
             gameMap:drawLayer(gameMap.layers["SignsIMG"])
             gameMap:drawLayer(gameMap.layers["CaveExit"])
-            gameMap:drawLayer(gameMap.layers["End"])
 
         -- Level 2
         elseif level == 2 then
@@ -462,8 +478,7 @@ function game:draw()
         end
     end
 
-    -- TEST UI PROMPT FOR END SCREEN 
-    -- REMOVE LATER
+    -- UI PROMPT FOR END SCREEN
    if endObject then
         local playerRect = getPlayerRect(player)
         local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
@@ -472,7 +487,7 @@ function game:draw()
         end
     end
 
-    -- Sign UI placeholder
+    -- Sign UI 
     if signUIActive then
         local scale = 2 
         local imgW = assets.ui.panel:getWidth()
@@ -481,11 +496,18 @@ function game:draw()
         local uiH = imgH * scale
         local uiX = (love.graphics.getWidth() - uiW) / 2
         local uiY = (love.graphics.getHeight() - uiH) / 2   
+        local textFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 20)
 
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(assets.ui.panel, uiX, uiY, 0, scale, scale)
 
-        love.graphics.print("Sign text goes here", uiX + 48, uiY + 48)
+        -- Print instructions on screen
+        love.graphics.setFont(textFont)
+        love.graphics.print("To move side to side press:", uiX + 45, uiY + 52)
+        love.graphics.print("A or Left Arrow to move Left", uiX + 45, uiY + 95)
+        love.graphics.print("D or Right Arrow to move Right", uiX + 45, uiY + 138)
+        love.graphics.print("W or Up Arrow to Jump", uiX + 45, uiY + 181)
+        love.graphics.print("Press E to exit", uiX + 150, uiY + 430)
         love.graphics.setColor(1, 1, 1, 1)
     end
 end
@@ -606,6 +628,7 @@ function game:keypressed(key)
                 elseif level == 2 then
                     -- End game or loop back to level 1
                     loadLevel('Map/Level_3.lua')
+                    
                     level = 3
                     orbsCollected = 0
                 elseif level == 3 then

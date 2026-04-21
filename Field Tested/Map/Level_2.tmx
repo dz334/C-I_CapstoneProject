@@ -773,7 +773,7 @@
     <property name="collidable" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="17" x="171" y="397" width="75" height="18">
+  <object id="17" x="171" y="397" width="75" height="37.75">
    <properties>
     <property name="collidable" type="bool" value="true"/>
    </properties>
