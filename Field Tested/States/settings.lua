@@ -1,3 +1,4 @@
+
 local settings = {}
 local buttons = {}
 local titleFont
@@ -17,6 +18,7 @@ local function makeButton(text, onClick)
 end
 
 function settings:enter()
+
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
     buttonFont = love.graphics.newFont(16)
@@ -24,6 +26,7 @@ function settings:enter()
     table.insert(buttons, makeButton("Back", function()
         Gamestate.pop()
     end))
+
     -- Volume buttons
     table.insert(buttons, makeButton("Volume: +", function()
         local currentVolume = love.audio.getVolume()
@@ -33,6 +36,7 @@ function settings:enter()
         local currentVolume = love.audio.getVolume()
         love.audio.setVolume(math.max(0, currentVolume - 0.1))
     end))
+
     -- Mute button
     table.insert(buttons, makeButton("Mute/Unmute", function()
         if love.audio.getVolume() > 0 then
@@ -41,6 +45,7 @@ function settings:enter()
             love.audio.setVolume(0.5) -- Default volume when unmuting
         end
     end))
+
 -- Fullscreen
     table.insert(buttons, makeButton("Toggle Fullscreen", function()
         local isFullscreen = love.window.getFullscreen()
@@ -52,6 +57,7 @@ function settings:update(dt)
 end
 
 function settings:draw()
+
     drawBackground(assets.background1.backgroundSky, 0.05)
     drawBackground(assets.background1.backgroundSand, 0.1)
     drawBackground(assets.background1.backgroundCloud3, 0.2)
@@ -70,6 +76,7 @@ function settings:draw()
     local titleW = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleW) / 2, height * 0.22)
 
+
     -- Placeholder
     love.graphics.setColor(1, 1, 1, 0.95)
     love.graphics.setFont(buttonFont)
@@ -77,7 +84,6 @@ function settings:draw()
     -- print the current volume level
     local volumeText = string.format("Current Volume: %d%%", love.audio.getVolume() * 100)
     love.graphics.print(volumeText, width * 0.22, height * 0.44)
-
 
     -- Buttons
     local startY = height * 0.5
