@@ -386,7 +386,9 @@ end
     or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
     or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
     or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
-    or (level == 3 and player.y > 800)
+    -- Reset if player falls below map bounds in level 3
+    or (level == 3 and player.y > 773)
+    or (level == 4 and player.y > 850)
     then
         player.x, player.y = getSpawnPoint(gameMap)
         elapsedTime = 0
@@ -434,6 +436,12 @@ function game:draw()
         elseif level == 3 then
             gameMap:drawLayer(gameMap.layers["bg"])
             gameMap:drawLayer(gameMap.layers["ground"])
+        elseif level == 4 then
+            drawBackground(assets.background2.backgroundSky, 0.05)
+            drawBackground(assets.background2.backgroundCloud2, 0.1)
+            drawBackground(assets.background2.backgroundCloud1, 0.15)
+            gameMap:drawLayer(gameMap.layers["Background"])
+            gameMap:drawLayer(gameMap.layers["Ground"])
             gameMap:drawLayer(gameMap.layers["props"])
             gameMap:drawLayer(gameMap.layers["grass"])
         end
@@ -562,8 +570,23 @@ function game:keypressed(key)
         orbsCollected = 0
         level = 2
     elseif key == "3" then
-        loadLevel('Map/Level_3.lua')
+        gameMap = sti('Map/Level_3.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
         level = 3
+    elseif key == "4" then
+        gameMap = sti('Map/Level_4.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 3
+    elseif key == "4" then
+        gameMap = sti('Map/Level_4.lua')
+        collectSolidRects(gameMap)
+        collectOrbs(gameMap)
+        player.x, player.y = getSpawnPoint(gameMap)
+        level = 4
     end
     -- REMOVE LATER
 

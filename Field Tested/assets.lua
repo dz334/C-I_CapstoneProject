@@ -9,6 +9,13 @@ function assets.load()
         backgroundSky = love.graphics.newImage('Tiles/Seaside/Background/Sky.png'),
         backgroundOcean = love.graphics.newImage('Tiles/Seaside/Background/Ocean.png')
     }
+
+    assets.background2 = {
+        backgroundSky = love.graphics.newImage('Tiles/lvl4_assets/BG/1.png'),
+        backgroundCloud1 = love.graphics.newImage('Tiles/lvl4_assets/BG/2.png'),
+        backgroundCloud2 = love.graphics.newImage('Tiles/lvl4_assets/BG/3.png'),
+        
+    }
     
     assets.background3 = {
         backgroundColor1 = love.graphics.newImage('Tiles/lvl3_bg/Layers/1.png'),
