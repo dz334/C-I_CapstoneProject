@@ -252,6 +252,7 @@ function game:enter()
 
         createPlayer()
         player.x, player.y = getSpawnPoint(gameMap)
+        player.vx, player.vy = 0, 0
 
         elapsedTime = 0
         orbsCollected = 0
@@ -411,10 +412,18 @@ function game:draw()
         drawBackground(assets.background3.backgroundTree2, 0.2)
     end
 
+    local function drawBackgroundLevel4()
+        drawBackground(assets.background2.backgroundSky, 0.05)
+        drawBackground(assets.background2.backgroundCloud2, 0.1)
+        drawBackground(assets.background2.backgroundCloud1, 0.15)
+    end
+
     if level == 1 then
-        drawBackgroundLevel1()
+            drawBackgroundLevel1()
         elseif level == 3 then
             drawBackgroundLevel3()
+        elseif level == 4 then
+            drawBackgroundLevel4()
     end
     
     cam:attach()
@@ -436,14 +445,11 @@ function game:draw()
         elseif level == 3 then
             gameMap:drawLayer(gameMap.layers["bg"])
             gameMap:drawLayer(gameMap.layers["ground"])
-        elseif level == 4 then
-            drawBackground(assets.background2.backgroundSky, 0.05)
-            drawBackground(assets.background2.backgroundCloud2, 0.1)
-            drawBackground(assets.background2.backgroundCloud1, 0.15)
-            gameMap:drawLayer(gameMap.layers["Background"])
-            gameMap:drawLayer(gameMap.layers["Ground"])
             gameMap:drawLayer(gameMap.layers["props"])
             gameMap:drawLayer(gameMap.layers["grass"])
+        elseif level == 4 then
+            gameMap:drawLayer(gameMap.layers["Background"])
+            gameMap:drawLayer(gameMap.layers["Ground"])
         end
 
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
@@ -527,32 +533,21 @@ local function loadLevel(mapPath)
     collectOrbs(gameMap)
 
     player.x, player.y = getSpawnPoint(gameMap)
+    exitUnlocked = false
+    orbsCollected = 0
 
     -- reload sign
     local signX, signY = getSignLocation(gameMap)
-    if signX and signY then
-        signObject = {
-            x = signX - 16,
-            y = signY - 16,
-            w = 32,
-            h = 32
-        }
-    else
-        signObject = nil
-    end
+    signObject = (signX and signY) and { x = signX - 16, y = signY - 16, w = 32, h = 32 } or nil
+    signUIActive = false
 
     -- reload exit
     local exitX, exitY = getExitLocation(gameMap)
-    if exitX and exitY then
-        exitObject = {
-            x = exitX - 16,
-            y = exitY - 16,
-            w = 64,
-            h = 32
-        }
-    else
-        exitObject = nil
-    end
+    exitObject = (exitX and exitY) and { x = exitX - 16, y = exitY - 16, w = 64, h = 32 } or nil
+
+    -- reload end trigger
+    local endX, endY = getEndLocation(gameMap)
+    endObject = (endX and endY) and { x = endX, y = endY, w = 64, h = 64 } or nil
 end
 
 function game:keypressed(key)
@@ -563,30 +558,16 @@ function game:keypressed(key)
         level = 1
     elseif key == "2" then
         loadLevel('Map/Level_2.lua')
-        gameMap = sti('Map/Level_2.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
         orbsCollected = 0
         level = 2
     elseif key == "3" then
-        gameMap = sti('Map/Level_3.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
+        loadLevel('Map/Level_3.lua')
         level = 3
     elseif key == "4" then
-        gameMap = sti('Map/Level_4.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
-        level = 3
-    elseif key == "4" then
-        gameMap = sti('Map/Level_4.lua')
-        collectSolidRects(gameMap)
-        collectOrbs(gameMap)
-        player.x, player.y = getSpawnPoint(gameMap)
+        loadLevel('Map/Level_4.lua')
         level = 4
+    elseif key == "p" then
+        player.x, player.y = 3977, 466
     end
     -- REMOVE LATER
 
@@ -649,15 +630,12 @@ function game:keypressed(key)
                     level = 2
                     orbsCollected = 0
                 elseif level == 2 then
-                    -- End game or loop back to level 1
                     loadLevel('Map/Level_3.lua')
-                    
                     level = 3
                     orbsCollected = 0
                 elseif level == 3 then
-                    -- For now, just loop back to level 1
-                    loadLevel('Map/Level_1.lua')
-                    level = 1
+                    loadLevel('Map/Level_4.lua')
+                    level = 4
                     orbsCollected = 0
                 end
             end
