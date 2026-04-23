@@ -126,7 +126,7 @@ function game:enter()
         game_Music:stop()
         game_Music = nil
     end
-    game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
+    game_Music = love.audio.newSource('sounds/WhiteForest.mp3', 'stream')
     game_Music:setVolume(0.2)
     game_Music:setLooping(true)
 
@@ -487,7 +487,12 @@ function game:draw()
     love.graphics.setFont(gameFont)
     local orbDisplay= "Keys: "
     local orbTitle = gameFont:getWidth(orbDisplay)
-    love.graphics.print("Keys: " .. (totalKeysCollected or 0), ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
+    love.graphics.print("Keys: " .. (totalKeysCollected or 0), ((love.graphics.getWidth() - orbTitle) / 2) + 16, 16)
+    if exitUnlocked then
+        love.graphics.print("Exit: Unlocked", ((love.graphics.getWidth() - orbTitle) / 2) - 16, 48)
+    else 
+        love.graphics.print("Exit: Locked", ((love.graphics.getWidth() - orbTitle) / 2) - 16, 48)
+    end
 
     -- UI prompt when near sign object
     if signObject and not signUIActive then
