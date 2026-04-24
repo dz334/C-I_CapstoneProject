@@ -284,8 +284,8 @@ local function respawnPlayer()
     player.vx, player.vy = 0, 0
 end
 
+gravTime = 0
 function game:update(dt)
-    gravTime = 0
     elapsedTime = elapsedTime + dt
 
     if signUIActive then
