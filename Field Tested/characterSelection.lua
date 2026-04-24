@@ -10,11 +10,7 @@ local charData = {
 }
 function onUpdate(dt)
     if not inCharSelect then return end
-
-    function onUpdate(dt)
-    if not inCharSelect then return end
-
-    
+   
     if mouseClicked('left') and mouseOver('right') then
         navigate(1)
         objectPlayAnimation('right', 'rightPress', false)
