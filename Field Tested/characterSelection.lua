@@ -1,5 +1,18 @@
 
-
+-- Register your characters here
+local charData = {
+    variations = {
+        [1] = { 
+            
+            json = {'bf', 'pico-player', 'senpai'}, 
+            name = {'BoyFriend', 'Pico', 'Senpai'} 
+        },
+        [2] = { 
+            json = {'bf-pixel', 'pico-player', 'spirit'}, 
+            name = {'Pixel BoyFriend', 'Pico', 'Spirit'} 
+        }
+    }
+}
 function onUpdate(dt)
     if not inCharSelect then return end
 
