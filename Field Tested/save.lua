@@ -7,8 +7,10 @@ function save.getSaveData()
         playerX = player.x,
         playerY = player.y,
         orbsCollected = orbsCollected,
+        totalKeysCollected = totalKeysCollected or 0,
         currentLevel = level or 1,
         elapsedTime = elapsedTime or 0,
+        totalDeaths = totalDeaths or 0,
         saveDate = os.date("%Y-%m-%d %H:%M:%S")
     }
 end
@@ -115,6 +117,18 @@ function save.applyPendingData()
         elapsedTime = data.elapsedTime
     else
         elapsedTime = 0
+    end
+
+    if data.totalKeysCollected then
+        totalKeysCollected = data.totalKeysCollected
+    else
+        totalKeysCollected = data.orbsCollected or 0
+    end
+
+    if data.totalDeaths then
+        totalDeaths = data.totalDeaths
+    else
+        totalDeaths = 0
     end
 
     save.pendingData = nil

@@ -3,13 +3,15 @@ local BASE_W, BASE_H = 1280, 720
 local mapW = 0
 local mapH = 0
 local solids = {}
-gameLoaded = false
+local gameFont
 local signUIActive = false
 local endUIActive = false
-local gameFont
+gameLoaded = false
 elapsedTime = 0
 orbs = {}
 orbsCollected = 0
+totalKeysCollected = 0
+totalDeaths = 0
 orbsRequired = 1
 exitUnlocked = false
 local jumpSound = love.audio.newSource('sounds/jump.mp3', 'static')
@@ -73,6 +75,7 @@ local function resolveVerticalCollisions(p)
     end
 end
 
+-- Gets spawn point from Tiled obj layer pointer
 local function getSpawnPoint(map)
     local spawnLayer = map.layers["Spawn"]
     if spawnLayer and spawnLayer.objects and spawnLayer.objects[1] then
@@ -94,8 +97,6 @@ local function getExitLocation(map)
     end
 end
 
-
--- UI PROMPT FOR END SCREEN 
 local function getEndLocation(map)
     local endLayer = map.layers["EndTest"]
     if endLayer and endLayer.objects and endLayer.objects[1] then
@@ -103,7 +104,7 @@ local function getEndLocation(map)
     end
 end
 
--- Find and create orbs from tiled
+-- Find and create "orbs"/keys from tiled
 function collectOrbs(map)
     orbs = {}
     local orbLayer = map.layers["Orb"]
@@ -120,10 +121,16 @@ function collectOrbs(map)
 end
 
 function game:enter()
-    game_Music = love.audio.newSource('sounds/AccumulaTown.mp3', 'stream')
+    -- Upon enter start music
+    if game_Music then
+        game_Music:stop()
+        game_Music = nil
+    end
+    game_Music = love.audio.newSource('sounds/WhiteForest.mp3', 'stream')
     game_Music:setVolume(0.2)
     game_Music:setLooping(true)
 
+    -- Create player attributes for later creation
     function createPlayer()
         player = {}
         player.w, player.h = 24, 32
@@ -175,6 +182,7 @@ function game:enter()
         orbAnim = anim8.newAnimation(orbGrid('1-24', 1), 0.07)
     end
 
+    -- Create UI objects for later reuse
     function createUIObjects()
         local signX, signY = getSignLocation(gameMap)
         signObject = (signX and signY) and { x = signX, y = signY, w = 32, h = 32 } or nil
@@ -187,6 +195,7 @@ function game:enter()
         endObject = (endX and endY) and { x = endX, y = endY, w = 64, h = 64 } or nil
     end
 
+    -- If loading from previous save data run this version 
     -- Load save data
     if save.pendingData then
         game_Music:play()
@@ -213,14 +222,14 @@ function game:enter()
         createPlayer()
         player.x, player.y = getSpawnPoint(gameMap)  -- fallback position
   
-
         -- Reset state defaults before applying save
         elapsedTime = 0
         orbsCollected = 0
+        totalKeysCollected = 0
+        totalDeaths = 0
         exitUnlocked = false
 
-        --love.timer.sleep(1)
-        -- Apply save: overwrites player.x/y, orbsCollected, elapsedTime, orb states
+        -- Apply saved data
         save.applyPendingData()
         player.vx, player.vy = 0, 0
 
@@ -230,10 +239,9 @@ function game:enter()
         return
     end
 
-    -- If not save then fresh start 
+    -- If not loading from save then load fresh start 
     exitUnlocked = false
     signUIActive = false
-
     if not gameLoaded then
         game_Music:play()
 
@@ -256,6 +264,8 @@ function game:enter()
 
         elapsedTime = 0
         orbsCollected = 0
+        totalKeysCollected = 0
+        totalDeaths = 0
         createUIObjects()
         gameLoaded = true
     end
@@ -268,9 +278,14 @@ function game:leave()
     end
 end
 
-gravTime = 0
+local function respawnPlayer()
+    totalDeaths = (totalDeaths or 0) + 1
+    player.x, player.y = getSpawnPoint(gameMap)
+    player.vx, player.vy = 0, 0
+end
 
 function game:update(dt)
+    gravTime = 0
     elapsedTime = elapsedTime + dt
 
     if signUIActive then
@@ -297,8 +312,7 @@ function game:update(dt)
     player.vx = moveX * player.moveSpeed
 
     -- Jump input (only if grounded)
-    if (love.keyboard.isDown("up") or love.keyboard.isDown("w") or love.keyboard.isDown("space"))
-    and player.isGrounded then
+    if (love.keyboard.isDown("up") or love.keyboard.isDown("w") or love.keyboard.isDown("space")) and player.isGrounded then
         player.vy = -player.jumpForce
         player.isGrounded = false
         if player.jumpRequested then
@@ -306,7 +320,6 @@ function game:update(dt)
             jumpSound:play()
             player.jumpRequested = false
         end
-    
     player.jumpRequested = false
         jumping = true
     end
@@ -329,8 +342,7 @@ function game:update(dt)
     end
 
     -- Calculate vertical fall speed with gravity
-
-    gravTime = gravTime + dt
+    gravTime = gravTime + dt -- When loading stops player from falling through blocks
     if gravTime > 0.5 then
         player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
     end
@@ -373,28 +385,25 @@ function game:update(dt)
         if rectsOverlap(playerRect, orbRect) then
             orb.collected = true
             orbsCollected = orbsCollected + 1
-            if orbsCollected >= orbsRequired then
-                exitUnlocked = true
+            totalKeysCollected = (totalKeysCollected or 0) + 1
+                if orbsCollected >= orbsRequired then
+                    exitUnlocked = true
+                end
             end
         end
     end
-end
 
-    -- Press "r" to reset position to spawn 
-    if love.keyboard.isDown("r") 
     -- Death zone resets
-    or (level == 2 and player.y > 773)
-    or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
-    or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
-    or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
-    -- Reset if player falls below map bounds in level 3
-    or (level == 3 and player.y > 773)
-    or (level == 4 and player.y > 850)
-    then
-        player.x, player.y = getSpawnPoint(gameMap)
-        elapsedTime = 0
-    end    
-
+    local hitDeathZone =
+        (level == 2 and player.y > 773)
+        or (level == 2 and player.x > 385 and player.x < 512 and player.y > 507)
+        or (level == 2 and player.x > 1932 and player.x < 1972 and player.y > 340 and player.y < 369)
+        or (level == 2 and player.x > 2060 and player.x < 2102 and player.y > 340 and player.y < 369)
+        or (level == 3 and player.y > 773)
+        or (level == 4 and player.y > 850)
+    if hitDeathZone then
+        respawnPlayer()
+    end
 end
 
 function game:draw()
@@ -455,15 +464,14 @@ function game:draw()
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
 
         for _, orb in ipairs(orbs) do
-
-        if not orb.collected then
-            love.graphics.setColor(1, 1, 1, 1)
-            orbAnim:draw(assets.orb.orbIdle, orb.x + 16, orb.y + 16, nil, 1, nil, 32/2, assets.orb.orbIdle:getHeight()/2)
+            if not orb.collected then
+                love.graphics.setColor(1, 1, 1, 1)
+                orbAnim:draw(assets.orb.orbIdle, orb.x + 16, orb.y + 16, nil, 1, nil, 32/2, assets.orb.orbIdle:getHeight()/2)
+            end
         end
-
-    end
     cam:detach()
 
+    -- Misc information in top left corner
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
     love.graphics.print("ESC = Pause", 10, 40)
@@ -472,7 +480,12 @@ function game:draw()
     love.graphics.setFont(gameFont)
     local orbDisplay= "Keys: "
     local orbTitle = gameFont:getWidth(orbDisplay)
-    love.graphics.print("Keys: " .. orbsCollected .. "/" .. orbsRequired, ((love.graphics.getWidth() - orbTitle) / 2) - 16, 16)
+    love.graphics.print("Keys: " .. (totalKeysCollected or 0), ((love.graphics.getWidth() - orbTitle) / 2) + 16, 16)
+    if exitUnlocked then
+        love.graphics.print("Exit: Unlocked", ((love.graphics.getWidth() - orbTitle) / 2) - 16, 48)
+    else 
+        love.graphics.print("Exit: Locked", ((love.graphics.getWidth() - orbTitle) / 2) - 16, 48)
+    end
 
     -- UI prompt when near sign object
     if signObject and not signUIActive then
@@ -492,12 +505,12 @@ function game:draw()
         end
     end
 
-    -- UI PROMPT FOR END SCREEN
+    -- UI prompt for end screen
    if endObject then
         local playerRect = getPlayerRect(player)
         local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
         if rectsOverlap(playerRect, endRect) then
-            love.graphics.print("Press E to end", 10, 112)
+            love.graphics.print(level == 4 and "Press E to finish" or "Press E to continue", 10, 112)
         end
     end
 
@@ -511,7 +524,6 @@ function game:draw()
         local uiX = (love.graphics.getWidth() - uiW) / 2
         local uiY = (love.graphics.getHeight() - uiH) / 2   
         local textFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 20)
-
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(assets.ui.panel, uiX, uiY, 0, scale, scale)
 
@@ -551,30 +563,14 @@ local function loadLevel(mapPath)
 end
 
 function game:keypressed(key)
-
-    -- REMOVE LATER
-    if key == "1" then
-        loadLevel('Map/Level_1.lua')
-        level = 1
-    elseif key == "2" then
-        loadLevel('Map/Level_2.lua')
-        orbsCollected = 0
-        level = 2
-    elseif key == "3" then
-        loadLevel('Map/Level_3.lua')
-        level = 3
-    elseif key == "4" then
-        loadLevel('Map/Level_4.lua')
-        level = 4
-    elseif key == "p" then
-        player.x, player.y = 3977, 466
-    end
-    -- REMOVE LATER
-
-
-
+    -- Extra controls
     if (key == "space" or key == "up" or key == "w") then
         player.jumpRequested = true
+    end
+
+    if key == "r" then
+        respawnPlayer()
+        return
     end
 
     if key == "m" then
@@ -602,7 +598,7 @@ function game:keypressed(key)
         if key == "e" or key == "return" or key == "space" then
             signUIActive = false
         end
-
+        
     elseif key == "e" then
         if signObject then
             local playerRect = getPlayerRect(player)
@@ -616,7 +612,20 @@ function game:keypressed(key)
             local playerRect = getPlayerRect(player)
             local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
             if rectsOverlap(playerRect, endRect) then
-                Gamestate.push(endState)
+                if level == 4 then
+                    Gamestate.push(endState)
+                else
+                    if level == 1 then
+                        loadLevel('Map/Level_2.lua')
+                        level = 2
+                    elseif level == 2 then
+                        loadLevel('Map/Level_3.lua')
+                        level = 3
+                    elseif level == 3 then
+                        loadLevel('Map/Level_4.lua')
+                        level = 4
+                    end
+                end
                 return
             end
         end
@@ -628,15 +637,12 @@ function game:keypressed(key)
                 if level == 1 then
                     loadLevel('Map/Level_2.lua')
                     level = 2
-                    orbsCollected = 0
                 elseif level == 2 then
                     loadLevel('Map/Level_3.lua')
                     level = 3
-                    orbsCollected = 0
                 elseif level == 3 then
                     loadLevel('Map/Level_4.lua')
                     level = 4
-                    orbsCollected = 0
                 end
             end
         end
