@@ -1,15 +1,10 @@
 
--- Register your characters here
 local charData = {
     variations = {
         [1] = { 
             
-            json = {'bf', 'pico-player', 'senpai'}, 
-            name = {'BoyFriend', 'Pico', 'Senpai'} 
-        },
-        [2] = { 
-            json = {'bf-pixel', 'pico-player', 'spirit'}, 
-            name = {'Pixel BoyFriend', 'Pico', 'Spirit'} 
+            json = {'character1', 'character2', 'character3', 'character4'}, 
+            name = {'character1', 'character2', 'character3', 'character4'} 
         }
     }
 }
@@ -19,7 +14,7 @@ function onUpdate(dt)
     function onUpdate(dt)
     if not inCharSelect then return end
 
-    -- RIGHT BUTTON
+    
     if mouseClicked('left') and mouseOver('right') then
         navigate(1)
         objectPlayAnimation('right', 'rightPress', false)
@@ -27,7 +22,7 @@ function onUpdate(dt)
         objectPlayAnimation('right', 'right', true)
     end
 
-    -- LEFT BUTTON
+    
     if mouseClicked('left') and mouseOver('left') then
         navigate(-1)
         objectPlayAnimation('left', 'leftPress', false)
@@ -35,12 +30,12 @@ function onUpdate(dt)
         objectPlayAnimation('left', 'left', true)
     end
 
-    -- ACCEPT CLICK (A Button)
+    
     if mouseClicked('left') and mouseOver('a') then
         confirmSelection() -- Calls the helper function below
     end
 
-    -- CANCEL CLICK (B Button)
+    
     if mouseClicked('left') and mouseOver('b') then
         exitSelector('cancelMenu') -- Calls the exit helper
     end
