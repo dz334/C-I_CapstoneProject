@@ -240,7 +240,7 @@ function game:enter()
         cam = camera()
         screenW, screenH = love.graphics.getDimensions()
         cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
-        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
+        gameFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
 
         gameMap = sti('Map/Level_1.lua')
         level = 1
@@ -479,6 +479,7 @@ function game:draw()
         local playerRect = getPlayerRect(player)
         local signRect = { x = signObject.x, y = signObject.y, w = signObject.w, h = signObject.h }
         if rectsOverlap(playerRect, signRect) then
+            love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
             love.graphics.print("Press E to read sign", 10, 112)
         end
     end
@@ -488,6 +489,7 @@ function game:draw()
         local playerRect = getPlayerRect(player)
         local exitRect = { x = exitObject.x, y = exitObject.y, w = exitObject.w, h = exitObject.h }
         if rectsOverlap(playerRect, exitRect) then
+            love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
             love.graphics.print("Press E to Advance", 10, 112)
         end
     end
@@ -497,6 +499,7 @@ function game:draw()
         local playerRect = getPlayerRect(player)
         local endRect = { x = endObject.x, y = endObject.y, w = endObject.w, h = endObject.h }
         if rectsOverlap(playerRect, endRect) then
+            love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
             love.graphics.print("Press E to end", 10, 112)
         end
     end
@@ -510,19 +513,20 @@ function game:draw()
         local uiH = imgH * scale
         local uiX = (love.graphics.getWidth() - uiW) / 2
         local uiY = (love.graphics.getHeight() - uiH) / 2   
-        local textFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 20)
+        local textFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 20)
 
-        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
         love.graphics.draw(assets.ui.panel, uiX, uiY, 0, scale, scale)
 
         -- Print instructions on screen
         love.graphics.setFont(textFont)
+        
         love.graphics.print("To move side to side press:", uiX + 45, uiY + 52)
         love.graphics.print("A or Left Arrow to move Left", uiX + 45, uiY + 95)
         love.graphics.print("D or Right Arrow to move Right", uiX + 45, uiY + 138)
         love.graphics.print("W or Up Arrow to Jump", uiX + 45, uiY + 181)
         love.graphics.print("Press E to exit", uiX + 150, uiY + 430)
-        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
     end
 end
 

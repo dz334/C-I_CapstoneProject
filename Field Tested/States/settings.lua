@@ -3,8 +3,8 @@ local settings = {}
 local buttons = {}
 local titleFont
 local buttonFont
-local buttonHeight = 36
-local margin = 20
+local buttonHeight = 64
+local margin = 16
 
 local function makeButton(text, onClick)
     return { 
@@ -20,8 +20,8 @@ end
 function settings:enter()
 
     buttons = {}
-    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    buttonFont = love.graphics.newFont(16)
+    titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 150)
+    buttonFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf',40)
 
     table.insert(buttons, makeButton("Back", function()
         Gamestate.pop()
@@ -66,12 +66,12 @@ function settings:draw()
 
     local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
-    local buttonWidth = width / 3
+    local buttonWidth = width / 4
     local mouseX, mouseY = love.mouse.getPosition()
 
     -- Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(love.math.colorFromBytes(135, 206, 235))
+    love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
     local title  = "Settings"
     local titleW = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleW) / 2, height * 0.22)
@@ -80,8 +80,10 @@ function settings:draw()
     -- Placeholder
     love.graphics.setColor(1, 1, 1, 0.95)
     love.graphics.setFont(buttonFont)
-    love.graphics.print("Add your options here (audio, controls, graphics).", width * 0.22, height * 0.38)
+    love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
+    love.graphics.print("Add your options here [audio, controls, graphics].", width * 0.22, height * 0.38)
     -- print the current volume level
+    love.graphics.setColor(love.math.colorFromBytes(50, 60, 135))
     local volumeText = string.format("Current Volume: %d%%", love.audio.getVolume() * 100)
     love.graphics.print(volumeText, width * 0.22, height * 0.44)
 
