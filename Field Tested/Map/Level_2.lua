@@ -1,7 +1,7 @@
 return {
   version = "1.10",
   luaversion = "5.1",
-  tiledversion = "1.11.2",
+  tiledversion = "1.12.1",
   class = "",
   orientation = "orthogonal",
   renderorder = "right-down",
@@ -1598,7 +1598,7 @@ return {
       data = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1611,7 +1611,7 @@ return {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 162, 0, 162, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 161, 0, 161, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1647,6 +1647,7 @@ return {
           width = 103.667,
           height = 96.333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1662,6 +1663,7 @@ return {
           width = 75,
           height = 37.75,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1677,6 +1679,7 @@ return {
           width = 53.3333,
           height = 503.667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1692,6 +1695,7 @@ return {
           width = 55,
           height = 343.333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1707,6 +1711,7 @@ return {
           width = 39,
           height = 64.5,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1722,6 +1727,7 @@ return {
           width = 39,
           height = 56.6667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1737,6 +1743,7 @@ return {
           width = 85,
           height = 34,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1752,6 +1759,7 @@ return {
           width = 4804,
           height = 30,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1767,6 +1775,7 @@ return {
           width = 7,
           height = 794.5,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1782,6 +1791,7 @@ return {
           width = 71,
           height = 33.25,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1797,6 +1807,7 @@ return {
           width = 11,
           height = 32,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1812,6 +1823,7 @@ return {
           width = 142,
           height = 13,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1827,6 +1839,7 @@ return {
           width = 10,
           height = 33,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1842,6 +1855,7 @@ return {
           width = 64,
           height = 289,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1857,6 +1871,7 @@ return {
           width = 103,
           height = 37,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1872,6 +1887,7 @@ return {
           width = 103,
           height = 39,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1887,6 +1903,7 @@ return {
           width = 75.6667,
           height = 16,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1902,6 +1919,7 @@ return {
           width = 37.1287,
           height = 232.063,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1917,6 +1935,7 @@ return {
           width = 53.3725,
           height = 199.002,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1932,6 +1951,7 @@ return {
           width = 14.8762,
           height = 13.9233,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1947,6 +1967,7 @@ return {
           width = 75.8044,
           height = 6.18812,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1962,6 +1983,7 @@ return {
           width = 36.3552,
           height = 10.8292,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1977,6 +1999,7 @@ return {
           width = 38.6757,
           height = 41.7698,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -1992,6 +2015,7 @@ return {
           width = 100.557,
           height = 33.2611,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2007,6 +2031,7 @@ return {
           width = 37.1287,
           height = 244.96,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2022,6 +2047,7 @@ return {
           width = 37.9022,
           height = 12.3762,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2037,6 +2063,7 @@ return {
           width = 81.2191,
           height = 2.8292,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2052,6 +2079,7 @@ return {
           width = 8.50866,
           height = 28.62,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2067,6 +2095,7 @@ return {
           width = 51.8255,
           height = 10.0557,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2082,6 +2111,7 @@ return {
           width = 10.0557,
           height = 44.8639,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2097,6 +2127,7 @@ return {
           width = 50.2785,
           height = 13.1498,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2112,6 +2143,7 @@ return {
           width = 10.8292,
           height = 45.6374,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2127,6 +2159,7 @@ return {
           width = 61.8812,
           height = 6.96163,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2142,6 +2175,7 @@ return {
           width = 10.0557,
           height = 47.9579,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2157,6 +2191,7 @@ return {
           width = 44.0903,
           height = 10.8292,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2172,6 +2207,7 @@ return {
           width = 8.50866,
           height = 48.7314,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2187,6 +2223,7 @@ return {
           width = 55.6931,
           height = 6.18812,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2202,6 +2239,7 @@ return {
           width = 8.50866,
           height = 28.62,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2217,6 +2255,7 @@ return {
           width = 42.5433,
           height = 36.0347,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2232,6 +2271,7 @@ return {
           width = 81.2191,
           height = 49.505,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2247,6 +2287,7 @@ return {
           width = 86,
           height = 7.5,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2262,6 +2303,7 @@ return {
           width = 100.667,
           height = 542,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2277,6 +2319,7 @@ return {
           width = 101.333,
           height = 150.666,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2292,6 +2335,7 @@ return {
           width = 10,
           height = 32.6667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2307,6 +2351,7 @@ return {
           width = 46,
           height = 14,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2322,6 +2367,7 @@ return {
           width = 8.66667,
           height = 34,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2337,6 +2383,7 @@ return {
           width = 39.3333,
           height = 10.6666,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2352,6 +2399,7 @@ return {
           width = 62,
           height = 11.6667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2367,6 +2415,7 @@ return {
           width = 58,
           height = 13.6667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2382,6 +2431,7 @@ return {
           width = 42,
           height = 15.6667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2397,6 +2447,7 @@ return {
           width = 61.3333,
           height = 12.3333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2412,6 +2463,7 @@ return {
           width = 100,
           height = 109.333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2427,6 +2479,7 @@ return {
           width = 52.6667,
           height = 565.166,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2442,6 +2495,7 @@ return {
           width = 41.3333,
           height = 60.5,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2457,6 +2511,7 @@ return {
           width = 26.6667,
           height = 6,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2472,6 +2527,7 @@ return {
           width = 29.9963,
           height = 34.2455,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2487,6 +2543,7 @@ return {
           width = 127.11,
           height = 263.968,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -2500,6 +2557,7 @@ return {
           width = 40.8821,
           height = 29.3195,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -2513,6 +2571,7 @@ return {
           width = 42.1209,
           height = 30.9713,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         },
@@ -2526,6 +2585,7 @@ return {
           width = 35.191,
           height = 27.291,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2541,6 +2601,7 @@ return {
           width = 326.667,
           height = 294.667,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2556,6 +2617,7 @@ return {
           width = 33.3333,
           height = 201.333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2571,6 +2633,7 @@ return {
           width = 38.6667,
           height = 197.333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2586,6 +2649,7 @@ return {
           width = 50,
           height = 791.333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2601,6 +2665,7 @@ return {
           width = 24,
           height = 8,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2616,6 +2681,7 @@ return {
           width = 8,
           height = 12,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2631,6 +2697,7 @@ return {
           width = 100.667,
           height = 19.3333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["collidable"] = true
@@ -2662,6 +2729,7 @@ return {
           width = 58.6667,
           height = 27.3333,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         }
@@ -2691,6 +2759,7 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {
             ["spawnpoint"] = true
@@ -2722,6 +2791,7 @@ return {
           width = 0,
           height = 0,
           rotation = 0,
+          opacity = 1,
           visible = true,
           properties = {}
         }

@@ -20,9 +20,9 @@ function pause:enter()
     slotPickerActive = false
     slotButtons = {}
 
-    titleFont  = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    buttonFont = love.graphics.newFont(32)
-    smallFont  = love.graphics.newFont(16)
+    titleFont  = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)
+    buttonFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
+    smallFont  = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 16)
 
     table.insert(buttons, makeButton("Resume", function()
         Gamestate.pop()
@@ -87,7 +87,7 @@ function pause:draw()
 
     -- Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(love.math.colorFromBytes(50, 60, 170))
     local title  = slotPickerActive and "Save to Slot" or "PAUSED"
     local titleW = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleW) / 2, height * 0.18)

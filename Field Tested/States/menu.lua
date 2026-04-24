@@ -30,8 +30,8 @@ function menu:enter()
     love.window.setFullscreen(true)
 
     buttons = {}
-    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 128)
-    font = love.graphics.newFont(32)
+    titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)
+    font = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
 
     table.insert(buttons, makeButton("Start Game", function()
         Gamestate.switch(require 'states/game')
@@ -57,7 +57,7 @@ function menu:leave()
 end
 
 function menu:draw()
-    -- Draw background (SUBJECT TO CHANGE)
+    -- Draw background
     drawBackground(assets.background1.backgroundSky, 0.05)
     drawBackground(assets.background1.backgroundSand, 0.1)
     drawBackground(assets.background1.backgroundCloud3, 0.2)
@@ -72,7 +72,7 @@ function menu:draw()
 
     -- Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(0, 1, 0, 1)
+    love.graphics.setColor(love.math.colorFromBytes(50, 60, 170))
     local title = "Field Tested"
     local titleWidth = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleWidth) / 2, 200)

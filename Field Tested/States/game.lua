@@ -206,7 +206,7 @@ function game:enter()
         cam = camera()
         screenW, screenH = love.graphics.getDimensions()
         cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
-        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
+        gameFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
 
         -- Load the correct map first
         gameMap = sti('Map/Level_' .. targetLevel .. '.lua')
@@ -248,7 +248,7 @@ function game:enter()
         cam = camera()
         screenW, screenH = love.graphics.getDimensions()
         cam:zoom(math.min(screenW / BASE_W, screenH / BASE_H))
-        gameFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 32)
+        gameFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
 
         gameMap = sti('Map/Level_1.lua')
         level = 1
@@ -523,7 +523,7 @@ function game:draw()
         local uiH = imgH * scale
         local uiX = (love.graphics.getWidth() - uiW) / 2
         local uiY = (love.graphics.getHeight() - uiH) / 2   
-        local textFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 20)
+        local textFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 20)
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(assets.ui.panel, uiX, uiY, 0, scale, scale)
 

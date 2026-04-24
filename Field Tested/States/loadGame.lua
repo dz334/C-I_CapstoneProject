@@ -24,9 +24,9 @@ end
 
 function load:enter()
     buttons = {}
-    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    font = love.graphics.newFont(32)
-    smallFont = love.graphics.newFont(16)
+    titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)
+    font = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
+    smallFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 16)
 
     menu_Music = love.audio.newSource('sounds/theme.mp3', 'stream')
     menu_Music:setVolume(0.5)
@@ -88,7 +88,7 @@ function load:draw()
 
     -- Title
     love.graphics.setFont(titleFont)
-    love.graphics.setColor(0, 1, 0, 1)
+    love.graphics.setColor(love.math.colorFromBytes(50, 60, 170))
     local title = "Select A Save File"
     local titleWidth = titleFont:getWidth(title)
     love.graphics.print(title, (width - titleWidth) / 2, 200)

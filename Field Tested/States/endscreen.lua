@@ -95,10 +95,10 @@ local function refreshButtons(self)
 end
 
 function win:enter()
-    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    buttonFont = love.graphics.newFont(28)
-    textFont = love.graphics.newFont(24)
-    smallFont = love.graphics.newFont(18)
+    titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 64)
+    buttonFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 28)
+    textFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 24)
+    smallFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 18)
     buildSounds()
 
     self.nameInput = ''

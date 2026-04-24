@@ -271,11 +271,11 @@ local function drawMedal(x, y, place)
 end
 
 function leaderboard:enter()
-    titleFont = love.graphics.newFont('Fonts/Chango/Chango-Regular.ttf', 64)
-    headerFont = love.graphics.newFont(26)
-    rowFont = love.graphics.newFont(24)
-    smallFont = love.graphics.newFont(18)
-    medalFont = love.graphics.newFont(16)
+    titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 64)
+    headerFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 26)
+    rowFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 24)
+    smallFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 18)
+    medalFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 16)
 
     buttons = {
         makeButton('Back', function()
