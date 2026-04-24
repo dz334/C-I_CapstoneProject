@@ -1,15 +1,16 @@
 local save = {}
 local bitser = require 'Libraries/bitser-master/bitser'
 save.maxSlots = 3
-save.filePath = "savegame.dat"
 
 function save.getSaveData()
     return {
         playerX = player.x,
         playerY = player.y,
         orbsCollected = orbsCollected,
-        currentLevel = level,
+        totalKeysCollected = totalKeysCollected or 0,
+        currentLevel = level or 1,
         elapsedTime = elapsedTime or 0,
+        totalDeaths = totalDeaths or 0,
         saveDate = os.date("%Y-%m-%d %H:%M:%S")
     }
 end
@@ -24,21 +25,20 @@ function save.saveGame(slot)
     if slot < 1 or slot > save.maxSlots then
         return false
     end
-    
+ 
     local filePath = save.getFilePath(slot)
     local data = save.getSaveData()
-    
-    -- Bitser serializes to string, then we write bytes
+ 
     local success, serialized = pcall(bitser.dumps, data)
     if not success then
         return false
     end
-    
-    -- Write binary data
-    local writeSuccess, message = pcall(function()
+
+    local writeSuccess, err = pcall(function()
         love.filesystem.write(filePath, serialized)
     end)
-    
+
+    -- Write binary data 
     if writeSuccess then
         return true
     else
@@ -75,39 +75,62 @@ function save.loadGame(slot)
     return true
 end
 
--- Apply loaded data
+function save.getPendingLevel()
+    if save.pendingData and save.pendingData.currentLevel then
+        return save.pendingData.currentLevel
+    end
+    return nil
+end
+
+-- Apply loaded data — call AFTER the correct map, solids, and orbs are loaded
 function save.applyPendingData()
-    if not save.pendingData then 
-        return false 
+    if not save.pendingData then
+        return false
     end
 
     local data = save.pendingData
-    
+
+    -- Player position
     if data.playerX and data.playerY then
         player.x = data.playerX
         player.y = data.playerY
     end
-    
+
+    -- Orb state — mark the first N orbs as collected
     if data.orbsCollected then
         orbsCollected = data.orbsCollected
         for i = 1, orbsCollected do
-            if orbs[i] then 
-                orbs[i].collected = true 
+            if orbs[i] then
+                orbs[i].collected = true
             end
         end
         if orbsCollected >= orbsRequired then
             exitUnlocked = true
         end
+    else
+        orbsCollected = 0
+        exitUnlocked = false
     end
-    
-    if data.isPuzzleCompleted ~= nil then
-        isPuzzleCompleted = data.isPuzzleCompleted
-    end
-    
+
+    -- Timer
     if data.elapsedTime then
         elapsedTime = data.elapsedTime
+    else
+        elapsedTime = 0
     end
-    
+
+    if data.totalKeysCollected then
+        totalKeysCollected = data.totalKeysCollected
+    else
+        totalKeysCollected = data.orbsCollected or 0
+    end
+
+    if data.totalDeaths then
+        totalDeaths = data.totalDeaths
+    else
+        totalDeaths = 0
+    end
+
     save.pendingData = nil
     save.pendingSlot = nil
     return true
