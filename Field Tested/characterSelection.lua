@@ -1,107 +1,82 @@
-
-local charData = {
-    variations = {
-        [1] = { 
-            
-            json = {'character1', 'character2', 'character3', 'character4'}, 
-            name = {'character1', 'character2', 'character3', 'character4'} 
-        }
-    }
+- STEP 1: The "Assets" Table (Translating your LÖVE logic)
+local assets = {
+    character1 = 'character1', 
+    character2 = 'character2', 
+    character3 = 'character3',
+    character4 = 'character4'
 }
+
+-- STEP 5 (Prep): Variable to hold the choice
+local selectedSprite = ''
+local inCharSelect = true
+local allowCountdown = false
+
+function onCreate()
+    -- STEP 2 & 3: Make buttons and add pictures
+    -- We'll place 4 buttons across the screen
+    for i = 1, 4 do
+        local tag = 'btn' .. i
+        makeAnimatedLuaSprite(tag, 'androidcontrols/virtualbuttons', (i * 250) - 150, 300)
+        addAnimationByPrefix(tag, 'idle', 'a', 24, true) -- Default button visual
+        addAnimationByPrefix(tag, 'press', 'aPressed', 24, false)
+        setObjectCamera(tag, 'other')
+        addLuaSprite(tag, true)
+    end
+    
+    -- Optional: Text to show who you are picking
+    makeLuaText('desc', 'Select Your Character', 0, 0, 100)
+    setTextSize('desc', 40)
+    screenCenter('desc', 'x')
+    addLuaText('desc')
+end
+
 function onUpdate(dt)
     if not inCharSelect then return end
-   
-    if mouseClicked('left') and mouseOver('right') then
-        navigate(1)
-        objectPlayAnimation('right', 'rightPress', false)
-    else
-        objectPlayAnimation('right', 'right', true)
-    end
 
-    
-    if mouseClicked('left') and mouseOver('left') then
-        navigate(-1)
-        objectPlayAnimation('left', 'leftPress', false)
-    else
-        objectPlayAnimation('left', 'left', true)
-    end
-
-    
-    if mouseClicked('left') and mouseOver('a') then
-        confirmSelection() -- Calls the helper function below
-    end
-
-    
-    if mouseClicked('left') and mouseOver('b') then
-        exitSelector('cancelMenu') -- Calls the exit helper
-    end
-    
-    -- HOVER EFFECTS (Optional visual juice)
-    local buttons = {'left', 'right', 'a', 'b'}
-    for _, btn in ipairs(buttons) do
-        if mouseOver(btn) then
-            setProperty(btn .. '.alpha', 1.0)
-        else
-            setProperty(btn .. '.alpha', 0.7)
+    -- STEP 4: Function to take in button click input
+    if mouseClicked('left') then
+        for i = 1, 4 do
+            local tag = 'btn' .. i
+            if mouseOver(tag) then
+                objectPlayAnimation(tag, 'press', false)
+                
+                -- STEP 5: Set var of sprite selected
+                selectedSprite = assets['character' .. i] 
+                
+                confirmSelection()
+            end
         end
     end
 end
 
-function onUpdatePost(elapsed)
-    if inCharSelect then
-        -- Update the display text and icon based on current data
-        local currentSet = charData.variations[variation]
-        setTextString('char', currentSet.name[page])
-        objectPlayAnimation('iconGrid', currentSet.json[page], false)
-        screenCenter('char', 'x')
-    end
-end
-
-function navigate(dir)
-    page = page + dir
-    if page > 3 then page = 1 elseif page < 1 then page = 3 end
-    playSound('scrollMenu', 1)
-end
-
 function confirmSelection()
-    local finalChar = charData.variations[variation].json[page]
-    triggerEvent('Change Character', 0, finalChar)
-    exitSelector('confirmMenu')
-end
-
-function exitSelector(sound)
+    -- STEP 6: Call that function/variable for game.lua
+    setVar('playerSelectedSprite', selectedSprite)
+    
+    -- Clean up and start the game
     inCharSelect = false
-    setProperty('camHUD.visible', true)
-    playSound(sound, 1)
+    playSound('confirmMenu', 1)
+    
+    -- Remove UI
+    for i = 1, 4 do removeLuaSprite('btn' .. i, true) end
+    removeLuaText('desc', true)
+    
     startCountdown()
 end
 
--- Boilerplate to start the whole process
+-- STEP 1 (Logic): Block the game start until selection is made
 function onStartCountdown()
     if not allowCountdown then
-        loadSelector()
-        runTimer('charSelector', 0.8)
         allowCountdown = true
         return Function_Stop
     end
     return Function_Continue
 end
 
-function onTimerCompleted(tag)
-    if tag == 'charSelector' then inCharSelect = true end
-end
-
+-- HELPER: Detection logic
 function mouseOver(tag)
-    -- Get sprite properties
-    local x = getProperty(tag .. '.x')
-    local y = getProperty(tag .. '.y')
-    local w = getProperty(tag .. '.width')
-    local h = getProperty(tag .. '.height')
-
-    -- Check if Mouse is within the boundaries
-    if getMouseX('other') > x and getMouseX('other') < (x + w) and
-       getMouseY('other') > y and getMouseY('other') < (y + h) then
-        return true
-    end
-    return false
+    local x, y = getProperty(tag .. '.x'), getProperty(tag .. '.y')
+    local w, h = getProperty(tag .. '.width'), getProperty(tag .. '.height')
+    return (getMouseX('other') > x and getMouseX('other') < x + w and
+            getMouseY('other') > y and getMouseY('other') < y + h)
 end
