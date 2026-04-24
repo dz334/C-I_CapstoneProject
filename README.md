@@ -18,30 +18,31 @@ Windows 7+ or MacOS 10.11+
 Drag and drop the 'Field Tested' folder onto 'love.exe'
 
 ## Controls
-A / Left Arrow — Move left
-D / Right Arrow — Move right
-W / Space / Up Arrow — Jump
-E — Interact with objects and signs
-R — Reset to spawn point
-ESC — Pause game
+- A / Left Arrow — Move left
+- D / Right Arrow — Move right
+- W / Space / Up Arrow — Jump
+- E — Interact with objects and signs
+- R — Reset to spawn point
+- ESC — Pause game
 
 ## Features
-2D sidescroller platformer
-Puzzle mechanics with interactive UI
-Orb collection system
-Local save and load system
-Animated player character
-Original music and sound effects
+- 2D sidescroller platformer
+- Puzzle mechanics with interactive UI
+- Orb collection system
+- Local save and load system
+- Animated player character
+- Original music and sound effects
 
 ## Libraries Used
-anim8 — Sprite Animation
-STI (Simple Tiled Implementation) — Map loading
-HUMP — Gamestate management
-Camera — Camera system
-Bitser — Save file serialization
+- Love2D — Game engine
+- anim8 — Animation
+- STI (Simple Tiled Implementation) — Map loading
+- HUMP — Gamestate management
+- Camera — Camera system
+- Bitser — Save file serialization
 
 ## Tools Used
-Tiled - Map editor
-Piskel - Sprite and animation design
-Visual Studio Code - IDE
-GitHub - Version control
+- Tiled — Map editor
+- Piskel — Sprite and animation design
+- Visual Studio Code — IDE
+- GitHub — Version control
