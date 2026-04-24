@@ -1,5 +1,5 @@
 local win = {}
-local leaderboard = require 'states/leaderboard'
+leaderboard = require 'states/leaderboard'
 local utf8 = require('utf8')
 
 local titleFont
@@ -177,7 +177,7 @@ function win:draw()
     love.graphics.setColor(0.88, 0.9, 0.95, 1)
     if best then
         local bestText = string.format('Personal Best on this device: %.1fs • %d keys • %d deaths • %d score', best.time or 0, best.keys or 0, best.deaths or 0, best.score or leaderboard.calculateScore(best.time, best.keys, best.deaths))
-        love.graphics.print(bestText, panelX + 60, panelY + 488)
+        love.graphics.print(bestText, panelX + 60, panelY + 520)
     else
         love.graphics.print('Personal Best on this device: This is your first recorded finish.', panelX + 60, panelY + 488)
     end
@@ -198,7 +198,7 @@ function win:draw()
 
         love.graphics.setFont(smallFont)
         love.graphics.setColor(0.82, 0.82, 0.82, 1)
-        love.graphics.print('Up to 12 letters, numbers, spaces, - or _. Press Enter to save.', panelX + 520, panelY + 268)
+        love.graphics.print('Up to 12 letters, numbers, spaces, - or _. Press Enter to save.', panelX + 400, panelY + 268)
     elseif self.saved then
         love.graphics.setFont(textFont)
         love.graphics.setColor(0.82, 1, 0.82, 1)

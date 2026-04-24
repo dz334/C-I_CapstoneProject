@@ -587,6 +587,8 @@ function game:keypressed(key)
         level = 4
     elseif key == "p" then
         player.x, player.y = 3977, 466
+    elseif key == "'" then
+        Gamestate.switch(endState)
     end
     -- REMOVE LATER
 
