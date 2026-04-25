@@ -75,7 +75,7 @@ local function resolveVerticalCollisions(p)
     end
 end
 
--- Gets spawn point from Tiled obj layer pointer
+-- Gets spawn point from Tiled object layer pointer
 local function getSpawnPoint(map)
     local spawnLayer = map.layers["Spawn"]
     if spawnLayer and spawnLayer.objects and spawnLayer.objects[1] then
@@ -83,6 +83,7 @@ local function getSpawnPoint(map)
     end
 end
 
+-- Gets sign location from Tiled obj layer pointer
 local function getSignLocation(map)
     local signsLayer = map.layers["Signs"]
     if signsLayer and signsLayer.objects and signsLayer.objects[1] then
@@ -90,6 +91,7 @@ local function getSignLocation(map)
     end
 end
 
+-- Gets exit location from Tiled obj layer pointer
 local function getExitLocation(map)
     local exitLayer = map.layers["Exit"]
     if exitLayer and exitLayer.objects and exitLayer.objects[1] then
@@ -97,6 +99,7 @@ local function getExitLocation(map)
     end
 end
 
+-- Gets end game location from Tiled obj layer
 local function getEndLocation(map)
     local endLayer = map.layers["EndTest"]
     if endLayer and endLayer.objects and endLayer.objects[1] then
@@ -120,6 +123,7 @@ function collectOrbs(map)
     end
 end
 
+-- When entering game create and load 
 function game:enter()
     -- Upon enter start music
     if game_Music then
@@ -130,7 +134,7 @@ function game:enter()
     game_Music:setVolume(0.2)
     game_Music:setLooping(true)
 
-    -- Create player attributes for later creation
+    -- Create player attributes for later creation and reuse
     function createPlayer()
         player = {}
         player.w, player.h = 24, 32
@@ -141,9 +145,10 @@ function game:enter()
         player.maxFallSpeed = 700
         player.isGrounded = false
 
-        local char = assets.character4
+        local char = assets.character4 -- Changeable character sprite, to change sprite change the number (1-4)
         player.animation = {}
 
+        -- Sprite loading (idle, running, jumping, falling)
         player.idleRightSheet = char.idleRight
         player.idleLeftSheet  = char.idleLeft
         local idleRightGrid = anim8.newGrid(32, 32, char.idleRight:getWidth(), char.idleRight:getHeight())
@@ -164,6 +169,7 @@ function game:enter()
         local fallRightGrid = anim8.newGrid(32, 32, char.fallRight:getWidth(), char.fallRight:getHeight())
         local fallLeftGrid  = anim8.newGrid(32, 32, char.fallLeft:getWidth(),  char.fallLeft:getHeight())
 
+        -- Use sprite grid to determine how many animations for each sprite
         player.animation.idleRight = anim8.newAnimation(idleRightGrid('1-11', 1), 0.08)
         player.animation.idleLeft  = anim8.newAnimation(idleLeftGrid('1-11', 1), 0.08)
         player.animation.runRight  = anim8.newAnimation(runRightGrid('1-12', 1), 0.07)
@@ -173,6 +179,7 @@ function game:enter()
         player.animation.fallRight = anim8.newAnimation(fallRightGrid('1-1', 1), 0.07)
         player.animation.fallLeft  = anim8.newAnimation(fallLeftGrid('1-1', 1), 0.07)
 
+        -- Default sprite animation values
         player.anim = player.animation.idleRight
         player.animSheet = player.idleRightSheet
         player.facingRight = true
@@ -278,16 +285,18 @@ function game:leave()
     end
 end
 
+-- Tracks player respawn and sets player x and y when they die
 local function respawnPlayer()
     totalDeaths = (totalDeaths or 0) + 1
     player.x, player.y = getSpawnPoint(gameMap)
     player.vx, player.vy = 0, 0
 end
 
-gravTime = 0
+gravTime = 0 -- Calculates how only the player stays in the air
 function game:update(dt)
-    elapsedTime = elapsedTime + dt
+    elapsedTime = elapsedTime + dt 
 
+    -- If player is in sign, prevent player from moving and change their animation
     if signUIActive then
         player.vx = 0
         player.vy = 0
@@ -342,7 +351,7 @@ function game:update(dt)
     end
 
     -- Calculate vertical fall speed with gravity
-    gravTime = gravTime + dt -- When loading stops player from falling through blocks
+    gravTime = gravTime + dt -- When loading from a save, stops player from falling through blocks
     if gravTime > 0.5 then
         player.vy = math.min(player.vy + player.gravity * dt, player.maxFallSpeed)
     end
@@ -406,6 +415,7 @@ function game:update(dt)
     end
 end
 
+-- Draws the game using set backgrounds and map from Tiled
 function game:draw()
     local function drawBackgroundLevel1() 
         drawBackground(assets.background1.backgroundSky, 0.05)
@@ -436,7 +446,7 @@ function game:draw()
     end
     
     cam:attach()
-        -- Level 1
+        -- Draws Level 1 tiled map layer
         if level == 1 then
             gameMap:drawLayer(gameMap.layers["Ground"])
             gameMap:drawLayer(gameMap.layers["Player Jump Platforms"])
@@ -461,8 +471,10 @@ function game:draw()
             gameMap:drawLayer(gameMap.layers["Ground"])
         end
 
+        -- Draws player
         player.anim:draw(player.animSheet, player.x, player.y, nil, 1.25, nil, 16, 32)
 
+        -- Draws Orbs/keys
         for _, orb in ipairs(orbs) do
             if not orb.collected then
                 love.graphics.setColor(1, 1, 1, 1)
@@ -471,7 +483,7 @@ function game:draw()
         end
     cam:detach()
 
-    -- Misc information in top left corner
+    -- Misc information in top left corner and top center of screen
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.print(string.format("Time: %.1f", elapsedTime), 10, 16)
     love.graphics.print("ESC = Pause", 10, 40)
@@ -538,6 +550,7 @@ function game:draw()
     end
 end
 
+-- Loads in level objects for later reuse
 local function loadLevel(mapPath)
     gameMap = sti(mapPath)
 

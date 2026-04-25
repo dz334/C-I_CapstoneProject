@@ -1,13 +1,10 @@
 local pause = {}
-
 local buttons = {}
 local titleFont
 local buttonFont
 local smallFont
 local buttonHeight = 64
 local margin = 16
-
--- Slot picker state
 local slotPickerActive = false
 local slotButtons = {}
 
@@ -20,9 +17,9 @@ function pause:enter()
     slotPickerActive = false
     slotButtons = {}
 
-    titleFont  = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)
+    titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)
     buttonFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
-    smallFont  = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 16)
+    smallFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 16)
 
     table.insert(buttons, makeButton("Resume", function()
         Gamestate.pop()
@@ -63,6 +60,7 @@ function pause:enter()
     end))
 end
 
+-- Adds in "Saved" message near bottom of the screen when saving game
 function pause:update(dt)
     if pause.saveMessageTimer then
         pause.saveMessageTimer = pause.saveMessageTimer - dt
@@ -80,7 +78,7 @@ function pause:draw()
     drawBackground(assets.background1.backgroundCloud2, 0.3)
     drawBackground(assets.background1.backgroundCloud1, 0.4)
 
-    local width  = love.graphics.getWidth()
+    local width = love.graphics.getWidth()
     local height = love.graphics.getHeight()
     local buttonWidth = width / 3
     local mouseX, mouseY = love.mouse.getPosition()
@@ -105,6 +103,7 @@ function pause:draw()
         local isHovered = mouseX >= x and mouseX <= x + buttonWidth
                       and mouseY >= y and mouseY <= y + buttonHeight
 
+        -- If hovering add glow effect
         if isHovered then
             love.graphics.setColor(1, 1, 1, 0.18)
             love.graphics.rectangle("fill", x-8, y-8, buttonWidth+16, buttonHeight+16, 10, 10)

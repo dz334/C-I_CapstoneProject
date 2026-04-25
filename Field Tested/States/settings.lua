@@ -18,7 +18,6 @@ local function makeButton(text, onClick)
 end
 
 function settings:enter()
-
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)
     buttonFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 32)
@@ -46,7 +45,7 @@ function settings:enter()
         end
     end))
 
--- Fullscreen
+    -- Fullscreen
     table.insert(buttons, makeButton("Toggle Fullscreen", function()
         local isFullscreen = love.window.getFullscreen()
         love.window.setFullscreen(not isFullscreen)
@@ -57,7 +56,6 @@ function settings:update(dt)
 end
 
 function settings:draw()
-
     drawBackground(assets.background1.backgroundSky, 0.05)
     drawBackground(assets.background1.backgroundSand, 0.1)
     drawBackground(assets.background1.backgroundCloud3, 0.2)

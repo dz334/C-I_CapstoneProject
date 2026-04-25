@@ -27,7 +27,7 @@ function menu:enter()
     menu_Music:play()
 
     -- Enter fullscreen mode
-    love.window.setFullscreen(true)
+    love.window.setFullscreen(true) -- Starts game as fullscreen
 
     buttons = {}
     titleFont = love.graphics.newFont('Fonts/dpcomic/dpcomic.ttf', 128)

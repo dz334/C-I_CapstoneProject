@@ -2,6 +2,7 @@ local save = {}
 local bitser = require 'Libraries/bitser-master/bitser'
 save.maxSlots = 3
 
+-- Get current player information for saving
 function save.getSaveData()
     return {
         playerX = player.x,
@@ -82,7 +83,7 @@ function save.getPendingLevel()
     return nil
 end
 
--- Apply loaded data — call AFTER the correct map, solids, and orbs are loaded
+-- Apply loaded data, call AFTER the correct map, solids, and orbs are loaded
 function save.applyPendingData()
     if not save.pendingData then
         return false
@@ -96,7 +97,7 @@ function save.applyPendingData()
         player.y = data.playerY
     end
 
-    -- Orb state — mark the first N orbs as collected
+    -- Orb state, mark the first N orbs as collected
     if data.orbsCollected then
         orbsCollected = data.orbsCollected
         for i = 1, orbsCollected do
@@ -142,7 +143,7 @@ function save.hasSaveFile(slot)
     return love.filesystem.getInfo(save.getFilePath(slot)) ~= nil
 end
 
--- Delete save
+-- Delete save (NOT IN USE YET)
 function save.deleteSave(slot)
     slot = slot or 1
     local filePath = save.getFilePath(slot)

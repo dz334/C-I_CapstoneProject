@@ -10,6 +10,7 @@ assets = require 'assets'
 endState = require 'states/endscreen'
 
 -- Global Draw Background Function With Parallax
+-- Takes in background image, and then the speed 
 function drawBackground(image, parallaxSpeed)
     local screenW = love.graphics.getWidth()
     local screenH = love.graphics.getHeight()

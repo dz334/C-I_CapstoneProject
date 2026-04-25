@@ -1,7 +1,7 @@
 local assets = {}
 
 function assets.load()
-    assets.background1 = {
+    assets.background1 = { -- Level 1 and menus background 
         backgroundCloud1 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_big.png'),
         backgroundCloud2 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_medium.png'),
         backgroundCloud3 = love.graphics.newImage('Tiles/Seaside/Background/Clouds_small.png'),
@@ -10,14 +10,14 @@ function assets.load()
         backgroundOcean = love.graphics.newImage('Tiles/Seaside/Background/Ocean.png')
     }
 
-    assets.background2 = {
+    assets.background2 = { -- Level 4 background
         backgroundSky = love.graphics.newImage('Tiles/lvl4_assets/BG/1.png'),
         backgroundCloud1 = love.graphics.newImage('Tiles/lvl4_assets/BG/2.png'),
         backgroundCloud2 = love.graphics.newImage('Tiles/lvl4_assets/BG/3.png'),
         
     }
     
-    assets.background3 = {
+    assets.background3 = { -- Level 3 background
         backgroundColor1 = love.graphics.newImage('Tiles/lvl3_bg/Layers/1.png'),
         backgroundTree1 = love.graphics.newImage('Tiles/lvl3_bg/Layers/2.png'),
         backgroundTree2 = love.graphics.newImage('Tiles/lvl3_bg/Layers/3.png'),
@@ -25,7 +25,7 @@ function assets.load()
 
     assets.audio = {
         menuMusic = 'Sounds/theme.mp3',
-        gameMusic = 'Sounds/AccumulaTown.mp3'
+        gameMusic = 'Sounds/WhiteForest.mp3'
     }
 
     assets.character1 = {
@@ -96,13 +96,14 @@ function assets.load()
         doubleJumpRight = love.graphics.newImage('Sprites/Character4/Double_Jump_Right.png')
     }
 
+    -- Sign Box
     assets.ui = {
         panel = love.graphics.newImage('Tiles/4.png')
     }
 
+    -- "Orb"/Key
     assets.orb = {
         orbIdle = love.graphics.newImage('Sprites/Key/key.png')
-        --orbCollected = love.graphics.newImage('Tiles/vfx_effect_orb.png')
     }
 end
 
